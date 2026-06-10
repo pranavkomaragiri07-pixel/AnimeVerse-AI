@@ -1,5 +1,5 @@
 /* =====================================
-   AnimeVerse AI - FINAL ULTRA DARK FIX
+   AnimeVerse AI - DEFINITIVE DARK FIX
 ===================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -9,29 +9,30 @@
 ================================ */
 html, body {
     font-family: 'Poppins', sans-serif !important;
-    background-color: #0f172a !important;
+    background: #0f172a !important;
     color: #e2e8f0 !important;
 }
 
 /* ===============================
-   FORCE FULL BACKGROUND (IMPORTANT)
+   FULL BACKGROUND FORCE (STREAMLIT ROOT FIX)
 ================================ */
 .stApp,
+.main,
+.block-container,
+.stMain,
 [data-testid="stAppViewContainer"],
 [data-testid="stAppViewBlockContainer"],
-.main {
-    background-color: #0f172a !important;
-}
-
-/* ===============================
-   MAIN APP WRAPPER FIX
-================================ */
 [data-testid="stMainBlockContainer"] {
     background-color: #0f172a !important;
 }
 
+/* EXTRA SAFETY LAYER */
+div {
+    background-color: transparent;
+}
+
 /* ===============================
-   TEXT FIX (Streamlit override)
+   TEXT FIX (NO WHITE BUGS)
 ================================ */
 h1, h2, h3 {
     color: #ffffff !important;
@@ -41,8 +42,8 @@ p, span, label, div {
     color: #e2e8f0 !important;
 }
 
-/* Markdown fix */
-.stMarkdown, .stMarkdown p {
+/* Streamlit markdown */
+.stMarkdown, .stMarkdown * {
     color: #e2e8f0 !important;
 }
 
@@ -70,7 +71,7 @@ p, span, label, div {
 }
 
 /* ===============================
-   TABS FIX
+   TABS
 ================================ */
 .stTabs [data-baseweb="tab"] {
     background-color: #1e293b !important;
@@ -95,6 +96,10 @@ p, span, label, div {
 ================================ */
 [data-testid="stSidebar"] {
     background-color: #0f172a !important;
+}
+
+[data-testid="stSidebar"] * {
+    color: #e2e8f0 !important;
 }
 
 /* ===============================

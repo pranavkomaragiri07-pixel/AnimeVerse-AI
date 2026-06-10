@@ -2,9 +2,8 @@ from gemini_utils import get_gemini_response
 import random
 
 # =========================
-# CORE STAT GENERATOR
+# STATS ENGINE
 # =========================
-
 def generate_stats():
     return {
         "Power": random.randint(60, 100),
@@ -15,115 +14,129 @@ def generate_stats():
         "Weapon Mastery": random.randint(60, 100)
     }
 
-# =========================
-# ⚔️ 1v1 BATTLE
-# =========================
 
+# =========================
+# ⚔️ 1v1 BATTLE (KEEP CATEGORY WINNERS)
+# =========================
 def battle_1v1(a, b):
 
-    fighter_a = {"name": a, "stats": generate_stats()}
-    fighter_b = {"name": b, "stats": generate_stats()}
+    fa = generate_stats()
+    fb = generate_stats()
 
-    category_winners = {}
-
-    for k in fighter_a["stats"]:
-        category_winners[k] = (
-            a if fighter_a["stats"][k] > fighter_b["stats"][k] else b
-        )
-
-    score_a = sum(fighter_a["stats"].values())
-    score_b = sum(fighter_b["stats"].values())
-
-    winner = a if score_a > score_b else b
-
-    return {
-        "fighter_a": fighter_a,
-        "fighter_b": fighter_b,
-        "category_winners": category_winners,
-        "winner": winner,
-        "story": f"{a} vs {b} ended in an intense clash. {winner} won using superior overall stats."
+    category_winners = {
+        "Power": a if fa["Power"] > fb["Power"] else b,
+        "Speed": a if fa["Speed"] > fb["Speed"] else b,
+        "Battle IQ": a if fa["Battle IQ"] > fb["Battle IQ"] else b,
+        "Durability": a if fa["Durability"] > fb["Durability"] else b,
+        "Stamina": a if fa["Stamina"] > fb["Stamina"] else b,
+        "Weapon Mastery": a if fa["Weapon Mastery"] > fb["Weapon Mastery"] else b
     }
 
-# =========================
-# 👥 2v2 BATTLE
-# =========================
+    winner = a if sum(fa.values()) > sum(fb.values()) else b
 
+    return {
+        "fighter_a": {"name": a, "stats": fa},
+        "fighter_b": {"name": b, "stats": fb},
+        "category_winners": category_winners,
+        "winner": winner,
+        "story": f"{a} vs {b} ended in an epic battle. {winner} won."
+    }
+
+
+# =========================
+# 👥 2v2 BATTLE (KEEP CATEGORY WINNERS)
+# =========================
 def battle_2v2(team_a, team_b):
 
-    score_a = sum([sum(generate_stats().values()) for _ in team_a])
-    score_b = sum([sum(generate_stats().values()) for _ in team_b])
+    score_a = sum(sum(generate_stats().values()) for _ in team_a)
+    score_b = sum(sum(generate_stats().values()) for _ in team_b)
 
     winner = "Team A" if score_a > score_b else "Team B"
 
     return {
         "winner": winner,
-        "team_a_score": score_a,
-        "team_b_score": score_b,
-        "story": f"{team_a} battled {team_b}. {winner} dominated with better coordination and power."
+        "category_winners": {
+            "Attack Power": winner,
+            "Defense": winner,
+            "Strategy": winner,
+            "Stamina": winner,
+            "Weapon Mastery": winner,
+            "Team Synergy": winner
+        },
+        "story": f"{team_a} vs {team_b} was a brutal team clash. {winner} dominated."
     }
 
-# =========================
-# ⚔️ 4v4 BATTLE
-# =========================
 
+# =========================
+# ⚔️ 4v4 BATTLE (KEEP CATEGORY WINNERS)
+# =========================
 def battle_4v4(team_a, team_b):
 
-    score_a = sum([sum(generate_stats().values()) for _ in team_a])
-    score_b = sum([sum(generate_stats().values()) for _ in team_b])
+    score_a = sum(sum(generate_stats().values()) for _ in team_a)
+    score_b = sum(sum(generate_stats().values()) for _ in team_b)
 
     winner = "Team Alpha" if score_a > score_b else "Team Omega"
 
     return {
         "winner": winner,
-        "score_a": score_a,
-        "score_b": score_b,
-        "story": f"4v4 battle concluded. {winner} dominated after extreme combat pressure."
+        "category_winners": {
+            "Power": winner,
+            "Speed": winner,
+            "Battle IQ": winner,
+            "Durability": winner,
+            "Stamina": winner,
+            "Weapon Mastery": winner
+        },
+        "story": f"4v4 war ended. {winner} completely destroyed the opponent team."
     }
 
-# =========================
-# 🏆 TOURNAMENT MODE
-# =========================
 
-def run_tournament(characters):
+# =========================
+# 🏆 TOURNAMENT MODE (REMOVED CATEGORY WINNERS)
+# =========================
+def run_tournament(fighters):
 
-    shuffled = characters[:]
-    random.shuffle(shuffled)
+    fighters = [f for f in fighters if f.strip()]
+    random.shuffle(fighters)
 
     rounds = []
 
-    while len(shuffled) > 1:
+    while len(fighters) > 1:
 
         next_round = []
 
-        for i in range(0, len(shuffled), 2):
+        for i in range(0, len(fighters), 2):
 
-            if i+1 < len(shuffled):
+            if i + 1 < len(fighters):
 
-                a = shuffled[i]
-                b = shuffled[i+1]
+                a = fighters[i]
+                b = fighters[i + 1]
 
-                winner = a if sum(generate_stats().values()) > sum(generate_stats().values()) else b
+                sa = sum(generate_stats().values())
+                sb = sum(generate_stats().values())
+
+                winner = a if sa > sb else b
                 next_round.append(winner)
 
                 rounds.append(f"{a} vs {b} → {winner}")
 
             else:
-                next_round.append(shuffled[i])
+                next_round.append(fighters[i])
 
-        shuffled = next_round
+        fighters = next_round
 
-    champion = shuffled[0]
+    champion = fighters[0]
 
     return {
         "champion": champion,
         "rounds": rounds,
-        "story": f"{champion} survived all rounds and became the champion."
+        "story": f"{champion} became the tournament champion after intense battles."
     }
 
-# =========================
-# 🔥 SURVIVAL MODE
-# =========================
 
+# =========================
+# 🔥 SURVIVAL MODE (REMOVED CATEGORY WINNERS)
+# =========================
 def survival_mode(character):
 
     rounds = []
@@ -132,10 +145,12 @@ def survival_mode(character):
     for i in range(1, 6):
 
         enemy = f"Enemy {i}"
-        win = random.choice([True, False])
 
-        if win:
-            score += random.randint(80, 120)
+        c_stats = sum(generate_stats().values())
+        e_stats = sum(generate_stats().values())
+
+        if c_stats > e_stats:
+            score += 100
             rounds.append(f"Round {i}: {character} defeated {enemy}")
         else:
             rounds.append(f"Round {i}: {character} lost to {enemy}")
@@ -145,5 +160,5 @@ def survival_mode(character):
         "character": character,
         "score": score,
         "rounds": rounds,
-        "story": f"{character} survived {len(rounds)} rounds in the arena."
+        "story": f"{character} survived {len(rounds)} arena rounds."
     }

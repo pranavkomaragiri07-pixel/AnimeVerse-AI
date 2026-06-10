@@ -1,8 +1,9 @@
 import streamlit as st
 import requests
+import random
 
 # =========================
-# IMPORT REAL BACKEND (IMPORTANT FIX)
+# IMPORT REAL BACKEND
 # =========================
 from battle import (
     battle_1v1,
@@ -11,6 +12,51 @@ from battle import (
     run_tournament,
     survival_mode
 )
+
+# =========================
+# SAFE FALLBACK FUNCTIONS (FIX CRASHES)
+# =========================
+
+def generate_quote(theme):
+    quotes = {
+        "Motivational": [
+            "Never give up until the end.",
+            "Power grows through struggle.",
+            "A true warrior never stops."
+        ],
+        "Friendship": [
+            "Friends are your greatest strength.",
+            "Together we are unstoppable."
+        ],
+        "Success": [
+            "Hard work beats talent.",
+            "Success is earned, not given."
+        ],
+        "Sad": [
+            "Pain creates strength.",
+            "Even heroes cry."
+        ],
+        "Funny": [
+            "Even anime heroes need snacks.",
+            "Training can wait, food cannot."
+        ]
+    }
+    return random.choice(quotes.get(theme, ["Stay strong!"]))
+
+
+def get_character_match(q1, q2):
+
+    if q1 == "Friendship":
+        return "Naruto Uzumaki"
+    elif q1 == "Freedom":
+        return "Monkey D. Luffy"
+    elif q1 == "Knowledge":
+        return "Itachi Uchiha"
+    elif q2 == "Strategic":
+        return "Levi Ackerman"
+    else:
+        return "Gojo Satoru"
+
 
 # =========================
 # APP CONFIG
@@ -23,7 +69,7 @@ st.set_page_config(
 )
 
 # =========================
-# LOAD CSS
+# CSS
 # =========================
 
 try:
@@ -109,28 +155,17 @@ with tab3:
 
     mode = st.selectbox(
         "Select Mode",
-        [
-            "1v1 Battle",
-            "2v2 Battle",
-            "4v4 Battle",
-            "Tournament Arc",
-            "Survival Arena"
-        ]
+        ["1v1 Battle", "2v2 Battle", "4v4 Battle", "Tournament Arc", "Survival Arena"]
     )
 
-    # =========================
-    # ⚔️ 1v1 BATTLE
-    # =========================
-
+    # 1v1
     if mode == "1v1 Battle":
 
         a = st.text_input("Character A")
         b = st.text_input("Character B")
 
         if st.button("Start Battle"):
-
             if a and b:
-
                 result = battle_1v1(a, b)
 
                 st.success(f"🏆 Winner: {result['winner']}")
@@ -141,7 +176,6 @@ with tab3:
                 fb = result["fighter_b"]["stats"]
 
                 for stat in fa:
-
                     col1, col2 = st.columns(2)
 
                     with col1:
@@ -156,16 +190,12 @@ with tab3:
                 for k, v in result["category_winners"].items():
                     st.write(f"⚔️ {k} → 🥇 {v}")
 
-                st.markdown("## 📖 Story")
                 st.write(result["story"])
 
             else:
                 st.error("Enter both characters.")
 
-    # =========================
-    # 👥 2v2 BATTLE
-    # =========================
-
+    # 2v2
     elif mode == "2v2 Battle":
 
         a1 = st.text_input("Team A Fighter 1")
@@ -174,9 +204,7 @@ with tab3:
         b2 = st.text_input("Team B Fighter 2")
 
         if st.button("Start Team Battle"):
-
             if all([a1, a2, b1, b2]):
-
                 result = battle_2v2([a1, a2], [b1, b2])
 
                 st.success(f"🏆 Winner: {result['winner']}")
@@ -190,17 +218,13 @@ with tab3:
             else:
                 st.error("Fill all fields.")
 
-    # =========================
-    # ⚔️ 4v4 BATTLE
-    # =========================
-
+    # 4v4
     elif mode == "4v4 Battle":
 
         t1 = st.text_area("Team Alpha (4 names)")
         t2 = st.text_area("Team Omega (4 names)")
 
         if st.button("Start 4v4 Battle"):
-
             if t1 and t2:
 
                 team_a = t1.split("\n")
@@ -219,53 +243,32 @@ with tab3:
             else:
                 st.error("Enter both teams.")
 
-    # =========================
-    # 🏆 TOURNAMENT (NO CATEGORY WINNERS)
-    # =========================
-
+    # Tournament
     elif mode == "Tournament Arc":
 
         fighters = st.text_area("Enter fighters (one per line)")
 
         if st.button("Start Tournament"):
-
             if fighters:
-
                 result = run_tournament(fighters.split("\n"))
 
                 st.success(f"👑 Champion: {result['champion']}")
-
-                st.markdown("## 🥊 Rounds")
-                st.write(result["rounds"])
-
-                st.markdown("## 📖 Story")
                 st.write(result["story"])
 
             else:
                 st.error("Enter fighters.")
 
-    # =========================
-    # 🔥 SURVIVAL (NO CATEGORY WINNERS)
-    # =========================
-
+    # Survival
     elif mode == "Survival Arena":
 
         hero = st.text_input("Select Hero")
 
         if st.button("Enter Arena"):
-
             if hero:
-
                 result = survival_mode(hero)
 
                 st.success(result["character"])
-
                 st.write(f"⭐ Score: {result['score']}")
-
-                st.markdown("## 🥊 Rounds")
-                st.write(result["rounds"])
-
-                st.markdown("## 📖 Story")
                 st.write(result["story"])
 
             else:
@@ -285,7 +288,8 @@ with tab4:
     )
 
     if st.button("Generate Quote"):
-        st.success(generate_quote(theme))
+        quote = generate_quote(theme)
+        st.success(quote)
 
 # =========================
 # 🎭 PERSONALITY QUIZ

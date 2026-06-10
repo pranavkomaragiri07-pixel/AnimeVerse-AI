@@ -1,0 +1,119 @@
+/* =====================================
+   AnimeVerse AI Theme
+===================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Main Background */
+.stApp {
+    background: linear-gradient(
+        135deg,
+        #0f172a,
+        #1e293b,
+        #111827
+    );
+    color: white;
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    color: #ff4b4b;
+    font-weight: 700;
+}
+
+h2, h3 {
+    color: #f8fafc;
+}
+
+/* Subtitle */
+p {
+    color: #e2e8f0;
+}
+
+/* Input Fields */
+.stTextInput input,
+.stTextArea textarea {
+    border-radius: 12px;
+    border: 2px solid #ff4b4b;
+    background-color: #1e293b;
+    color: white;
+}
+
+/* Select Box */
+.stSelectbox div {
+    border-radius: 10px;
+}
+
+/* Buttons */
+.stButton > button {
+    background: linear-gradient(
+        90deg,
+        #ff4b4b,
+        #ff6b6b
+    );
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.stButton > button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(
+        90deg,
+        #ff6b6b,
+        #ff8787
+    );
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 10px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background-color: #1e293b;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: #ff4b4b !important;
+    color: white !important;
+}
+
+/* Success Boxes */
+.stSuccess {
+    border-radius: 12px;
+}
+
+/* Images */
+img {
+    border-radius: 15px;
+    box-shadow: 0px 4px 20px rgba(255, 75, 75, 0.3);
+}
+
+/* Anime Cards */
+.anime-card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 15px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #94a3b8;
+}

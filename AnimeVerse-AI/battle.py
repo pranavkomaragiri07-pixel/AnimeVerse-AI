@@ -1,155 +1,116 @@
 from gemini_utils import get_gemini_response
+import random
 
 
 # =========================
-# 🥊 1v1 BATTLE SYSTEM
+# 🎯 STAT GENERATOR (FALLBACK CORE)
+# =========================
+def generate_stats(name):
+    return {
+        "Raw Power": random.randint(70, 100),
+        "Speed": random.randint(70, 100),
+        "Battle IQ": random.randint(70, 100),
+        "Durability": random.randint(70, 100),
+        "Special Ability": random.randint(70, 100),
+        "Experience": random.randint(70, 100),
+        "Stamina": random.randint(70, 100),
+        "Weapon Mastery": random.randint(70, 100)
+    }
+
+
+# =========================
+# ⚔️ 1v1 BATTLE (UPGRADED)
 # =========================
 def battle_1v1(char1, char2):
 
     try:
+        stats1 = generate_stats(char1)
+        stats2 = generate_stats(char2)
+
+        # category winners
+        category_winners = {}
+
+        score1 = 0
+        score2 = 0
+
+        for key in stats1:
+            if stats1[key] > stats2[key]:
+                category_winners[key] = char1
+                score1 += 1
+            else:
+                category_winners[key] = char2
+                score2 += 1
+
+        winner = char1 if score1 > score2 else char2
+
         prompt = f"""
-You are an expert anime battle analyst.
+Create a cinematic anime battle story between {char1} and {char2}
+based on their strengths and weaknesses.
 
-Simulate a cinematic 1v1 battle between {char1} and {char2}.
-
-FORMAT OUTPUT EXACTLY LIKE THIS:
-
-💪 POWER ANALYSIS
-- Raw Power (0-100)
-- Speed (0-100)
-- Intelligence (0-100)
-- Battle IQ (0-100)
-- Durability (0-100)
-- Stamina (0-100)
-- Special Powers (0-100)
-
-📊 DETAILED COMPARISON
-Compare both fighters in:
-Strength, Speed, Intelligence, Battle IQ, Durability, Stamina, Special Powers, Combat Skills, Experience
-
-🌟 SIGNATURE ABILITIES
-List abilities for both fighters
-
-🏆 FINAL VERDICT
-- Winner
-- Battle Score (each fighter)
-- MVP Ability
-- Winning Factor
-- Difficulty (Easy / Medium / Hard / Extreme)
-
-📖 BATTLE STORY
-Write cinematic anime-style fight story with actions, emotions, and abilities.
+Winner: {winner}
 """
 
-        return get_gemini_response(prompt)
+        story = get_gemini_response(prompt)
+
+        return {
+            "fighter_a": {
+                "name": char1,
+                "stats": stats1
+            },
+            "fighter_b": {
+                "name": char2,
+                "stats": stats2
+            },
+            "category_winners": category_winners,
+            "winner": winner,
+            "story": story
+        }
 
     except Exception:
-        return f"""
-🏆 WINNER: {char1}
 
-Battle Score:
-{char1}: 950
-{char2}: 870
-
-MVP Ability:
-Ultimate Technique
-
-Winning Factor:
-Superior Combat Skill
-
-📖 STORY:
-A fierce battle between {char1} and {char2} ends with {char1} emerging victorious.
-"""
+        return {
+            "fighter_a": {"name": char1, "stats": generate_stats(char1)},
+            "fighter_b": {"name": char2, "stats": generate_stats(char2)},
+            "category_winners": {},
+            "winner": random.choice([char1, char2]),
+            "story": f"{char1} and {char2} fought an intense battle."
+        }
 
 
 # =========================
-# 👥 2v2 BATTLE SYSTEM
+# 👥 2v2 BATTLE
 # =========================
 def battle_2v2(team1, team2):
 
-    try:
-        prompt = f"""
-Simulate a cinematic 2v2 anime team battle.
+    t1_score = random.randint(70, 100)
+    t2_score = random.randint(70, 100)
 
-Team A: {team1}
-Team B: {team2}
+    winner = "Team A" if t1_score > t2_score else "Team B"
 
-FORMAT:
-
-📊 TEAM ANALYSIS
-- Attack Power
-- Defense
-- Strategy
-- Synergy
-- Special Abilities
-
-🏆 FINAL RESULT
-- Winning Team
-- MVP Fighter
-- Best Combo
-- Winning Factor
-
-📖 BATTLE STORY
-Cinematic anime fight narration
-"""
-
-        return get_gemini_response(prompt)
-
-    except Exception:
-        return f"""
-🏆 WINNER: Team A
-
-MVP: Gojo
-
-Best Combo:
-Gojo + Sukuna
-
-Winning Factor:
-Superior coordination and teamwork
-"""
+    return {
+        "team_a_score": t1_score,
+        "team_b_score": t2_score,
+        "winner": winner,
+        "story": f"{'Team A' if winner=='Team A' else 'Team B'} dominated the battlefield."
+    }
 
 
 # =========================
-# ⚔️ 4v4 BATTLE SYSTEM
+# ⚔️ 4v4 BATTLE
 # =========================
 def battle_4v4(team1, team2):
 
-    try:
-        prompt = f"""
-Simulate an epic 4v4 anime battle.
+    t1 = sum(generate_stats(p)["Raw Power"] for p in team1)
+    t2 = sum(generate_stats(p)["Raw Power"] for p in team2)
 
-Team A: {team1}
-Team B: {team2}
+    winner = "Team Alpha" if t1 > t2 else "Team Omega"
 
-FORMAT:
-
-📊 TEAM STATS
-- Power
-- Strategy
-- Coordination
-- Synergy
-
-🏆 RESULT
-- Winner
-- MVP Fighter
-- Battle Highlights
-- Winning Factor
-
-📖 CINEMATIC STORY
-Epic anime battle narration with transformations and final clash.
-"""
-
-        return get_gemini_response(prompt)
-
-    except Exception:
-        return f"""
-🏆 WINNER: Team A
-
-MVP: Gojo Satoru
-
-Battle Highlight:
-Dominated the battlefield with overwhelming power and strategy
-"""
+    return {
+        "winner": winner,
+        "team_alpha_power": t1,
+        "team_omega_power": t2,
+        "story": f"{winner} won after an intense 4v4 clash."
+    }
 
 
 # =========================
@@ -157,44 +118,13 @@ Dominated the battlefield with overwhelming power and strategy
 # =========================
 def run_tournament(characters):
 
-    try:
-        prompt = f"""
-Run a full anime tournament.
+    champion = random.choice(characters)
 
-Participants:
-{characters}
-
-FORMAT:
-
-🥊 Quarter Finals
-🥊 Semi Finals
-🥊 Grand Final
-
-🏆 CHAMPION
-🏅 TOURNAMENT MVP
-🔥 MOST INTENSE MATCH
-
-📜 HALL OF FAME
-List top performers
-
-📊 TOURNAMENT SUMMARY
-Brief analytics
-"""
-
-        return get_gemini_response(prompt)
-
-    except Exception:
-        return f"""
-🏆 CHAMPION: Gojo Satoru
-
-🔥 MVP: Gojo
-
-Most Intense Match:
-Gojo vs Madara
-
-Hall of Fame:
-Gojo, Madara, Naruto
-"""
+    return {
+        "champion": champion,
+        "story": f"{champion} defeated all opponents in the tournament.",
+        "participants": characters
+    }
 
 
 # =========================
@@ -202,44 +132,13 @@ Gojo, Madara, Naruto
 # =========================
 def survival_mode(character):
 
-    try:
-        prompt = f"""
-Run survival arena mode for {character}.
+    rounds = random.randint(3, 8)
 
-FORMAT:
-
-🔥 ROUNDS
-Round 1
-Round 2
-Round 3
-
-⚔️ OPPONENTS
-List enemies faced
-
-📊 RESULTS
-Wins / Losses
-
-🏆 FINAL STATS
-- XP Earned
-- Survival Score
-- Arena Rank
-- Achievement
-
-📖 STORY
-Cinematic survival journey narration
-"""
-
-        return get_gemini_response(prompt)
-
-    except Exception:
-        return f"""
-🔥 SURVIVAL REPORT
-
-Character: {character}
-
-Rounds Cleared: 5
-XP Earned: 4500
-Survival Score: 87%
-Rank: S-TIER
-Achievement: KING OF THE ARENA
-"""
+    return {
+        "character": character,
+        "rounds_survived": rounds,
+        "stamina_left": random.randint(30, 100),
+        "xp": rounds * 500,
+        "rank": "S-TIER" if rounds > 5 else "A-TIER",
+        "achievement": "KING OF THE ARENA"
+    }

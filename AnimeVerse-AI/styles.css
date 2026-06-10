@@ -1,43 +1,39 @@
 /* =====================================
-   AnimeVerse AI - ULTRA DARK FINAL FIX (UPDATED)
+   AnimeVerse AI - FIXED DARK THEME
 ===================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* ===============================
-   GLOBAL FONT + RESET
+   GLOBAL RESET
 ================================ */
 html, body {
-    font-family: Times New Roman !important;
+    font-family: 'Poppins', sans-serif !important;
     background-color: #0f172a !important;
     color: #e2e8f0 !important;
 }
 
 /* ===============================
-   🔥 FORCE STREAMLIT FULL DARK BACKGROUND (IMPORTANT FIX)
+   MAIN APP BACKGROUND (IMPORTANT FIX)
 ================================ */
 .stApp {
-    background: 0000CD !important;
-    color: #e2e8f0 !important;
+    background-color: #0f172a !important;
 }
 
-/* MAIN CONTAINER FIX */
-[data-testid="stAppViewContainer"] {
-    background: #0f172a !important;
-}
-
+/* Streamlit containers */
+[data-testid="stAppViewContainer"],
 [data-testid="stAppViewBlockContainer"] {
-    background: #0f172a !important;
+    background-color: #0f172a !important;
 }
 
-/* HEADER + TOOLBAR */
+/* Header / toolbar */
 [data-testid="stHeader"],
 [data-testid="stToolbar"] {
     background: transparent !important;
 }
 
 /* ===============================
-   SIDEBAR FIX
+   SIDEBAR
 ================================ */
 [data-testid="stSidebar"] {
     background-color: #0f172a !important;
@@ -48,34 +44,13 @@ html, body {
 }
 
 /* ===============================
-   HEADINGS
+   TEXT FIX (SAFE - NOT GLOBAL *)
 ================================ */
-h1 {
-    text-align: center;
-    color: white !important;
-    font-weight: 800;
-}
-
-h2, h3 {
+h1, h2, h3 {
     color: white !important;
 }
 
-/* ===============================
-   🔥 FORCE ALL TEXT WHITE (IMPORTANT FIX)
-================================ */
-* {
-    color: white !important;
-}
-
-/* Markdown fix */
-.stMarkdown,
-.stMarkdown p,
-.stMarkdown span {
-    color: #e2e8f0 !important;
-}
-
-/* Labels fix */
-label {
+p, span, label, div {
     color: #e2e8f0 !important;
 }
 
@@ -91,13 +66,6 @@ label {
 }
 
 /* ===============================
-   SELECT BOX
-================================ */
-.stSelectbox div {
-    border-radius: 10px !important;
-}
-
-/* ===============================
    BUTTONS
 ================================ */
 .stButton > button {
@@ -106,28 +74,19 @@ label {
     border: none !important;
     border-radius: 12px !important;
     padding: 10px 24px !important;
-    font-size: 16px !important;
     font-weight: bold !important;
-    transition: 0.3s ease-in-out;
 }
 
 .stButton > button:hover {
     transform: scale(1.05);
-    background: linear-gradient(90deg, #ff6b6b, #ff8787) !important;
 }
 
 /* ===============================
    TABS
 ================================ */
-.stTabs [data-baseweb="tab-list"] {
-    gap: 10px;
-}
-
 .stTabs [data-baseweb="tab"] {
     background-color: #1e293b !important;
     color: white !important;
-    border-radius: 10px !important;
-    padding: 10px 20px !important;
 }
 
 .stTabs [aria-selected="true"] {
@@ -139,47 +98,24 @@ label {
    SUCCESS BOX
 ================================ */
 .stSuccess {
-    border-radius: 12px !important;
     background-color: #14532d !important;
     color: white !important;
 }
 
 /* ===============================
-   IMAGES
-================================ */
-img {
-    border-radius: 15px !important;
-    box-shadow: 0px 4px 20px rgba(255, 75, 75, 0.3);
-}
-
-/* ===============================
-   EXPANDERS / CARDS
-================================ */
-div[data-testid="stExpander"] {
-    background-color: #1e293b !important;
-    border-radius: 10px !important;
-}
-
-/* ===============================
-   CUSTOM CARD
+   CARDS
 ================================ */
 .anime-card {
-    background: #1e293b !important;
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 15px;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+    background-color: #1e293b !important;
+    padding: 15px;
+    border-radius: 12px;
 }
 
 /* ===============================
-   SCROLLBAR FIX
+   SCROLLBAR
 ================================ */
-* {
-    scrollbar-color: #ff4b4b #1e293b;
-}
-
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {

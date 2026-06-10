@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+```
+<title>Smart Health Advisor</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+```
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<h1>SMART HEALTH ADVISOR</h1>
+
+<div class="card">
+
+    <h2>Health Assessment Form</h2>
+
+    <input type="text" id="name" placeholder="Full Name">
+
+    <select id="gender">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+    <input type="number" id="age" placeholder="Age">
+
+    <input type="number" id="weight" placeholder="Weight (kg)">
+
+    <input type="number" id="height" placeholder="Height (cm)">
+
+    <input type="number" id="water" placeholder="Water Glasses Per Day">
+
+    <input type="number" id="exercise" placeholder="Exercise Minutes Per Day">
+
+    <select id="smoking">
+        <option value="no">Non Smoker</option>
+        <option value="yes">Smoker</option>
+    </select>
+
+    <select id="diabetes">
+        <option value="no">No Diabetes</option>
+        <option value="yes">Diabetes</option>
+    </select>
+
+    <select id="bp">
+        <option value="no">Normal Blood Pressure</option>
+        <option value="yes">High Blood Pressure</option>
+    </select>
+
+    <button onclick="generateReport()">
+        Generate Health Report
+    </button>
+
+</div>
+
+<div class="report">
+
+    <h2>Health Report</h2>
+
+    <p><b>Name:</b> <span id="name_result"></span></p>
+
+    <p><b>Gender:</b> <span id="gender_result"></span></p>
+
+    <p><b>Age:</b> <span id="age_result"></span></p>
+
+    <p><b>BMI:</b> <span id="bmi"></span></p>
+
+    <p><b>BMI Status:</b> <span id="bmi_status"></span></p>
+
+    <p><b>Disease Risk:</b> <span id="risk"></span></p>
+
+    <p><b>Health Score:</b> <span id="score"></span>/100</p>
+
+    <p><b>Health Status:</b> <span id="health_status"></span></p>
+
+    <h3>Health Tips</h3>
+
+    <div id="tips"></div>
+
+</div>
+
+<div class="report">
+
+    <h2>Health Dashboard</h2>
+
+    <canvas id="healthChart"></canvas>
+
+</div>
+
+<button onclick="window.print()">
+    Download Health Report
+</button>
+```
+
+</div>
+
+<script>
+
+let chart;
+
+function generateReport(){
+
+    let data = {
+
+        name: document.getElementById("name").value,
+
+        gender: document.getElementById("gender").value,
+
+        age: document.getElementById("age").value,
+
+        weight: document.getElementById("weight").value,
+
+        height: document.getElementById("height").value,
+
+        water: document.getElementById("water").value,
+
+        exercise: document.getElementById("exercise").value,
+
+        smoking: document.getElementById("smoking").value,
+
+        diabetes: document.getElementById("diabetes").value,
+
+        bp: document.getElementById("bp").value
+
+    };
+
+    fetch("/health_report", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(data)
+
+    })
+
+    .then(response => response.json())
+
+    .then(result => {
+
+        document.getElementById("name_result").innerHTML =
+        result.name;
+
+        document.getElementById("gender_result").innerHTML =
+        result.gender;
+
+        document.getElementById("age_result").innerHTML =
+        result.age;
+
+        document.getElementById("bmi").innerHTML =
+        result.bmi;
+
+        document.getElementById("bmi_status").innerHTML =
+        result.bmi_status;
+
+        document.getElementById("risk").innerHTML =
+        result.risk;
+
+        document.getElementById("score").innerHTML =
+        result.health_score;
+
+        document.getElementById("health_status").innerHTML =
+        result.health_status;
+
+        document.getElementById("tips").innerHTML =
+        result.tips.join("<br>");
+
+        drawChart(result);
+
+    });
+
+}
+
+function drawChart(result){
+
+    let ctx = document.getElementById("healthChart");
+
+    if(chart){
+        chart.destroy();
+    }
+
+    chart = new Chart(ctx, {
+
+        type: "bar",
+
+        data: {
+
+            labels: [
+
+                "BMI",
+
+                "Water Intake",
+
+                "Exercise",
+
+                "Health Score"
+
+            ],
+
+            datasets: [{
+
+                label: "Health Dashboard",
+
+                data: [
+
+                    result.bmi,
+
+                    result.water,
+
+                    result.exercise,
+
+                    result.health_score
+
+                ]
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>

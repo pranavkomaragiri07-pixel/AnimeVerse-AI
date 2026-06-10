@@ -1,0 +1,213 @@
+/* ==========================================
+SMART HEALTH ADVISOR
+========================================== */
+
+body {
+
+
+font-family: Arial, sans-serif;
+
+background-color: #f4f8fb;
+
+margin: 0;
+
+padding: 20px;
+
+
+}
+
+/* Main Container */
+
+.container {
+
+
+width: 85%;
+
+margin: auto;
+
+
+}
+
+/* Heading */
+
+h1 {
+
+
+text-align: center;
+
+color: #0077b6;
+
+margin-bottom: 30px;
+
+
+}
+
+/* Cards */
+
+.card,
+.report {
+
+background-color: white;
+
+padding: 20px;
+
+margin-bottom: 20px;
+
+border-radius: 12px;
+
+box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+
+}
+
+/* Form Inputs */
+
+input,
+select {
+
+width: 100%;
+
+padding: 12px;
+
+margin-top: 8px;
+
+margin-bottom: 15px;
+
+border: 1px solid #cccccc;
+
+border-radius: 6px;
+
+box-sizing: border-box;
+
+}
+
+/* Button */
+
+button {
+
+width: 100%;
+
+padding: 12px;
+
+border: none;
+
+border-radius: 6px;
+
+background-color: #0077b6;
+
+color: white;
+
+font-size: 16px;
+
+cursor: pointer;
+
+margin-top: 10px;
+
+}
+
+button:hover {
+
+background-color: #005f8f;
+
+}
+
+/* Report Text */
+
+.report p {
+
+font-size: 18px;
+
+margin: 10px 0;
+
+}
+
+.report h2 {
+
+color: #0077b6;
+
+}
+
+.report h3 {
+
+color: #28a745;
+
+}
+
+/* Health Tips */
+
+#tips {
+
+background-color: #f0fff4;
+
+padding: 15px;
+
+border-left: 5px solid #28a745;
+
+border-radius: 5px;
+
+line-height: 1.8;
+
+}
+
+/* Chart Section */
+
+canvas {
+
+max-width: 100%;
+
+margin-top: 20px;
+
+}
+
+/* Health Score Highlight */
+
+#score {
+
+color: #0077b6;
+
+font-weight: bold;
+
+}
+
+/* Risk Highlight */
+
+#risk {
+
+color: #dc3545;
+
+font-weight: bold;
+
+}
+
+/* Health Status */
+
+#health_status {
+
+color: #28a745;
+
+font-weight: bold;
+
+}
+
+/* Responsive Design */
+
+@media screen and (max-width: 768px) {
+
+.container {
+
+    width: 95%;
+
+}
+
+h1 {
+
+    font-size: 28px;
+
+}
+
+input,
+select,
+button {
+
+    font-size: 14px;
+}
+}

@@ -108,45 +108,33 @@ tab1, tab3, tab4, tab5 = st.tabs([
 # 🔍 ANIME SEARCH (FIXED CRASH)
 # =========================
 with tab1:
-
-    st.header("Search Anime")
+    st.header("🔍 Anime Search")
 
     name = st.text_input("Enter anime name")
 
     if st.button("Search"):
 
         if name:
-            url = f"https://api.jikan.moe/v4/anime?q={name}&limit=5"
-            response = requests.get(url)
-            res = response.json()
+
+            url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
+            res = requests.get(url).json()
 
             data = res.get("data", [])
 
-# fallback search matching
-            anime = None
-            for item in data:
-                if name.lower() in item["title"].lower():
-                    anime = item
-                    break
+            if data:
 
-# if no exact match, take first result
-            if not anime and data:
                 anime = data[0]
 
-                    st.success(anime.get("title", "No title"))
-                    st.image(anime["images"]["jpg"]["image_url"])
+                st.success(anime.get("title", "No title"))
+                st.image(anime["images"]["jpg"]["image_url"])
 
-                    st.write("⭐ Rating:", anime.get("score", "N/A"))
-                    st.write("🎬 Episodes:", anime.get("episodes", "N/A"))
-                    st.write("📌 Status:", anime.get("status", "N/A"))
-                    st.write("📖 Synopsis:", anime.get("synopsis", "N/A"))
+                st.write("⭐ Rating:", anime.get("score", "N/A"))
+                st.write("🎬 Episodes:", anime.get("episodes", "N/A"))
+                st.write("📌 Status:", anime.get("status", "N/A"))
+                st.write("📖 Synopsis:", anime.get("synopsis", "N/A"))
 
-                else:
-                    st.error("No anime found.")
-
-            except Exception as e:
-                st.error(f"Error: {e}")
-
+            else:
+                st.error("No anime found.")
 
 # =========================
 # ⚔️ BATTLE SYSTEM (UNCHANGED LOGIC)

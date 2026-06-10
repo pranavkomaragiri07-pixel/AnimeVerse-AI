@@ -2,6 +2,9 @@ import streamlit as st
 import requests
 import random
 
+# =========================
+# IMPORT BACKEND
+# =========================
 from battle import (
     battle_1v1,
     battle_2v2,
@@ -10,6 +13,9 @@ from battle import (
     survival_mode
 )
 
+# =========================
+# PAGE CONFIG
+# =========================
 st.set_page_config(
     page_title="AnimeVerse AI",
     page_icon="⚔️",
@@ -25,27 +31,26 @@ try:
 except:
     pass
 
-
 # =========================
-# QUOTES
+# QUOTE GENERATOR
 # =========================
 def generate_quote(theme):
     quotes = {
         "Motivational": [
             ("Naruto Uzumaki", "I'm not gonna run away!"),
-            ("All Might", "It's fine now! Because I am here!"),
+            ("All Might", "Because I am here!"),
         ],
         "Friendship": [
             ("Luffy", "I will never abandon my friends!"),
             ("Naruto", "Friends are my power!"),
         ],
         "Success": [
+            ("Itachi Uchiha", "Reality is harsh but growth is stronger."),
             ("Levi", "The only thing we can do is move forward."),
-            ("Itachi", "Growth comes from sacrifice."),
         ],
         "Sad": [
-            ("Pain", "Pain is the only way to understand peace."),
-            ("Itachi", "Even heroes suffer."),
+            ("Pain", "Pain is the only path to peace."),
+            ("Itachi", "Even the strongest cry alone."),
         ],
         "Funny": [
             ("Saitama", "Ok."),
@@ -54,8 +59,7 @@ def generate_quote(theme):
     }
 
     char, quote = random.choice(quotes.get(theme, [("Anime", "Stay strong!")]))
-    return f"{quote} — {char}"
-
+    return f"{quote}\n\n— {char}"
 
 # =========================
 # CHARACTER MATCH
@@ -67,35 +71,49 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
         "Monkey D. Luffy": 0,
         "Gojo Satoru": 0,
         "Itachi Uchiha": 0,
-        "Levi Ackerman": 0
+        "Levi Ackerman": 0,
+        "Goku": 0,
+        "Eren Yeager": 0,
+        "Saitama": 0
     }
 
     answers = [q1, q2, q3, q4, q5, q6]
 
     for a in answers:
+
         if a in ["Friendship", "Support", "Loyalty"]:
             score["Naruto Uzumaki"] += 2
-            score["Monkey D. Luffy"] += 1
-
-        if a in ["Strategic", "Intelligence"]:
+            score["Monkey D. Luffy"] += 2
             score["Itachi Uchiha"] += 2
-            score["Levi Ackerman"] += 2
 
-        if a in ["Power", "Overconfidence"]:
+        if a == "Freedom":
+            score["Monkey D. Luffy"] += 3
+            score["Eren Yeager"] += 2
+
+        if a in ["Power", "Physical strength"]:
+            score["Goku"] += 3
+            score["Saitama"] += 2
             score["Gojo Satoru"] += 2
 
-        if a in ["Freedom"]:
-            score["Monkey D. Luffy"] += 2
+        if a in ["Strategic", "Intelligence"]:
+            score["Itachi Uchiha"] += 3
+            score["Levi Ackerman"] += 3
+
+        if a == "Courage":
+            score["Naruto Uzumaki"] += 2
+            score["Monkey D. Luffy"] += 3
 
     return max(score, key=score.get)
 
-
 # =========================
-# UI HEADER
+# HEADER
 # =========================
 st.title("🏆 AnimeVerse AI")
-st.subheader("AI-Powered Anime Battle Simulator")
+st.subheader("AI-Powered Anime Companion")
 
+# =========================
+# TABS
+# =========================
 tab1, tab3, tab4, tab5 = st.tabs([
     "🔍 Anime Search",
     "⚔️ Battle Simulator",
@@ -103,45 +121,60 @@ tab1, tab3, tab4, tab5 = st.tabs([
     "🎭 Personality Quiz"
 ])
 
-
 # =========================
-# 🔍 ANIME SEARCH (FIXED CRASH)
+# 🔍 ANIME SEARCH (FIXED)
 # =========================
 with tab1:
+
     st.header("🔍 Anime Search")
 
-    name = st.text_input("Enter anime name")
+    anime_name = st.text_input("Enter Anime Name")
 
-    if st.button("Search"):
+    if st.button("Search Anime"):
 
-        if name:
+        if anime_name:
 
-            url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
-            res = requests.get(url).json()
+            try:
+                url = f"https://api.jikan.moe/v4/anime?q={anime_name}&limit=5"
+                res = requests.get(url).json()
 
-            data = res.get("data", [])
+                data = res.get("data", [])
 
-            if data:
+                anime = None
 
-                anime = data[0]
+                # smart matching
+                for item in data:
+                    if anime_name.lower() in item["title"].lower():
+                        anime = item
+                        break
 
-                st.success(anime.get("title", "No title"))
-                st.image(anime["images"]["jpg"]["image_url"])
+                if not anime and data:
+                    anime = data[0]
 
-                st.write("⭐ Rating:", anime.get("score", "N/A"))
-                st.write("🎬 Episodes:", anime.get("episodes", "N/A"))
-                st.write("📌 Status:", anime.get("status", "N/A"))
-                st.write("📖 Synopsis:", anime.get("synopsis", "N/A"))
+                if anime:
+                    st.success(anime.get("title", "No Title"))
+                    st.image(anime["images"]["jpg"]["image_url"])
 
-            else:
-                st.error("No anime found.")
+                    st.write("⭐ Rating:", anime.get("score", "N/A"))
+                    st.write("🎬 Episodes:", anime.get("episodes", "N/A"))
+                    st.write("📌 Status:", anime.get("status", "N/A"))
+                    st.write("📖 Synopsis:", anime.get("synopsis", "N/A"))
+
+                else:
+                    st.error("No anime found.")
+
+            except Exception as e:
+                st.error(f"Error: {e}")
+
+        else:
+            st.error("Please enter anime name")
 
 # =========================
-# ⚔️ BATTLE SYSTEM (UNCHANGED LOGIC)
+# ⚔️ BATTLE SYSTEM
 # =========================
 with tab3:
 
-    st.header("Battle Simulator")
+    st.header("⚔️ Battle Simulator")
 
     mode = st.selectbox(
         "Select Mode",
@@ -154,12 +187,11 @@ with tab3:
         b = st.text_input("Character B")
 
         if st.button("Start Battle") and a and b:
-
             result = battle_1v1(a, b)
-
             st.success("🏆 Winner: " + result["winner"])
 
-            st.markdown("### Stats")
+            st.markdown("### Stats Comparison")
+
             fa = result["fighter_a"]["stats"]
             fb = result["fighter_b"]["stats"]
 
@@ -167,43 +199,39 @@ with tab3:
                 col1, col2 = st.columns(2)
 
                 with col1:
-                    st.write(a, k)
+                    st.write(a, k, fa[k])
                     st.progress(fa[k] / 100)
 
                 with col2:
-                    st.write(b, k)
+                    st.write(b, k, fb[k])
                     st.progress(fb[k] / 100)
-
-            st.markdown("### Category Winners")
-            for k, v in result["category_winners"].items():
-                st.write(k, "→", v)
 
             st.write(result["story"])
 
-
     elif mode == "2v2 Battle":
-        st.info("2v2 mode working (backend unchanged)")
+        st.info("2v2 battle working")
 
     elif mode == "4v4 Battle":
-        st.info("4v4 mode working (backend unchanged)")
+        st.info("4v4 battle working")
 
     elif mode == "Tournament Arc":
-        st.info("Tournament mode working")
+        st.info("Tournament working")
 
     elif mode == "Survival Arena":
-        st.info("Survival mode working")
-
+        st.info("Survival working")
 
 # =========================
 # ✨ QUOTES
 # =========================
 with tab4:
 
-    theme = st.selectbox("Theme", ["Motivational", "Friendship", "Success", "Sad", "Funny"])
+    theme = st.selectbox(
+        "Theme",
+        ["Motivational", "Friendship", "Success", "Sad", "Funny"]
+    )
 
     if st.button("Generate Quote"):
         st.success(generate_quote(theme))
-
 
 # =========================
 # 🎭 QUIZ

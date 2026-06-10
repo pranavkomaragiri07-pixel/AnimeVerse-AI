@@ -193,22 +193,62 @@ with tab3:
         ]
     )
 
+    # =========================
+    # ⚔️ 1v1 BATTLE (UPGRADED UI)
+    # =========================
     if mode == "1v1 Battle":
 
         a = st.text_input("Character A")
         b = st.text_input("Character B")
 
         if st.button("Start Battle"):
+
             if a and b:
+
                 result = battle_1v1(a, b)
 
                 st.success(f"🏆 Winner: {result['winner']}")
-                st.write(f"⚡ Score: {result['battle_score']}")
-                st.write(f"🔥 Difficulty: {result['difficulty']}")
-                st.write(f"📖 Story: {result['story']}")
+
+                st.markdown("## ⚔️ Combat Analysis")
+
+                # Fighters stats
+                fa = result["fighter_a"]["stats"]
+                fb = result["fighter_b"]["stats"]
+
+                stats_keys = list(fa.keys())
+
+                for stat in stats_keys:
+
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        st.write(f"🔥 {a} - {stat}")
+                        st.progress(fa[stat] / 100)
+
+                    with col2:
+                        st.write(f"⚡ {b} - {stat}")
+                        st.progress(fb[stat] / 100)
+
+                # =========================
+                # 🏅 CATEGORY WINNERS
+                # =========================
+                st.markdown("## 🏅 Category Winners")
+
+                for k, v in result["category_winners"].items():
+                    st.write(f"⚔️ **{k} → 🥇 {v}**")
+
+                # =========================
+                # 📖 STORY
+                # =========================
+                st.markdown("## 📖 Battle Story")
+                st.write(result["story"])
+
             else:
                 st.error("Enter both characters.")
 
+    # =========================
+    # 👥 2v2 BATTLE
+    # =========================
     elif mode == "2v2 Battle":
 
         a1 = st.text_input("Team A Fighter 1")
@@ -217,20 +257,29 @@ with tab3:
         b2 = st.text_input("Team B Fighter 2")
 
         if st.button("Start Team Battle"):
+
             if all([a1, a2, b1, b2]):
+
                 result = battle_2v2([a1, a2], [b1, b2])
+
                 st.success(f"🏆 Winner: {result['winner']}")
                 st.write(result["story"])
+
             else:
                 st.error("Fill all fields.")
 
+    # =========================
+    # ⚔️ 4v4 BATTLE
+    # =========================
     elif mode == "4v4 Battle":
 
         t1 = st.text_area("Team Alpha (4 names)")
         t2 = st.text_area("Team Omega (4 names)")
 
         if st.button("Start 4v4 Battle"):
+
             if t1 and t2:
+
                 team_a = t1.split("\n")
                 team_b = t2.split("\n")
 
@@ -238,30 +287,45 @@ with tab3:
 
                 st.success(f"🏆 Winner: {result['winner']}")
                 st.write(result["story"])
+
             else:
                 st.error("Enter both teams.")
 
+    # =========================
+    # 🏆 TOURNAMENT
+    # =========================
     elif mode == "Tournament Arc":
 
         fighters = st.text_area("Enter fighters (one per line)")
 
         if st.button("Start Tournament"):
+
             if fighters:
+
                 result = run_tournament(fighters.split("\n"))
+
                 st.success(f"👑 Champion: {result['champion']}")
                 st.write(result["story"])
+
             else:
                 st.error("Enter fighters.")
 
+    # =========================
+    # 🔥 SURVIVAL
+    # =========================
     elif mode == "Survival Arena":
 
         hero = st.text_input("Select Hero")
 
         if st.button("Enter Arena"):
+
             if hero:
+
                 result = survival_mode(hero)
+
                 st.success(result["result"])
                 st.write(f"⭐ Score: {result['score']}")
+
             else:
                 st.error("Enter hero name.")
 

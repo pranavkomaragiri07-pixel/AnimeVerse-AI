@@ -28,7 +28,7 @@ st.set_page_config(
 st.markdown("""
 <style>
 .stApp {
-    background-color: black !important;
+    background-color: 00FF7F !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -254,8 +254,8 @@ with tab3:
 
                 st.markdown("## ⚔️ Combat Analysis")
 
-                fa = result["fighter_a"]["stats"]
-                fb = result["fighter_b"]["stats"]
+                fa = result.get("fighter_a", {}).get("stats", {})
+                fb = result.get("fighter_b", {}).get("stats", {})
 
                 for stat in fa:
                     col1, col2 = st.columns(2)

@@ -1,11 +1,11 @@
 /* =====================================
-   AnimeVerse AI - FINAL DARK THEME FIX
+   AnimeVerse AI - FINAL ULTRA DARK FIX
 ===================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* ===============================
-   GLOBAL FONT + FORCE COLOR
+   GLOBAL RESET (IMPORTANT)
 ================================ */
 html, body {
     font-family: 'Poppins', sans-serif !important;
@@ -14,29 +14,42 @@ html, body {
 }
 
 /* ===============================
-   STREAMLIT MAIN APP BACKGROUND
-   (IMPORTANT FIX FOR WHITE SCREEN)
+   STREAMLIT MAIN BACKGROUND FIX
 ================================ */
 .stApp {
     background: linear-gradient(135deg, #0f172a, #1e293b, #111827) !important;
     color: white !important;
 }
 
-/* Extra Streamlit container fix */
+/* Main container */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #0f172a, #1e293b, #111827) !important;
+    background: transparent !important;
 }
 
+/* Fix top header bar */
 [data-testid="stHeader"] {
     background: transparent !important;
 }
 
+/* Toolbar */
 [data-testid="stToolbar"] {
     background: transparent !important;
 }
 
+/* Main block container (IMPORTANT FIX FOR WHITE BOXES) */
+[data-testid="stAppViewBlockContainer"] {
+    background-color: transparent !important;
+}
+
 /* ===============================
-   TITLES
+   SIDEBAR (IF USED)
+================================ */
+[data-testid="stSidebar"] {
+    background-color: #0f172a !important;
+}
+
+/* ===============================
+   TEXT FIX
 ================================ */
 h1 {
     text-align: center;
@@ -48,9 +61,6 @@ h2, h3 {
     color: #f8fafc !important;
 }
 
-/* ===============================
-   TEXT
-================================ */
 p, span, label {
     color: #e2e8f0 !important;
 }
@@ -93,7 +103,7 @@ p, span, label {
 }
 
 /* ===============================
-   TABS
+   TABS FIX
 ================================ */
 .stTabs [data-baseweb="tab-list"] {
     gap: 10px;
@@ -116,6 +126,8 @@ p, span, label {
 ================================ */
 .stSuccess {
     border-radius: 12px !important;
+    background-color: #14532d !important;
+    color: white !important;
 }
 
 /* ===============================
@@ -127,10 +139,18 @@ img {
 }
 
 /* ===============================
-   CUSTOM ANIME CARD
+   FIX WHITE EXPANDERS / CARDS
+================================ */
+div[data-testid="stExpander"] {
+    background-color: #1e293b !important;
+    border-radius: 10px !important;
+}
+
+/* ===============================
+   CUSTOM CARD
 ================================ */
 .anime-card {
-    background: #1e293b;
+    background: #1e293b !important;
     padding: 20px;
     border-radius: 15px;
     margin-top: 15px;
@@ -138,17 +158,22 @@ img {
 }
 
 /* ===============================
-   FOOTER
-================================ */
-.footer {
-    text-align: center;
-    margin-top: 30px;
-    color: #94a3b8;
-}
-
-/* ===============================
-   FORCE EVERYTHING DARK (IMPORTANT)
+   SCROLLBAR FIX
 ================================ */
 * {
     scrollbar-color: #ff4b4b #1e293b;
+}
+
+/* Chrome scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ff4b4b;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e293b;
 }

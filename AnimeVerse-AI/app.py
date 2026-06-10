@@ -72,7 +72,7 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
         if a in ["Friendship", "Support", "Loyalty"]:
             score["Uzumaki Naruto"] += 2
             score["Monkey D. Luffy"] += 2
-            score["Itachi Uchiha"] += 3
+            score["Uchiha Itachi"] += 3
             score["Saitama"] += 2
 
         if a in ["Freedom"]:
@@ -84,10 +84,10 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
             score["Saitama"] += 2
             score["Gojo Satoru"] += 1
             score["Uzumaki Naruto"] += 1
-            score["Uchiha Itachi""] += 1
+            score["Uchiha Itachi"] += 1
 
         if a in ["Strategic", "Intelligence", "Tactical mind"]:
-            score["Uchiha Itachi""] += 3
+            score["Uchiha Itachi"] += 3
             score["Levi Ackerman"] += 3
 
         if a in ["Courage"]:
@@ -99,7 +99,7 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
             score["Eren Yeager"] += 3
 
         if a in ["Calmness"]:
-            score["Uchiha Itachi""] += 2
+            score["Uchiha Itachi"] += 2
             score["Gojo Satoru"] += 2
 
         if a in ["Speed"]:

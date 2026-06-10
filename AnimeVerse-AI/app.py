@@ -141,7 +141,7 @@ function battle1v1(a, b) {
   const closeness = margin < 5 ? "an incredibly close fight" : margin < 15 ? "a hard-fought battle" : "a decisive victory";
   const finishers = ["Rasengan!", "Gear Fifth!", "Kamehameha!", "Infinity!", "Hakai!", "Omniscience:", "Titan roar!", "Flash Step!"];
   const finisher = finishers[Math.floor(Math.random() * finishers.length)];
-  return { winner, loser: winner === a ? b : a, log: [`${a} vs ${b} — ${closeness}!`, `${winner} lands the finishing blow: ${finisher}`, `Winner: ${winner}`] };
+  return { winner, loser: winner === a ? b : a, log: [`${a} vs ${b} ${closeness}!`, `${winner} lands the finishing blow: ${finisher}`, `Winner: ${winner}`] };
 }
 
 function battleTeam(teamA, teamB) {

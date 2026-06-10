@@ -13,6 +13,11 @@ html, body {
     color: white !important;
 }
 
+/* Force ALL text white (FIX FOR YOUR ISSUE) */
+* {
+    color: #e2e8f0 !important;
+}
+
 /* ===============================
    STREAMLIT MAIN BACKGROUND FIX
 ================================ */
@@ -26,30 +31,26 @@ html, body {
     background: transparent !important;
 }
 
-/* Fix top header bar */
-[data-testid="stHeader"] {
-    background: transparent !important;
-}
-
-/* Toolbar */
-[data-testid="stToolbar"] {
-    background: transparent !important;
-}
-
-/* Main block container (IMPORTANT FIX FOR WHITE BOXES) */
+/* App block container */
 [data-testid="stAppViewBlockContainer"] {
     background-color: transparent !important;
 }
 
+/* Header + Toolbar */
+[data-testid="stHeader"],
+[data-testid="stToolbar"] {
+    background: transparent !important;
+}
+
 /* ===============================
-   SIDEBAR (IF USED)
+   SIDEBAR
 ================================ */
 [data-testid="stSidebar"] {
     background-color: #0f172a !important;
 }
 
 /* ===============================
-   TEXT FIX
+   HEADINGS
 ================================ */
 h1 {
     text-align: center;
@@ -57,12 +58,8 @@ h1 {
     font-weight: 800;
 }
 
-h2, h3 {
+h2, h3, h4 {
     color: #f8fafc !important;
-}
-
-p, span, label {
-    color: #e2e8f0 !important;
 }
 
 /* ===============================
@@ -73,6 +70,17 @@ p, span, label {
     border-radius: 12px !important;
     border: 2px solid #ff4b4b !important;
     background-color: #1e293b !important;
+    color: white !important;
+}
+
+/* ===============================
+   RADIO + LABEL FIX (IMPORTANT)
+================================ */
+.stRadio label {
+    color: white !important;
+}
+
+.stRadio div {
     color: white !important;
 }
 
@@ -103,7 +111,7 @@ p, span, label {
 }
 
 /* ===============================
-   TABS FIX
+   TABS
 ================================ */
 .stTabs [data-baseweb="tab-list"] {
     gap: 10px;
@@ -139,7 +147,7 @@ img {
 }
 
 /* ===============================
-   FIX WHITE EXPANDERS / CARDS
+   EXPANDERS
 ================================ */
 div[data-testid="stExpander"] {
     background-color: #1e293b !important;
@@ -158,13 +166,12 @@ div[data-testid="stExpander"] {
 }
 
 /* ===============================
-   SCROLLBAR FIX
+   SCROLLBAR
 ================================ */
 * {
     scrollbar-color: #ff4b4b #1e293b;
 }
 
-/* Chrome scrollbar */
 ::-webkit-scrollbar {
     width: 10px;
 }

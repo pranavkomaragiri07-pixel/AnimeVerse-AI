@@ -11,6 +11,7 @@ def generate_stats():
         "Battle IQ": random.randint(60, 100),
         "Durability": random.randint(60, 100),
         "Stamina": random.randint(60, 100),
+        "Combat Skills": random.randint(60, 100),
         "Weapon Mastery": random.randint(60, 100)
     }
 
@@ -29,6 +30,7 @@ def battle_1v1(a, b):
         "Battle IQ": a if fa["Battle IQ"] > fb["Battle IQ"] else b,
         "Durability": a if fa["Durability"] > fb["Durability"] else b,
         "Stamina": a if fa["Stamina"] > fb["Stamina"] else b,
+        "Combat Skills": a if fa["Combat Skills"] > fb["Combat Skills"] else b,
         "Weapon Mastery": a if fa["Weapon Mastery"] > fb["Weapon Mastery"] else b
     }
 
@@ -61,6 +63,7 @@ def battle_2v2(team_a, team_b):
             "Strategy": winner,
             "Stamina": winner,
             "Weapon Mastery": winner,
+            "Combat Skills": winner,
             "Team Synergy": winner
         },
         "story": f"{team_a} vs {team_b} was a brutal team clash. {winner} dominated."
@@ -85,6 +88,7 @@ def battle_4v4(team_a, team_b):
             "Battle IQ": winner,
             "Durability": winner,
             "Stamina": winner,
+            "Combat Skills": winner,
             "Weapon Mastery": winner
         },
         "story": f"4v4 war ended. {winner} completely destroyed the opponent team."

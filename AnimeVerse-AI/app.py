@@ -52,20 +52,66 @@ def generate_quote(theme):
     return random.choice(quotes.get(theme, ["Stay strong!"]))
 
 
-def get_character_match(q1, q2):
+def get_character_match(q1, q2, q3, q4, q5, q6):
 
-    if q1 == "Friendship":
-        return "Naruto Uzumaki"
-    elif q1 == "Freedom":
-        return "Monkey D. Luffy"
-    elif q1 == "Knowledge":
-        return "Itachi Uchiha"
-    elif q2 == "Strategic":
-        return "Levi Ackerman"
-    else:
-        return "Gojo Satoru"
+    score = {
+        "Naruto Uzumaki": 0,
+        "Monkey D. Luffy": 0,
+        "Itachi Uchiha": 0,
+        "Levi Ackerman": 0,
+        "Gojo Satoru": 0,
+        "Kurosaki Ichigo": 0,
+        "Goku": 0,
+        "Eren Yeager": 0,
+        "Kamado Tanjiro": 0,
+        "Saitama": 0
+    }
 
+    answers = [q1, q2, q3, q4, q5, q6]
 
+    for a in answers:
+
+        if a in ["Friendship", "Support", "Loyalty"]:
+            score["Naruto Uzumaki"] += 2
+            score["Kamado Tanjiro"] += 2
+            score["Monkey D. Luffy"] += 1
+
+        if a in ["Freedom"]:
+            score["Monkey D. Luffy"] += 3
+            score["Eren Yeager"] += 2
+
+        if a in ["Power", "Physical strength"]:
+            score["Goku"] += 3
+            score["Saitama"] += 2
+            score["Gojo Satoru"] += 2
+
+        if a in ["Strategic", "Intelligence", "Tactical mind"]:
+            score["Itachi Uchiha"] += 3
+            score["Levi Ackerman"] += 3
+
+        if a in ["Courage"]:
+            score["Naruto Uzumaki"] += 2
+            score["Kamado Tanjiro"] += 3
+
+        if a in ["Anger", "Overconfidence"]:
+            score["Eren Yeager"] += 3
+
+        if a in ["Calmness"]:
+            score["Itachi Uchiha"] += 2
+            score["Gojo Satoru"] += 2
+
+        if a in ["Speed"]:
+            score["Goku"] += 2
+
+        if a in ["Leader"]:
+            score["Naruto Uzumaki"] += 2
+            score["Eren Yeager"] += 2
+
+        if a in ["Adapt"]:
+            score["Levi Ackerman"] += 2
+            score["Saitama"] += 1
+
+    return max(score, key=score.get)
 # =========================
 # APP CONFIG
 # =========================
@@ -315,5 +361,5 @@ with tab5:
     q6 = st.radio("What type of power do you prefer?",["Physical strength", "Speed", "Magic/Skills", "Tactical mind"])
 
     if st.button("Reveal Result"):
-        character = get_character_match(q1, q2)
+        character = get_character_match(q1, q2, q3, q4, q5, q6)
         st.success(f"🎌 Your Anime Match: {character}")

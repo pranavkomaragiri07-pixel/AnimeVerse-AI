@@ -1,11 +1,7 @@
 import streamlit as st
 import requests
 import random
-import streamlit.components.v1 as components
 
-# =========================
-# BACKEND IMPORT
-# =========================
 from battle import (
     battle_1v1,
     battle_2v2,
@@ -34,66 +30,30 @@ except:
 
 
 # =========================
-# 🎆 FIREWORKS
+# CLEAN WINNER UI (NO TOP GREEN BAR)
 # =========================
-def show_fireworks():
-    components.html("""
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script>
-        for (let i = 0; i < 5; i++) {
-            setTimeout(() => {
-                confetti({
-                    particleCount: 150,
-                    spread: 100,
-                    origin: { y: 0.6 }
-                });
-            }, i * 400);
-        }
-    </script>
-    """, height=300)
-
-
-# =========================
-# 🏆 GLOW WINNER
-# =========================
-def show_winner_glow(name, title="WINNER!!"):
-    components.html(f"""
-    <style>
-        .title {{
+def show_winner(name):
+    st.markdown(f"""
+        <div style="
             text-align:center;
-            font-size:55px;
+            font-size:50px;
             font-weight:900;
-            color:white;
-            animation: glow 1s infinite alternate;
-        }}
-
-        .name {{
-            text-align:center;
-            font-size:28px;
-            color:#ff4b4b;
-            font-weight:bold;
-        }}
-
-        @keyframes glow {{
-            0% {{
-                text-shadow: 0 0 10px red, 0 0 20px #ff4b4b;
-            }}
-            100% {{
-                text-shadow: 0 0 40px red, 0 0 80px #ff6b6b;
-            }}
-        }}
-    </style>
-
-    <div class="title">{title}</div>
-    <div class="name">{name}</div>
-    """, height=220)
+            color:#ff3b3b;
+            text-shadow:0 0 20px red;
+            margin-top:-20px;
+        ">
+        🏆 WINNER!!<br>
+        <span style="font-size:30px;color:white;">{name}</span>
+        </div>
+    """, unsafe_allow_html=True)
 
 
 # =========================
-# UI
+# HEADER
 # =========================
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Companion")
+
 
 tab1, tab3, tab4, tab5 = st.tabs([
     "🔍 Anime Search",
@@ -116,12 +76,12 @@ with tab1:
 
         if r["data"]:
             anime = r["data"][0]
-            st.success(anime["title"])
             st.image(anime["images"]["jpg"]["image_url"])
+            st.success(anime["title"])
 
 
 # =========================
-# ⚔️ BATTLE SYSTEM
+# ⚔️ BATTLE SYSTEM (FIXED UI)
 # =========================
 with tab3:
     st.header("⚔️ Battle Simulator")
@@ -133,33 +93,45 @@ with tab3:
 
     # ================= 1v1 =================
     if mode == "1v1 Battle":
+
         a = st.text_input("Character A")
         b = st.text_input("Character B")
 
         if st.button("Start Battle"):
+
             result = battle_1v1(a, b)
+            winner = result["winner"]
 
-            st.success(f"🏆 Winner: {result['winner']}")
+            st.markdown("---")  # removes big gap
 
-            show_fireworks()
-            show_winner_glow(result["winner"], "WINNER!!")
+            show_winner(winner)
 
-            # stats
-            st.markdown("## ⚔️ Stats")
+            # ================= STATS AS BARS =================
+            st.markdown("## ⚔️ Stats Comparison")
+
             fa = result["fighter_a"]["stats"]
             fb = result["fighter_b"]["stats"]
 
-            for k in fa:
+            for stat in fa:
                 col1, col2 = st.columns(2)
-                with col1:
-                    st.write(a, k, fa[k])
-                with col2:
-                    st.write(b, k, fb[k])
 
-            # category
+                with col1:
+                    st.write(a, stat)
+                    st.progress(fa[stat] / 100)
+
+                with col2:
+                    st.write(b, stat)
+                    st.progress(fb[stat] / 100)
+
+            # ================= CATEGORY WINNERS =================
             st.markdown("## 🏅 Category Winners")
+
             for k, v in result["category_winners"].items():
-                st.write(k, "→", v)
+
+                if v == winner:
+                    st.markdown(f"🔥 🏅 **{k} → {v} (WINNER BOOST)**")
+                else:
+                    st.write(f"🏅 {k} → {v}")
 
             st.write(result["story"])
 
@@ -173,16 +145,20 @@ with tab3:
         b2 = st.text_input("Team B 2")
 
         if st.button("Start Battle"):
+
             result = battle_2v2([a1, a2], [b1, b2])
+            winner = result["winner"]
 
-            st.success(f"🏆 Winner: {result['winner']}")
-
-            show_fireworks()
-            show_winner_glow(result["winner"], "WINNER!!")
+            st.markdown("---")
+            show_winner(winner)
 
             st.markdown("## 🏅 Category Winners")
+
             for k, v in result["category_winners"].items():
-                st.write(k, "→", v)
+                if v == winner:
+                    st.markdown(f"🔥 🏅 **{k} → {v}**")
+                else:
+                    st.write(f"🏅 {k} → {v}")
 
             st.write(result["story"])
 
@@ -190,20 +166,24 @@ with tab3:
     # ================= 4v4 =================
     elif mode == "4v4 Battle":
 
-        t1 = st.text_area("Team Alpha (4 names)")
-        t2 = st.text_area("Team Omega (4 names)")
+        t1 = st.text_area("Team Alpha")
+        t2 = st.text_area("Team Omega")
 
         if st.button("Start Battle"):
+
             result = battle_4v4(t1.split("\n"), t2.split("\n"))
+            winner = result["winner"]
 
-            st.success(f"🏆 Winner: {result['winner']}")
-
-            show_fireworks()
-            show_winner_glow(result["winner"], "WINNER!!")
+            st.markdown("---")
+            show_winner(winner)
 
             st.markdown("## 🏅 Category Winners")
+
             for k, v in result["category_winners"].items():
-                st.write(k, "→", v)
+                if v == winner:
+                    st.markdown(f"🔥 🏅 **{k} → {v}**")
+                else:
+                    st.write(f"🏅 {k} → {v}")
 
             st.write(result["story"])
 
@@ -214,21 +194,21 @@ with tab3:
         fighters = st.text_area("Enter fighters")
 
         if st.button("Start Tournament"):
+
             result = run_tournament(fighters.split("\n"))
+            winner = result["champion"]
 
-            st.success(f"👑 Champion: {result['champion']}")
+            st.markdown("---")
+            show_winner(winner)
 
-            show_fireworks()
-            show_winner_glow(result["champion"], "CHAMPION!!")
-
-            st.markdown("## 🔥 Rounds")
+            st.markdown("## 🔥 Tournament Rounds")
             st.write(result["rounds"])
 
             st.write(result["story"])
 
 
 # =========================
-# QUOTE
+# QUOTES
 # =========================
 with tab4:
     theme = st.selectbox("Theme", ["Motivational","Friendship","Success","Sad","Funny"])
@@ -241,6 +221,7 @@ with tab4:
 # QUIZ
 # =========================
 with tab5:
+
     q1 = st.radio("Motivation", ["Power","Friendship","Freedom","Knowledge"])
     q2 = st.radio("Fight Style", ["Head on","Strategic","Support friends","Adapt"])
     q3 = st.radio("Trait", ["Courage","Intelligence","Loyalty","Calmness"])

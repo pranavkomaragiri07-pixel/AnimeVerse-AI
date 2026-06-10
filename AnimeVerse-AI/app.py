@@ -38,20 +38,20 @@ except:
 def generate_quote(theme):
     quotes = {
         "Motivational": [
-            ("Naruto Uzumaki", "I'm not gonna run away!"),
-            ("All Might", "Because I am here!"),
+            ("Naruto Uzumaki", "Believe it! Never give up."),
+            ("All Might", "I am here!"),
         ],
         "Friendship": [
             ("Luffy", "I will never abandon my friends!"),
             ("Naruto", "Friends are my power!"),
         ],
         "Success": [
-            ("Itachi Uchiha", "Reality is harsh but growth is stronger."),
-            ("Levi Ackerman", "The only thing we can do is move forward."),
+            ("Itachi Uchiha", "Growth comes through sacrifice."),
+            ("Levi Ackerman", "Move forward."),
         ],
         "Sad": [
-            ("Pain", "Pain is the only path to peace."),
-            ("Itachi", "Even the strongest cry alone."),
+            ("Pain", "Pain leads to understanding."),
+            ("Itachi", "Even heroes suffer."),
         ],
         "Funny": [
             ("Saitama", "Ok."),
@@ -95,6 +95,10 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
         if a in ["Strategic", "Intelligence"]:
             score["Itachi Uchiha"] += 3
 
+        if a == "Courage":
+            score["Naruto Uzumaki"] += 2
+            score["Monkey D. Luffy"] += 3
+
     return max(score, key=score.get)
 
 
@@ -103,6 +107,7 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
 # =========================
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Companion")
+
 
 tab1, tab3, tab4, tab5 = st.tabs([
     "🔍 Anime Search",
@@ -113,7 +118,7 @@ tab1, tab3, tab4, tab5 = st.tabs([
 
 
 # =========================
-# 🔍 ANIME SEARCH (FIXED FINAL)
+# 🔍 ANIME SEARCH (FINAL FIX)
 # =========================
 with tab1:
 
@@ -127,21 +132,35 @@ with tab1:
 
             try:
                 url = "https://api.jikan.moe/v4/anime"
-                params = {"q": anime_name, "limit": 10}
+                params = {
+                    "q": anime_name,
+                    "limit": 25,
+                    "sfw": True
+                }
 
-                res = requests.get(url, params=params, timeout=10).json()
+                headers = {"User-Agent": "Mozilla/5.0"}
+
+                res = requests.get(url, params=params, headers=headers, timeout=10).json()
 
                 data = res.get("data", [])
 
                 anime = None
+                query = anime_name.lower().strip()
 
-                # BEST MATCH LOGIC (FIXED)
+                # 🔥 STRONG MATCH LOGIC
                 for item in data:
                     title = item.get("title", "").lower()
-                    if anime_name.lower() in title:
+
+                    if (
+                        query == title
+                        or query in title
+                        or title in query
+                        or any(word in title for word in query.split())
+                    ):
                         anime = item
                         break
 
+                # fallback
                 if not anime and data:
                     anime = data[0]
 
@@ -159,14 +178,14 @@ with tab1:
                     st.error("No anime found.")
 
             except Exception as e:
-                st.error(f"API Error: {e}")
+                st.error(f"Error: {e}")
 
         else:
-            st.error("Please enter anime name")
+            st.warning("Please enter anime name")
 
 
 # =========================
-# ⚔️ BATTLE SYSTEM (UNCHANGED)
+# ⚔️ BATTLE SYSTEM
 # =========================
 with tab3:
 
@@ -186,21 +205,9 @@ with tab3:
             result = battle_1v1(a, b)
             st.success("🏆 Winner: " + result["winner"])
 
-    elif mode == "2v2 Battle":
-        st.info("2v2 mode working")
-
-    elif mode == "4v4 Battle":
-        st.info("4v4 mode working")
-
-    elif mode == "Tournament Arc":
-        st.info("Tournament mode working")
-
-    elif mode == "Survival Arena":
-        st.info("Survival mode working")
-
 
 # =========================
-# QUOTES
+# ✨ QUOTES
 # =========================
 with tab4:
 
@@ -214,7 +221,7 @@ with tab4:
 
 
 # =========================
-# QUIZ
+# 🎭 QUIZ
 # =========================
 with tab5:
 

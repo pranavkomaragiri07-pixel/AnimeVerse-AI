@@ -1,311 +1,245 @@
 from gemini_utils import get_gemini_response
 
 
+# =========================
+# 🥊 1v1 BATTLE SYSTEM
+# =========================
 def battle_1v1(char1, char2):
 
     try:
         prompt = f"""
-        Simulate a professional anime battle analysis between
-        {char1} and {char2}.
+You are an expert anime battle analyst.
 
-        Generate:
+Simulate a cinematic 1v1 battle between {char1} and {char2}.
 
-        💪 POWER ANALYSIS
-        Raw Power (0-100)
-        Speed (0-100)
-        Intelligence (0-100)
-        Battle IQ (0-100)
-        Durability (0-100)
-        Stamina (0-100)
-        Special Powers (0-100)
+FORMAT OUTPUT EXACTLY LIKE THIS:
 
-        📊 DETAILED COMPARISON TABLE
+💪 POWER ANALYSIS
+- Raw Power (0-100)
+- Speed (0-100)
+- Intelligence (0-100)
+- Battle IQ (0-100)
+- Durability (0-100)
+- Stamina (0-100)
+- Special Powers (0-100)
 
-        Strength
-        Speed
-        Intelligence
-        Battle IQ
-        Durability
-        Stamina
-        Special Powers
-        Combat Skills
-        Experience
+📊 DETAILED COMPARISON
+Compare both fighters in:
+Strength, Speed, Intelligence, Battle IQ, Durability, Stamina, Special Powers, Combat Skills, Experience
 
-        🌟 SIGNATURE ABILITIES
+🌟 SIGNATURE ABILITIES
+List abilities for both fighters
 
-        For both fighters.
+🏆 FINAL VERDICT
+- Winner
+- Battle Score (each fighter)
+- MVP Ability
+- Winning Factor
+- Difficulty (Easy / Medium / Hard / Extreme)
 
-        🏆 FINAL VERDICT
-
-        Winner
-        Win Probability
-        Difficulty Rating
-        Battle Score For Each Fighter
-        MVP Ability
-        Winning Factor
-
-        📖 DETAILED BATTLE STORY
-
-        Create a cinematic anime battle story.
-        """
+📖 BATTLE STORY
+Write cinematic anime-style fight story with actions, emotions, and abilities.
+"""
 
         return get_gemini_response(prompt)
 
     except Exception:
-
         return f"""
-🏆 Winner: {char1}
+🏆 WINNER: {char1}
 
-Win Probability: 65%
-Difficulty: Extreme Diff
-Battle Score: 950
+Battle Score:
+{char1}: 950
+{char2}: 870
 
 MVP Ability:
 Ultimate Technique
 
 Winning Factor:
-Superior Combat Ability
+Superior Combat Skill
 
-📖 Battle Story
-
-A fierce battle occurred between {char1} and {char2}.
-
-After an intense clash of abilities and strategy,
-{char1} emerged victorious.
+📖 STORY:
+A fierce battle between {char1} and {char2} ends with {char1} emerging victorious.
 """
 
 
+# =========================
+# 👥 2v2 BATTLE SYSTEM
+# =========================
 def battle_2v2(team1, team2):
 
     try:
         prompt = f"""
-        Simulate an anime team battle.
+Simulate a cinematic 2v2 anime team battle.
 
-        Team A:
-        {team1}
+Team A: {team1}
+Team B: {team2}
 
-        Team B:
-        {team2}
+FORMAT:
 
-        Generate:
+📊 TEAM ANALYSIS
+- Attack Power
+- Defense
+- Strategy
+- Synergy
+- Special Abilities
 
-        Attack Power (0-100)
-        Defense (0-100)
-        Strategy (0-100)
-        Synergy (0-100)
-        Special Abilities (0-100)
+🏆 FINAL RESULT
+- Winning Team
+- MVP Fighter
+- Best Combo
+- Winning Factor
 
-        Team Comparison
-
-        Winner
-        Win Probability
-        Difficulty Rating
-        MVP Fighter
-        Best Combo
-        Winning Factor
-
-        Generate a detailed team battle story.
-        """
+📖 BATTLE STORY
+Cinematic anime fight narration
+"""
 
         return get_gemini_response(prompt)
 
     except Exception:
+        return f"""
+🏆 WINNER: Team A
 
-        return """
-🏆 Winner: Team A
-
-Win Probability: 60%
-
-Difficulty:
-High Diff
-
-MVP Fighter:
-Gojo
+MVP: Gojo
 
 Best Combo:
 Gojo + Sukuna
 
 Winning Factor:
-Superior Team Coordination
+Superior coordination and teamwork
 """
 
 
+# =========================
+# ⚔️ 4v4 BATTLE SYSTEM
+# =========================
 def battle_4v4(team1, team2):
 
     try:
         prompt = f"""
-        Simulate an epic 4v4 anime battle.
+Simulate an epic 4v4 anime battle.
 
-        Team A:
-        {team1}
+Team A: {team1}
+Team B: {team2}
 
-        Team B:
-        {team2}
+FORMAT:
 
-        Generate:
+📊 TEAM STATS
+- Power
+- Strategy
+- Coordination
+- Synergy
 
-        Team Power Analysis
-        Synergy Score
-        Attack Rating
-        Defense Rating
-        Strategy Rating
+🏆 RESULT
+- Winner
+- MVP Fighter
+- Battle Highlights
+- Winning Factor
 
-        MVP Fighter
-        Team Rankings
-        Winning Factor
-
-        Winner
-        Probability
-        Difficulty
-
-        Detailed Battle Story
-        """
+📖 CINEMATIC STORY
+Epic anime battle narration with transformations and final clash.
+"""
 
         return get_gemini_response(prompt)
 
     except Exception:
+        return f"""
+🏆 WINNER: Team A
 
-        return """
-🏆 Winner: Team A
+MVP: Gojo Satoru
 
-MVP Fighter:
-Gojo Satoru
-
-Synergy Score:
-89
-
-Attack Rating:
-95
-
-Defense Rating:
-90
-
-Difficulty:
-Extreme Diff
+Battle Highlight:
+Dominated the battlefield with overwhelming power and strategy
 """
 
 
+# =========================
+# 🏆 TOURNAMENT MODE
+# =========================
 def run_tournament(characters):
 
     try:
         prompt = f"""
-        Run a complete anime tournament.
+Run a full anime tournament.
 
-        Participants:
-        {characters}
+Participants:
+{characters}
 
-        Generate:
+FORMAT:
 
-        Quarter Finals
+🥊 Quarter Finals
+🥊 Semi Finals
+🥊 Grand Final
 
-        Semi Finals
+🏆 CHAMPION
+🏅 TOURNAMENT MVP
+🔥 MOST INTENSE MATCH
 
-        Grand Final
+📜 HALL OF FAME
+List top performers
 
-        Champion
-
-        Tournament MVP
-
-        Total Knockouts
-
-        Most Intense Match
-
-        Hall Of Fame
-
-        Tournament Statistics
-
-        Create detailed tournament commentary.
-        """
+📊 TOURNAMENT SUMMARY
+Brief analytics
+"""
 
         return get_gemini_response(prompt)
 
     except Exception:
+        return f"""
+🏆 CHAMPION: Gojo Satoru
 
-        return """
-🏆 TOURNAMENT RESULTS
-
-Quarter Finals Completed
-
-Semi Finals Completed
-
-Grand Final Completed
-
-👑 Champion:
-Gojo Satoru
-
-🔥 Tournament MVP:
-Gojo Satoru
-
-Knockouts:
-3
+🔥 MVP: Gojo
 
 Most Intense Match:
 Gojo vs Madara
 
-Hall Of Fame:
-Gojo Satoru
+Hall of Fame:
+Gojo, Madara, Naruto
 """
-        
 
+
+# =========================
+# 🔥 SURVIVAL MODE
+# =========================
 def survival_mode(character):
 
     try:
         prompt = f"""
-        Character:
-        {character}
+Run survival arena mode for {character}.
 
-        Run Survival Arena Mode.
+FORMAT:
 
-        Generate:
+🔥 ROUNDS
+Round 1
+Round 2
+Round 3
 
-        Round 1
+⚔️ OPPONENTS
+List enemies faced
 
-        Round 2
+📊 RESULTS
+Wins / Losses
 
-        Round 3
+🏆 FINAL STATS
+- XP Earned
+- Survival Score
+- Arena Rank
+- Achievement
 
-        Opponents
-
-        Victories
-
-        Defeats
-
-        XP Earned
-
-        Survival Score
-
-        Arena Rank
-
-        Achievement Unlocked
-
-        Generate a cinematic survival story.
-        """
+📖 STORY
+Cinematic survival journey narration
+"""
 
         return get_gemini_response(prompt)
 
     except Exception:
-
         return f"""
 🔥 SURVIVAL REPORT
 
-Character:
-{character}
+Character: {character}
 
-Rounds Cleared:
-5
-
-Enemies Defeated:
-4
-
-XP Earned:
-4500
-
-Survival Score:
-87%
-
-Arena Rank:
-S-TIER
-
-Achievement:
-KING OF THE ARENA
+Rounds Cleared: 5
+XP Earned: 4500
+Survival Score: 87%
+Rank: S-TIER
+Achievement: KING OF THE ARENA
 """

@@ -167,6 +167,8 @@ with tab1:
 
                 if data["data"]:
                     anime = data["data"][0]
+                else:
+                    st.error("No anime found.")
 
                     st.success(f"Results for {anime['title']}")
                     st.image(anime["images"]["jpg"]["image_url"], width=300)

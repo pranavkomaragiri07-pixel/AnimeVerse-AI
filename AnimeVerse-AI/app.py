@@ -28,7 +28,7 @@ st.set_page_config(
 st.markdown("""
 <style>
 .stApp {
-    background-color: 00FF7F !important;
+    background-color: linear-gradient(to top left, #0099ff 0%, #cc33ff 100%); !important;
 }
 </style>
 """, unsafe_allow_html=True)

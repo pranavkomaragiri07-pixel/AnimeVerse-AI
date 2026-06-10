@@ -34,7 +34,10 @@ def battle_1v1(a, b):
         "Weapon Mastery": a if fa["Weapon Mastery"] > fb["Weapon Mastery"] else b
     }
 
-    winner = a if sum(fa.values()) > sum(fb.values()) else b
+    a_score = sum(1 for k in fa if fa[k] > fb[k])
+    b_score = sum(1 for k in fa if fb[k] > fa[k])
+
+    winner = a if a_score > b_score else b
 
     return {
         "fighter_a": {"name": a, "stats": fa},
@@ -48,35 +51,40 @@ def battle_1v1(a, b):
 # =========================
 # 👥 2v2 BATTLE (KEEP CATEGORY WINNERS)
 # =========================
+
 def battle_2v2(team_a, team_b):
 
-    score_a = sum(sum(generate_stats().values()) for _ in team_a)
-    score_b = sum(sum(generate_stats().values()) for _ in team_b)
+    team_a_stats = [generate_stats() for _ in team_a]
+    team_b_stats = [generate_stats() for _ in team_b]
+
+    score_a = sum(sum(p.values()) for p in team_a_stats)
+    score_b = sum(sum(p.values()) for p in team_b_stats)
 
     winner = "Team A" if score_a > score_b else "Team B"
 
     return {
         "winner": winner,
         "category_winners": {
-            "Attack Power": winner,
-            "Defense": winner,
-            "Strategy": winner,
+            "Power": winner,
+            "Speed": winner,
+            "Battle IQ": winner,
+            "Durability": winner,
             "Stamina": winner,
-            "Weapon Mastery": winner,
             "Combat Skills": winner,
-            "Team Synergy": winner
+            "Weapon Mastery": winner
         },
-        "story": f"{team_a} vs {team_b} was a brutal team clash. {winner} dominated."
+        "story": f"{team_a} vs {team_b} ended in a brutal fight. {winner} dominated."
     }
-
-
 # =========================
 # ⚔️ 4v4 BATTLE (KEEP CATEGORY WINNERS)
 # =========================
 def battle_4v4(team_a, team_b):
 
-    score_a = sum(sum(generate_stats().values()) for _ in team_a)
-    score_b = sum(sum(generate_stats().values()) for _ in team_b)
+    team_a_stats = [generate_stats() for _ in team_a]
+    team_b_stats = [generate_stats() for _ in team_b]
+
+    score_a = sum(sum(p.values()) for p in team_a_stats)
+    score_b = sum(sum(p.values()) for p in team_b_stats)
 
     winner = "Team Alpha" if score_a > score_b else "Team Omega"
 
@@ -91,10 +99,8 @@ def battle_4v4(team_a, team_b):
             "Combat Skills": winner,
             "Weapon Mastery": winner
         },
-        "story": f"4v4 war ended. {winner} completely destroyed the opponent team."
+        "story": f"Epic 4v4 battle ended. {winner} crushed the opponent team."
     }
-
-
 # =========================
 # 🏆 TOURNAMENT MODE (REMOVED CATEGORY WINNERS)
 # =========================

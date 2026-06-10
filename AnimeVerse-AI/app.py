@@ -20,25 +20,33 @@ from battle import (
 def generate_quote(theme):
     quotes = {
         "Motivational": [
-            "Never give up until the end.",
-            "Power grows through struggle.",
-            "A true warrior never stops."
+            ("Naruto Uzumaki", "I'm not gonna run away, I never go back on my word."),
+            ("Rock Lee", "A dropout will beat a genius through hard work."),
+            ("All Might", "It's fine now. Why? Because I am here!")
         ],
+
         "Friendship": [
-            "Friends are your greatest strength.",
-            "Together we are unstoppable."
+            ("Monkey D. Luffy", "I don't want to conquer anything. I just think the guy with the most freedom is the Pirate King."),
+            ("Naruto Uzumaki", "I will never let my friends die."),
+            ("Natsu Dragneel", "We're not alone when we have friends.")
         ],
+
         "Success": [
-            "Hard work beats talent.",
-            "Success is earned, not given."
+            ("Itachi Uchiha", "People live their lives bound by what they accept as correct."),
+            ("Light Yagami", "I am Justice."),
+            ("Levi Ackerman", "The only thing we're allowed to do is believe we won't regret the choice we made.")
         ],
+
         "Sad": [
-            "Pain creates strength.",
-            "Even heroes cry."
+            ("Nagato (Pain)", "If you don't share someone's pain, you can never understand them."),
+            ("Itachi Uchiha", "No one understands you until it's too late."),
+            ("Griffith", "Dreams... are meaningful only when shared.")
         ],
+
         "Funny": [
-            "Even anime heroes need snacks.",
-            "Training can wait, food cannot."
+            ("Saitama", "Ok."),
+            ("Goku", "I'm hungry again."),
+            ("Kakashi", "Sorry I'm late... I was lost on the path of life.")
         ]
     }
     return random.choice(quotes.get(theme, ["Stay strong!"]))
@@ -301,6 +309,10 @@ with tab5:
 
     q1 = st.radio("What motivates you?", ["Power", "Friendship", "Freedom", "Knowledge"])
     q2 = st.radio("How do you fight?", ["Head on", "Strategic", "Support friends", "Adapt"])
+    q3 = st.radio("What is your strongest trait?",["Courage", "Intelligence", "Loyalty", "Calmness"])
+    q4 = st.radio("What role do you take in a team?",["Leader", "Support", "Lone wolf", "Strategist"])
+    q5 = st.radio("What is your biggest weakness?",["Anger", "Trust issues", "Overconfidence", "Fear"])
+    q6 = st.radio("What type of power do you prefer?",["Physical strength", "Speed", "Magic/Skills", "Tactical mind"])
 
     if st.button("Reveal Result"):
         character = get_character_match(q1, q2)

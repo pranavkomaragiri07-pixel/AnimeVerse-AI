@@ -86,8 +86,8 @@ def generate_quote(theme):
         ("Kakashi", "Sorry I'm late... I got lost on the path of life."),
         ("Zenitsu", "I don’t want to die yet!!"),
     ]
-}
-return random.choice(quotes.get(theme, [("Anime", "Stay strong")]))
+    }
+    return random.choice(quotes.get(theme, [("Anime", "Stay strong")]))
 
 
 # =========================

@@ -8,7 +8,7 @@
    GLOBAL FONT + RESET
 ================================ */
 html, body {
-    font-family: 'Poppins', sans-serif !important;
+    font-family: Times New Roman !important;
     background-color: #0f172a !important;
     color: #e2e8f0 !important;
 }
@@ -17,7 +17,7 @@ html, body {
    🔥 FORCE STREAMLIT FULL DARK BACKGROUND (IMPORTANT FIX)
 ================================ */
 .stApp {
-    background: #0f172a !important;
+    background: 0000CD !important;
     color: #e2e8f0 !important;
 }
 
@@ -52,19 +52,19 @@ html, body {
 ================================ */
 h1 {
     text-align: center;
-    color: #ff4b4b !important;
+    color: white !important;
     font-weight: 800;
 }
 
 h2, h3 {
-    color: #f8fafc !important;
+    color: white !important;
 }
 
 /* ===============================
    🔥 FORCE ALL TEXT WHITE (IMPORTANT FIX)
 ================================ */
 * {
-    color: #e2e8f0 !important;
+    color: white !important;
 }
 
 /* Markdown fix */

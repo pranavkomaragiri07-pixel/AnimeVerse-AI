@@ -4,7 +4,7 @@ import random
 import streamlit.components.v1 as components
 
 # =========================
-# IMPORT BACKEND
+# IMPORT REAL BACKEND
 # =========================
 from battle import (
     battle_1v1,
@@ -15,7 +15,7 @@ from battle import (
 )
 
 # =========================
-# PAGE CONFIG
+# PAGE CONFIG (MUST BE FIRST)
 # =========================
 st.set_page_config(
     page_title="AnimeVerse AI",
@@ -24,7 +24,7 @@ st.set_page_config(
 )
 
 # =========================
-# CSS
+# CSS LOADER (KEEP HERE)
 # =========================
 try:
     with open("styles.css") as f:
@@ -34,7 +34,7 @@ except:
 
 
 # =========================
-# 🎆 FIREWORKS FUNCTION
+# 🎆 FIREWORKS
 # =========================
 def show_fireworks():
     components.html("""
@@ -59,7 +59,7 @@ def show_fireworks():
 # =========================
 # 🏆 WINNER GLOW
 # =========================
-def show_winner_glow(winner):
+def show_winner_glow(name):
     components.html(f"""
     <style>
         .winner {{
@@ -82,62 +82,42 @@ def show_winner_glow(winner):
                 text-shadow: 0 0 10px #ff0000, 0 0 20px #ff4b4b;
             }}
             100% {{
-                text-shadow: 0 0 30px #ff0000, 0 0 60px #ff6b6b;
+                text-shadow: 0 0 40px #ff0000, 0 0 80px #ff6b6b;
             }}
         }}
     </style>
 
-    <div class="winner">🏆 WINNER!!</div>
-    <div class="name">{winner}</div>
-    """, height=220)
+    <div class="winner">🏆 WINNER !!</div>
+    <div class="name">{name}</div>
+    """, height=200)
 
 
 # =========================
-# 🏆 CHAMPION GLOW (TOURNAMENT)
-# =========================
-def show_champion_glow(champion):
-    components.html(f"""
-    <style>
-        .champion {{
-            text-align:center;
-            font-size:70px;
-            font-weight:900;
-            color:#fff;
-            animation: glow 1s infinite alternate;
-        }}
-
-        .name {{
-            text-align:center;
-            font-size:30px;
-            color:#ffd700;
-            font-weight:bold;
-        }}
-
-        @keyframes glow {{
-            0% {{
-                text-shadow: 0 0 10px #ffd700, 0 0 20px #ff4b4b;
-            }}
-            100% {{
-                text-shadow: 0 0 40px #ffd700, 0 0 80px #ff6b6b;
-            }}
-        }}
-    </style>
-
-    <div class="champion">🏆 CHAMPION !!</div>
-    <div class="name">{champion}</div>
-    """, height=260)
-
-
-# =========================
-# QUOTES
+# QUOTE GENERATOR
 # =========================
 def generate_quote(theme):
     quotes = {
-        "Motivational": [("Naruto Uzumaki", "Believe it!")],
-        "Friendship": [("Luffy", "I will become Pirate King.")],
-        "Success": [("Itachi", "Knowledge is power.")],
-        "Sad": [("Pain", "Know pain.")],
-        "Funny": [("Saitama", "Ok.")]
+        "Motivational": [
+            ("Naruto Uzumaki", "I'm not gonna run away..."),
+            ("Rock Lee", "Hard work beats talent."),
+            ("All Might", "Because I am here!")
+        ],
+        "Friendship": [
+            ("Luffy", "I will become Pirate King."),
+            ("Naruto Uzumaki", "I won't let my friends die."),
+        ],
+        "Success": [
+            ("Itachi Uchiha", "Reality is harsh."),
+            ("Light Yagami", "I am justice."),
+        ],
+        "Sad": [
+            ("Pain", "Feel pain."),
+            ("Itachi", "Forgive me."),
+        ],
+        "Funny": [
+            ("Saitama", "Ok."),
+            ("Goku", "I’m hungry."),
+        ]
     }
     return random.choice(quotes.get(theme, [("Anime", "Stay strong")]))
 
@@ -163,6 +143,8 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
         if a in ["Friendship", "Support", "Loyalty"]:
             score["Naruto Uzumaki"] += 2
             score["Monkey D. Luffy"] += 2
+            score["Itachi Uchiha"] += 2
+            score["Saitama"] += 1
 
         if a in ["Freedom"]:
             score["Monkey D. Luffy"] += 3
@@ -171,30 +153,55 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
         if a in ["Power", "Physical strength"]:
             score["Goku"] += 3
             score["Saitama"] += 2
+            score["Gojo Satoru"] += 2
+            score["Naruto Uzumaki"] += 1
+            score["Itachi Uchiha"] += 1
 
-        if a in ["Strategic", "Intelligence"]:
+        if a in ["Strategic", "Intelligence", "Tactical mind"]:
             score["Itachi Uchiha"] += 3
             score["Levi Ackerman"] += 3
 
         if a in ["Courage"]:
-            score["Naruto Uzumaki"] += 3
+            score["Naruto Uzumaki"] += 2
+            score["Monkey D. Luffy"] += 3
+            score["Goku"] += 2
+
+        if a in ["Anger", "Overconfidence"]:
+            score["Eren Yeager"] += 3
+
+        if a in ["Calmness"]:
+            score["Itachi Uchiha"] += 2
+            score["Gojo Satoru"] += 2
 
         if a in ["Speed"]:
             score["Goku"] += 2
+            score["Naruto Uzumaki"] += 1
+            score["Monkey D. Luffy"] += 1
 
         if a in ["Leader"]:
             score["Naruto Uzumaki"] += 2
             score["Eren Yeager"] += 2
+            score["Monkey D. Luffy"] += 2
+
+        if a in ["Adapt"]:
+            score["Levi Ackerman"] += 2
+            score["Goku"] += 2
+            score["Itachi Uchiha"] += 3
+            score["Saitama"] += 1
 
     return max(score, key=score.get)
 
 
 # =========================
-# UI
+# HEADER
 # =========================
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Companion")
 
+
+# =========================
+# TABS
+# =========================
 tab1, tab3, tab4, tab5 = st.tabs([
     "🔍 Anime Search",
     "⚔️ Battle Simulator",
@@ -213,63 +220,76 @@ with tab1:
 
     if st.button("Search Anime"):
         url = f"https://api.jikan.moe/v4/anime?q={anime_name}&limit=1"
-        r = requests.get(url).json()
+        response = requests.get(url).json()
 
-        if r["data"]:
-            anime = r["data"][0]
-            st.success(anime["title"])
-            st.image(anime["images"]["jpg"]["image_url"])
+        if response["data"]:
+            anime = response["data"][0]
+
+            st.success(f"Results for {anime['title']}")
+            st.image(anime["images"]["jpg"]["image_url"], width=300)
+
+            st.write(f"⭐ Rating: {anime['score']}")
+            st.write(f"🎬 Episodes: {anime['episodes']}")
+            st.write(f"🎭 Genres: {', '.join(g['name'] for g in anime['genres'])}")
+
+            if anime["year"]:
+                st.write(f"📅 Year: {anime['year']}")
+
+            st.write(anime["synopsis"])
 
 
 # =========================
-# ⚔️ BATTLE MODE (1v1)
+# ⚔️ BATTLE SIMULATOR
 # =========================
 with tab3:
     st.header("⚔️ Battle Simulator")
 
-    mode = st.selectbox("Mode", ["1v1 Battle", "Tournament Arc"])
+    mode = st.selectbox(
+        "Select Mode",
+        ["1v1 Battle", "2v2 Battle", "4v4 Battle", "Tournament Arc", "Survival Arena"]
+    )
 
+    # ---------------- 1v1 ----------------
     if mode == "1v1 Battle":
-
         a = st.text_input("Character A")
         b = st.text_input("Character B")
 
         if st.button("Start Battle"):
             result = battle_1v1(a, b)
 
-            st.success(f"Winner: {result['winner']}")
+            st.success(result["winner"])
 
+            # 🎆 ADD
             show_fireworks()
             show_winner_glow(result["winner"])
 
+            st.write(result["story"])
 
-    # =========================
-    # 🏆 TOURNAMENT MODE (UPDATED)
-    # =========================
+
+    # ---------------- TOURNAMENT ----------------
     elif mode == "Tournament Arc":
-
         fighters = st.text_area("Enter fighters (one per line)")
 
         if st.button("Start Tournament"):
-
             result = run_tournament(fighters.split("\n"))
 
-            st.success(f"Champion: {result['champion']}")
+            st.success(result["champion"])
 
-            # 🎆 FIREWORKS
+            # 🎆 ADD
             show_fireworks()
+            show_winner_glow(result["champion"])
 
-            # 🏆 CHAMPION GLOW
-            show_champion_glow(result["champion"])
+            st.write(result["rounds"])
+            st.write(result["story"])
 
 
 # =========================
-# QUOTE
+# QUOTES
 # =========================
 with tab4:
     theme = st.selectbox("Theme", ["Motivational","Friendship","Success","Sad","Funny"])
 
-    if st.button("Generate"):
+    if st.button("Generate Quote"):
         st.success(generate_quote(theme))
 
 
@@ -282,7 +302,7 @@ with tab5:
     q3 = st.radio("Trait", ["Courage","Intelligence","Loyalty","Calmness"])
     q4 = st.radio("Role", ["Leader","Support","Lone wolf","Strategist"])
     q5 = st.radio("Weakness", ["Anger","Trust issues","Overconfidence","Fear"])
-    q6 = st.radio("Power Type", ["Physical strength","Speed","Magic","Tactical"])
+    q6 = st.radio("Power Type", ["Physical strength","Speed","Magic/Skills","Tactical mind"])
 
-    if st.button("Result"):
+    if st.button("Reveal Result"):
         st.success(get_character_match(q1,q2,q3,q4,q5,q6))

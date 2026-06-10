@@ -112,8 +112,8 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
 
         if a in ["Courage"]:
             score["Uzumaki Naruto"] += 2
-             score["Monkey D. Luffy"] += 3
-             score["Goku"] += 2
+            score["Monkey D. Luffy"] += 3
+            score["Goku"] += 2
 
         if a in ["Anger", "Overconfidence"]:
             score["Eren Yeager"] += 3

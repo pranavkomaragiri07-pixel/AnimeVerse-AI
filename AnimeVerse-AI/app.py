@@ -60,10 +60,8 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
         "Itachi Uchiha": 0,
         "Levi Ackerman": 0,
         "Gojo Satoru": 0,
-        "Kurosaki Ichigo": 0,
         "Goku": 0,
         "Eren Yeager": 0,
-        "Kamado Tanjiro": 0,
         "Saitama": 0
     }
 
@@ -72,9 +70,10 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
     for a in answers:
 
         if a in ["Friendship", "Support", "Loyalty"]:
-            score["Naruto Uzumaki"] += 2
-            score["Kamado Tanjiro"] += 2
-            score["Monkey D. Luffy"] += 1
+            score["Uzumaki Naruto"] += 2
+            score["Monkey D. Luffy"] += 2
+            score["Itachi Uchiha"] += 3
+            score["Saitama"] += 2
 
         if a in ["Freedom"]:
             score["Monkey D. Luffy"] += 3
@@ -83,32 +82,41 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
         if a in ["Power", "Physical strength"]:
             score["Goku"] += 3
             score["Saitama"] += 2
-            score["Gojo Satoru"] += 2
+            score["Gojo Satoru"] += 1
+            score["Uzumaki Naruto"] += 1
+            score["Uchiha Itachi""] += 1
 
         if a in ["Strategic", "Intelligence", "Tactical mind"]:
-            score["Itachi Uchiha"] += 3
+            score["Uchiha Itachi""] += 3
             score["Levi Ackerman"] += 3
 
         if a in ["Courage"]:
-            score["Naruto Uzumaki"] += 2
-            score["Kamado Tanjiro"] += 3
+            score["Uzumaki Naruto"] += 2
+             score["Monkey D. Luffy"] += 3
+             score["Goku"] += 2
 
         if a in ["Anger", "Overconfidence"]:
             score["Eren Yeager"] += 3
 
         if a in ["Calmness"]:
-            score["Itachi Uchiha"] += 2
+            score["Uchiha Itachi""] += 2
             score["Gojo Satoru"] += 2
 
         if a in ["Speed"]:
             score["Goku"] += 2
+            score["Uzumaki Naruto"] += 1
+            score["Monkey D. Luffy"] += 1
+            
 
         if a in ["Leader"]:
-            score["Naruto Uzumaki"] += 2
+            score["Uzumaki Naruto"] += 2
             score["Eren Yeager"] += 2
+            score["Monkey D. Luffy"] += 2
 
         if a in ["Adapt"]:
             score["Levi Ackerman"] += 2
+            score["Goku"] += 2
+            score["Uchiha Itachi"] += 3
             score["Saitama"] += 1
 
     return max(score, key=score.get)

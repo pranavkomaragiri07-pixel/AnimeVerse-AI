@@ -28,7 +28,7 @@ st.set_page_config(
 st.markdown("""
 <style>
 .stApp {
-    background-color: #0f172a !important;
+    background-color: black !important;
 }
 </style>
 """, unsafe_allow_html=True)

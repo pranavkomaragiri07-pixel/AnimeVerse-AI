@@ -1,5 +1,5 @@
 /* =====================================
-   AnimeVerse AI - FIXED DARK THEME
+   AnimeVerse AI - FINAL ULTRA DARK FIX
 ===================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -14,43 +14,35 @@ html, body {
 }
 
 /* ===============================
-   MAIN APP BACKGROUND (IMPORTANT FIX)
+   FORCE FULL BACKGROUND (IMPORTANT)
 ================================ */
-.stApp {
-    background-color: #0f172a !important;
-}
-
-/* Streamlit containers */
+.stApp,
 [data-testid="stAppViewContainer"],
-[data-testid="stAppViewBlockContainer"] {
+[data-testid="stAppViewBlockContainer"],
+.main {
     background-color: #0f172a !important;
 }
 
-/* Header / toolbar */
-[data-testid="stHeader"],
-[data-testid="stToolbar"] {
-    background: transparent !important;
-}
-
 /* ===============================
-   SIDEBAR
+   MAIN APP WRAPPER FIX
 ================================ */
-[data-testid="stSidebar"] {
+[data-testid="stMainBlockContainer"] {
     background-color: #0f172a !important;
 }
 
-[data-testid="stSidebar"] * {
-    color: #e2e8f0 !important;
-}
-
 /* ===============================
-   TEXT FIX (SAFE - NOT GLOBAL *)
+   TEXT FIX (Streamlit override)
 ================================ */
 h1, h2, h3 {
-    color: white !important;
+    color: #ffffff !important;
 }
 
 p, span, label, div {
+    color: #e2e8f0 !important;
+}
+
+/* Markdown fix */
+.stMarkdown, .stMarkdown p {
     color: #e2e8f0 !important;
 }
 
@@ -77,12 +69,8 @@ p, span, label, div {
     font-weight: bold !important;
 }
 
-.stButton > button:hover {
-    transform: scale(1.05);
-}
-
 /* ===============================
-   TABS
+   TABS FIX
 ================================ */
 .stTabs [data-baseweb="tab"] {
     background-color: #1e293b !important;
@@ -100,6 +88,13 @@ p, span, label, div {
 .stSuccess {
     background-color: #14532d !important;
     color: white !important;
+}
+
+/* ===============================
+   SIDEBAR
+================================ */
+[data-testid="stSidebar"] {
+    background-color: #0f172a !important;
 }
 
 /* ===============================

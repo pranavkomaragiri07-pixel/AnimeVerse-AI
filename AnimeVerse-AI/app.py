@@ -116,19 +116,22 @@ with tab1:
     if st.button("Search"):
 
         if name:
+            url = f"https://api.jikan.moe/v4/anime?q={name}&limit=5"
+            response = requests.get(url)
+            res = response.json()
 
-            try:
-                url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
-                response = requests.get(url)
+            data = res.get("data", [])
 
-                # SAFE JSON HANDLING
-                res = response.json() if response.status_code == 200 else {}
+# fallback search matching
+            anime = None
+            for item in data:
+                if name.lower() in item["title"].lower():
+                    anime = item
+                    break
 
-                data = res.get("data", [])   # ✅ FIX HERE
-
-                if data:
-
-                    anime = data[0]
+# if no exact match, take first result
+            if not anime and data:
+                anime = data[0]
 
                     st.success(anime.get("title", "No title"))
                     st.image(anime["images"]["jpg"]["image_url"])

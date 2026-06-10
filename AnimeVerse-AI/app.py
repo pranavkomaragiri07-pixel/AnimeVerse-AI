@@ -114,7 +114,7 @@ with tab1:
                 url = "https://api.jikan.moe/v4/anime"
                 params = {
                     "q": anime_name,
-                    "limit": 5,
+                    "limit": 10,
                     "sfw": True
                 }
 
@@ -122,12 +122,7 @@ with tab1:
                     "User-Agent": "Mozilla/5.0"
                 }
 
-                response = requests.get(
-                    url,
-                    params=params,
-                    headers=headers,
-                    timeout=10
-                )
+                response = requests.get(url, params=params, headers=headers, timeout=10)
 
                 data = response.json().get("data", [])
 
@@ -135,30 +130,46 @@ with tab1:
                     st.error("No anime found.")
                 else:
 
-                    anime = None
-                    query = anime_name.lower()
+                    anime_name_lower = anime_name.lower()
 
-                    # smarter matching
+                    # BEST MATCH (FIXED LOGIC)
+                    anime = None
+
                     for item in data:
                         title = item.get("title", "").lower()
-                        if query in title:
+
+                        if anime_name_lower == title:
                             anime = item
                             break
 
-                    if anime is None:
+                    # fallback partial match
+                    if not anime:
+                        for item in data:
+                            title = item.get("title", "").lower()
+                            if anime_name_lower in title:
+                                anime = item
+                                break
+
+                    # final fallback
+                    if not anime:
                         anime = data[0]
 
-                    st.success(anime.get("title", "Unknown"))
+                    st.success(f"🎌 {anime.get('title', 'Unknown')}")
 
-                    st.image(anime["images"]["jpg"]["image_url"])
+                    st.image(anime["images"]["jpg"]["image_url"], width=300)
 
                     st.write("⭐ Rating:", anime.get("score", "N/A"))
                     st.write("🎬 Episodes:", anime.get("episodes", "N/A"))
                     st.write("📌 Status:", anime.get("status", "N/A"))
                     st.write("📅 Year:", anime.get("year", "N/A"))
 
+                    genres = ", ".join([g["name"] for g in anime.get("genres", [])])
+                    st.write("🎭 Genres:", genres)
+
+                    st.write("📖 Synopsis:", anime.get("synopsis", "N/A"))
+
             except Exception as e:
-                st.error("Failed to fetch anime data. Try again in a few seconds.")
+                st.error("API error. Try again in a few seconds.")
 # =========================
 # ⚔️ BATTLE SIMULATOR
 # =========================

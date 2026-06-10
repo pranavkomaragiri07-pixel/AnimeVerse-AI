@@ -1,4 +1,3 @@
-from gemini_utils import get_gemini_response
 import random
 
 # =========================
@@ -11,7 +10,6 @@ def generate_stats():
         "Battle IQ": random.randint(60, 100),
         "Durability": random.randint(60, 100),
         "Stamina": random.randint(60, 100),
-        "Combat Skills": random.randint(60, 100),
         "Weapon Mastery": random.randint(60, 100)
     }
 
@@ -30,14 +28,10 @@ def battle_1v1(a, b):
         "Battle IQ": a if fa["Battle IQ"] > fb["Battle IQ"] else b,
         "Durability": a if fa["Durability"] > fb["Durability"] else b,
         "Stamina": a if fa["Stamina"] > fb["Stamina"] else b,
-        "Combat Skills": a if fa["Combat Skills"] > fb["Combat Skills"] else b,
         "Weapon Mastery": a if fa["Weapon Mastery"] > fb["Weapon Mastery"] else b
     }
 
-    a_score = sum(1 for k in fa if fa[k] > fb[k])
-    b_score = sum(1 for k in fa if fb[k] > fa[k])
-
-    winner = a if a_score > b_score else b
+    winner = a if sum(fa.values()) > sum(fb.values()) else b
 
     return {
         "fighter_a": {"name": a, "stats": fa},
@@ -51,40 +45,34 @@ def battle_1v1(a, b):
 # =========================
 # 👥 2v2 BATTLE (KEEP CATEGORY WINNERS)
 # =========================
-
 def battle_2v2(team_a, team_b):
 
-    team_a_stats = [generate_stats() for _ in team_a]
-    team_b_stats = [generate_stats() for _ in team_b]
-
-    score_a = sum(sum(p.values()) for p in team_a_stats)
-    score_b = sum(sum(p.values()) for p in team_b_stats)
+    score_a = sum(sum(generate_stats().values()) for _ in team_a)
+    score_b = sum(sum(generate_stats().values()) for _ in team_b)
 
     winner = "Team A" if score_a > score_b else "Team B"
 
     return {
         "winner": winner,
         "category_winners": {
-            "Power": winner,
-            "Speed": winner,
-            "Battle IQ": winner,
-            "Durability": winner,
+            "Attack Power": winner,
+            "Defense": winner,
+            "Strategy": winner,
             "Stamina": winner,
-            "Combat Skills": winner,
-            "Weapon Mastery": winner
+            "Weapon Mastery": winner,
+            "Team Synergy": winner
         },
-        "story": f"{team_a} vs {team_b} ended in a brutal fight. {winner} dominated."
+        "story": f"{team_a} vs {team_b} was a brutal team clash. {winner} dominated."
     }
+
+
 # =========================
 # ⚔️ 4v4 BATTLE (KEEP CATEGORY WINNERS)
 # =========================
 def battle_4v4(team_a, team_b):
 
-    team_a_stats = [generate_stats() for _ in team_a]
-    team_b_stats = [generate_stats() for _ in team_b]
-
-    score_a = sum(sum(p.values()) for p in team_a_stats)
-    score_b = sum(sum(p.values()) for p in team_b_stats)
+    score_a = sum(sum(generate_stats().values()) for _ in team_a)
+    score_b = sum(sum(generate_stats().values()) for _ in team_b)
 
     winner = "Team Alpha" if score_a > score_b else "Team Omega"
 
@@ -96,11 +84,12 @@ def battle_4v4(team_a, team_b):
             "Battle IQ": winner,
             "Durability": winner,
             "Stamina": winner,
-            "Combat Skills": winner,
             "Weapon Mastery": winner
         },
-        "story": f"Epic 4v4 battle ended. {winner} crushed the opponent team."
+        "story": f"4v4 war ended. {winner} completely destroyed the opponent team."
     }
+
+
 # =========================
 # 🏆 TOURNAMENT MODE (REMOVED CATEGORY WINNERS)
 # =========================

@@ -1,20 +1,15 @@
 /* =====================================
-   AnimeVerse AI - FINAL ULTRA DARK FIX
+   AnimeVerse AI - ULTRA DARK FINAL FIX
 ===================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* ===============================
-   GLOBAL RESET (IMPORTANT)
+   GLOBAL FONT + RESET
 ================================ */
 html, body {
     font-family: 'Poppins', sans-serif !important;
     background-color: #0f172a !important;
-    color: white !important;
-}
-
-/* Force ALL text white (FIX FOR YOUR ISSUE) */
-* {
     color: #e2e8f0 !important;
 }
 
@@ -23,30 +18,34 @@ html, body {
 ================================ */
 .stApp {
     background: linear-gradient(135deg, #0f172a, #1e293b, #111827) !important;
-    color: white !important;
+    color: #e2e8f0 !important;
 }
 
-/* Main container */
 [data-testid="stAppViewContainer"] {
     background: transparent !important;
 }
 
-/* App block container */
-[data-testid="stAppViewBlockContainer"] {
-    background-color: transparent !important;
+[data-testid="stHeader"] {
+    background: transparent !important;
 }
 
-/* Header + Toolbar */
-[data-testid="stHeader"],
 [data-testid="stToolbar"] {
     background: transparent !important;
 }
 
+[data-testid="stAppViewBlockContainer"] {
+    background-color: transparent !important;
+}
+
 /* ===============================
-   SIDEBAR
+   SIDEBAR FIX
 ================================ */
 [data-testid="stSidebar"] {
     background-color: #0f172a !important;
+}
+
+[data-testid="stSidebar"] * {
+    color: #e2e8f0 !important;
 }
 
 /* ===============================
@@ -58,8 +57,25 @@ h1 {
     font-weight: 800;
 }
 
-h2, h3, h4 {
+h2, h3 {
     color: #f8fafc !important;
+}
+
+/* ===============================
+   🔥 FORCE ALL TEXT WHITE (IMPORTANT FIX)
+================================ */
+* {
+    color: #e2e8f0 !important;
+}
+
+/* Markdown text fix */
+.stMarkdown, .stMarkdown p, .stMarkdown span {
+    color: #e2e8f0 !important;
+}
+
+/* Labels fix (radio, input, etc.) */
+label {
+    color: #e2e8f0 !important;
 }
 
 /* ===============================
@@ -70,17 +86,6 @@ h2, h3, h4 {
     border-radius: 12px !important;
     border: 2px solid #ff4b4b !important;
     background-color: #1e293b !important;
-    color: white !important;
-}
-
-/* ===============================
-   RADIO + LABEL FIX (IMPORTANT)
-================================ */
-.stRadio label {
-    color: white !important;
-}
-
-.stRadio div {
     color: white !important;
 }
 
@@ -147,7 +152,7 @@ img {
 }
 
 /* ===============================
-   EXPANDERS
+   EXPANDERS / CARDS
 ================================ */
 div[data-testid="stExpander"] {
     background-color: #1e293b !important;
@@ -166,7 +171,7 @@ div[data-testid="stExpander"] {
 }
 
 /* ===============================
-   SCROLLBAR
+   SCROLLBAR FIX
 ================================ */
 * {
     scrollbar-color: #ff4b4b #1e293b;

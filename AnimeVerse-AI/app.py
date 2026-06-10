@@ -111,40 +111,54 @@ with tab1:
         if anime_name:
 
             try:
-                url = f"https://api.jikan.moe/v4/anime?q={anime_name}&limit=1"
-                response = requests.get(url)
+                url = "https://api.jikan.moe/v4/anime"
+                params = {
+                    "q": anime_name,
+                    "limit": 5,
+                    "sfw": True
+                }
 
-                if response.status_code == 200:
-                    data = response.json()
+                headers = {
+                    "User-Agent": "Mozilla/5.0"
+                }
 
-                    if data["data"]:
-                        anime = data["data"][0]
+                response = requests.get(
+                    url,
+                    params=params,
+                    headers=headers,
+                    timeout=10
+                )
 
-                        st.success(f"Results for {anime['title']}")
-                        st.image(anime["images"]["jpg"]["image_url"], width=300)
+                data = response.json().get("data", [])
 
-                        st.write(f"⭐ Rating: {anime['score']}")
-                        st.write(f"🎬 Episodes: {anime['episodes']}")
-
-                        genres = ", ".join(g["name"] for g in anime["genres"])
-                        st.write(f"🎭 Genres: {genres}")
-
-                        if anime["year"]:
-                            st.write(f"📅 Release Year: {anime['year']}")
-
-                        st.write(f"📖 Synopsis: {anime['synopsis']}")
-
-                    else:
-                        st.error("Anime not found.")
+                if not data:
+                    st.error("No anime found.")
                 else:
-                    st.error("Failed to fetch anime data.")
+
+                    anime = None
+                    query = anime_name.lower()
+
+                    # smarter matching
+                    for item in data:
+                        title = item.get("title", "").lower()
+                        if query in title:
+                            anime = item
+                            break
+
+                    if anime is None:
+                        anime = data[0]
+
+                    st.success(anime.get("title", "Unknown"))
+
+                    st.image(anime["images"]["jpg"]["image_url"])
+
+                    st.write("⭐ Rating:", anime.get("score", "N/A"))
+                    st.write("🎬 Episodes:", anime.get("episodes", "N/A"))
+                    st.write("📌 Status:", anime.get("status", "N/A"))
+                    st.write("📅 Year:", anime.get("year", "N/A"))
 
             except Exception as e:
-                st.error(f"Error: {e}")
-
-        else:
-            st.error("Please enter an anime name.")
-
+                st.error("Failed to fetch anime data. Try again in a few seconds.")
 # =========================
 # ⚔️ BATTLE SIMULATOR
 # =========================

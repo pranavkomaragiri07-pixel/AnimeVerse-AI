@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 # =========================
 # BACKEND IMPORTS
@@ -8,7 +9,7 @@ from quote_generator import generate_quote
 from personality_quiz import get_character_match
 
 # =========================
-# APP CONFIG
+# PAGE CONFIG
 # =========================
 st.set_page_config(
     page_title="AnimeVerse AI",
@@ -17,11 +18,22 @@ st.set_page_config(
 )
 
 # =========================
-# LOAD CSS
+# SAFE CSS LOADER (FIXED ERROR)
 # =========================
-with open("styles.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+css_path = os.path.join(os.path.dirname(__file__), "styles.css")
 
+if os.path.exists(css_path):
+    with open(css_path, "r") as f:
+        st.markdown(
+            f"<style>{f.read()}</style>",
+            unsafe_allow_html=True
+        )
+else:
+    st.warning("styles.css not found - UI styling disabled")
+
+# =========================
+# HEADER
+# =========================
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Companion")
 
@@ -34,7 +46,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 ])
 
 # =========================
-# ANIME SEARCH (FRONTEND ONLY)
+# TAB 1 - ANIME SEARCH
 # =========================
 with tab1:
     st.header("🔍 Anime Search")
@@ -42,7 +54,7 @@ with tab1:
     anime_name = st.text_input("Enter Anime Name")
 
     if st.button("Search Anime"):
-        st.info("Backend will connect here later")
+        st.info("Backend API integration pending")
 
     st.subheader("Anime Details")
     st.write("🖼️ Poster: Backend Output")
@@ -53,7 +65,7 @@ with tab1:
     st.write("📖 Synopsis: Backend Output")
 
 # =========================
-# AI RECOMMENDER
+# TAB 2 - RECOMMENDER
 # =========================
 with tab2:
     st.header("🎌 AI Anime Recommender")
@@ -69,7 +81,7 @@ with tab2:
     st.write("🎌 Recommendation 3")
 
 # =========================
-# BATTLE SIMULATOR
+# TAB 3 - BATTLE SIMULATOR
 # =========================
 with tab3:
     st.header("⚔️ Anime Battle Simulator")
@@ -79,7 +91,6 @@ with tab3:
         ["1v1 Battle", "2v2 Battle", "4v4 Battle", "Tournament Arc", "Survival Arena"]
     )
 
-    # ---------------- 1v1 ----------------
     if mode == "1v1 Battle":
         a = st.text_input("Character A")
         b = st.text_input("Character B")
@@ -87,16 +98,11 @@ with tab3:
         if st.button("Start Battle"):
             if a and b:
                 result = battle_1v1(a, b)
-
                 st.success(f"🏆 Winner: {result['winner']}")
-                st.write(f"⚡ Score: {result['battle_score']}")
-                st.write(f"🔥 Difficulty: {result['difficulty']}")
-                st.write(f"📊 Win Probability: {result['win_probability']}")
-                st.write(f"📖 Story: {result['story']}")
+                st.write(result["story"])
             else:
                 st.error("Enter both characters")
 
-    # ---------------- 2v2 ----------------
     elif mode == "2v2 Battle":
         a1 = st.text_input("Team A Fighter 1")
         a2 = st.text_input("Team A Fighter 2")
@@ -111,25 +117,20 @@ with tab3:
             else:
                 st.error("Fill all fields")
 
-    # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
-        t1 = st.text_area("Team Alpha (4 names)")
-        t2 = st.text_area("Team Omega (4 names)")
+        t1 = st.text_area("Team Alpha")
+        t2 = st.text_area("Team Omega")
 
         if st.button("Start 4v4 Battle"):
             if t1 and t2:
-                team_a = t1.split("\n")
-                team_b = t2.split("\n")
-                result = battle_4v4(team_a, team_b)
-
+                result = battle_4v4(t1.split("\n"), t2.split("\n"))
                 st.success(f"🏆 Winner: {result['winner']}")
                 st.write(result["story"])
             else:
-                st.error("Enter both teams")
+                st.error("Enter teams")
 
-    # ---------------- TOURNAMENT ----------------
     elif mode == "Tournament Arc":
-        fighters = st.text_area("Enter fighters (one per line)")
+        fighters = st.text_area("Enter Fighters (one per line)")
 
         if st.button("Start Tournament"):
             if fighters:
@@ -139,7 +140,6 @@ with tab3:
             else:
                 st.error("Enter fighters")
 
-    # ---------------- SURVIVAL ----------------
     elif mode == "Survival Arena":
         hero = st.text_input("Select Hero")
 
@@ -152,7 +152,7 @@ with tab3:
                 st.error("Enter hero name")
 
 # =========================
-# QUOTE GENERATOR (FRONTEND READY)
+# TAB 4 - QUOTE GENERATOR
 # =========================
 with tab4:
     st.header("✨ Anime Quote Generator")
@@ -161,10 +161,10 @@ with tab4:
     theme = st.selectbox("Theme", ["Motivational", "Friendship", "Success", "Sad", "Funny"])
 
     if st.button("Generate Quote"):
-        st.info("Backend will connect here later")
+        st.info("Backend pending integration")
 
 # =========================
-# PERSONALITY QUIZ
+# TAB 5 - PERSONALITY QUIZ
 # =========================
 with tab5:
     st.header("🎭 Personality Quiz")
@@ -173,4 +173,4 @@ with tab5:
     q2 = st.radio("How do you fight?", ["Head on", "Strategic", "Support friends", "Adapt"])
 
     if st.button("Reveal Result"):
-        st.info("Backend will connect here later")
+        st.info("Backend pending integration")

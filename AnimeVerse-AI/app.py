@@ -23,7 +23,7 @@ st.set_page_config(
 )
 
 # =========================
-# CSS LOADER (KEEP HERE)
+# CSS LOADER
 # =========================
 try:
     with open("styles.css") as f:
@@ -31,51 +31,67 @@ try:
 except:
     pass
 
-
-# =========================
-# 🔥 ADDED FEATURE: EXTRA ANIME INFO HELPER (NEW)
-# =========================
-def get_anime_extra(anime):
-    return {
-        "episodes": anime.get("episodes", "N/A"),
-        "status": anime.get("status", "N/A"),
-        "score": anime.get("score", "N/A"),
-        "year": anime.get("year", "N/A")
-    }
-
-
 # =========================
 # QUOTE GENERATOR
 # =========================
 def generate_quote(theme):
     quotes = {
-        "Motivational": [
-            ("Naruto Uzumaki", "I'm not gonna run away..."),
-            ("Rock Lee", "Hard work beats talent."),
-            ("All Might", "Because I am here!")
-        ],
-        "Friendship": [
-            ("Luffy", "I will become Pirate King."),
-            ("Naruto Uzumaki", "I won't let my friends die."),
-        ],
-        "Success": [
-            ("Itachi Uchiha", "Reality is harsh."),
-            ("Light Yagami", "I am justice."),
-        ],
-        "Sad": [
-            ("Pain", "Feel pain."),
-            ("Itachi", "Forgive me."),
-        ],
-        "Funny": [
-            ("Saitama", "Ok."),
-            ("Goku", "I’m hungry."),
-        ]
-    }
+
+    # =========================
+    #  MOTIVATIONAL
+    # =========================
+    "🔥Motivational": [
+        ("Naruto Uzumaki", "I'm not gonna run away, I never go back on my word. That's my ninja way!"),
+        ("Rock Lee", "A dropout will beat a genius through hard work."),
+        ("All Might", "Now it's your turn. Go beyond your limits! Plus Ultra!"),
+        ("Asta", "No matter how hard I fall, I will rise again!"),
+    ],
+
+    # =========================
+    # 🤝 FRIENDSHIP
+    # =========================
+    "🤝Friendship": [
+        ("Monkey D. Luffy", "I don’t care if I die protecting my friends."),
+        ("Naruto Uzumaki", "I will never let my friends die."),
+        ("Natsu Dragneel", "We’re not alone when we have friends."),
+        ("Eren Yeager", "If we die, we die together."),
+    ],
+
+    # =========================
+    # 🏆 SUCCESS / AMBITION
+    # =========================
+    "🏆Success": [
+        ("Itachi Uchiha", "People live bound by what they accept as correct."),
+        ("Light Yagami", "I am justice. I will become the god of a new world."),
+        ("Levi Ackerman", "The only thing we can do is move forward."),
+        ("Madara Uchiha", "Wake up to reality. Nothing goes as planned."),
+    ],
+
+    # =========================
+    # 😢 SAD / EMOTIONAL
+    # =========================
+    "😢Sad": [
+        ("Nagato (Pain)", "Those who do not understand pain can never understand true peace."),
+        ("Itachi Uchiha", "Forgive me, Sasuke... this is the last time."),
+        ("Griffith", "Dreams… are something you sacrifice everything for."),
+        ("Rengoku", "Set your heart ablaze, even in suffering."),
+    ],
+
+    # =========================
+    # 😂 FUNNY / LIGHT
+    # =========================
+    "😂Funny": [
+        ("Saitama", "Ok."),
+        ("Goku", "I'm hungry again... is there food?"),
+        ("Kakashi", "Sorry I'm late... I got lost on the path of life."),
+        ("Zenitsu", "I don’t want to die yet!!"),
+    ]
+}
     return random.choice(quotes.get(theme, [("Anime", "Stay strong")]))
 
 
 # =========================
-# PERSONA FIXED (IMPORTANT)
+# CHARACTER MATCH
 # =========================
 def get_character_match(q1, q2, q3, q4, q5, q6):
 
@@ -100,7 +116,7 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
             score["Itachi Uchiha"] += 2
             score["Saitama"] += 1
 
-        if a in ["Freedom"]:
+        if a == "Freedom":
             score["Monkey D. Luffy"] += 3
             score["Eren Yeager"] += 2
 
@@ -115,7 +131,7 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
             score["Itachi Uchiha"] += 3
             score["Levi Ackerman"] += 3
 
-        if a in ["Courage"]:
+        if a == "Courage":
             score["Naruto Uzumaki"] += 2
             score["Monkey D. Luffy"] += 3
             score["Goku"] += 2
@@ -123,21 +139,21 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
         if a in ["Anger", "Overconfidence"]:
             score["Eren Yeager"] += 3
 
-        if a in ["Calmness"]:
+        if a == "Calmness":
             score["Itachi Uchiha"] += 2
             score["Gojo Satoru"] += 2
 
-        if a in ["Speed"]:
+        if a == "Speed":
             score["Goku"] += 2
             score["Naruto Uzumaki"] += 1
             score["Monkey D. Luffy"] += 1
 
-        if a in ["Leader"]:
+        if a == "Leader":
             score["Naruto Uzumaki"] += 2
             score["Eren Yeager"] += 2
             score["Monkey D. Luffy"] += 2
 
-        if a in ["Adapt"]:
+        if a == "Adapt":
             score["Levi Ackerman"] += 2
             score["Goku"] += 2
             score["Itachi Uchiha"] += 3
@@ -147,80 +163,57 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
 
 
 # =========================
-# HEADER
+# UI HEADER
 # =========================
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Companion")
 
-
 # =========================
 # TABS
 # =========================
-tab1, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4 = st.tabs([
     "🔍 Anime Search",
     "⚔️ Battle Simulator",
     "✨ Quote Generator",
     "🎭 Personality Quiz"
 ])
 
-
 # =========================
-# 🔍 ANIME SEARCH (YOUR ORIGINAL + ADDED FEATURE)
+# ANIME SEARCH
 # =========================
 with tab1:
-
     st.header("🔍 Anime Search")
 
     anime_name = st.text_input("Enter Anime Name")
 
     if st.button("Search Anime"):
-
         if anime_name:
-
             url = f"https://api.jikan.moe/v4/anime?q={anime_name}&limit=1"
             response = requests.get(url)
 
             if response.status_code == 200:
-
                 data = response.json()
 
                 if data["data"]:
-
                     anime = data["data"][0]
 
                     st.success(f"Results for {anime['title']}")
                     st.image(anime["images"]["jpg"]["image_url"], width=300)
 
-                    st.write(f"⭐ Rating: {anime['score']}")
-                    st.write(f"🎬 Episodes: {anime['episodes']}")
+                    st.write(f"⭐ Rating: {anime.get('score')}")
+                    st.write(f"🎬 Episodes: {anime.get('episodes')}")
+                    st.write(f"📌 Status: {anime.get('status')}")
+
                     genres = ", ".join(g["name"] for g in anime["genres"])
                     st.write(f"🎭 Genres: {genres}")
 
-                    if anime["year"]:
-                        st.write(f"📅 Release Year: {anime['year']}")
-
-                    st.write(f"📖 Synopsis: {anime['synopsis']}")
-
-
-                    # =========================
-                    # 🔥 ADDED FEATURE: EXTRA INFO (NO CHANGES TO ORIGINAL)
-                    # =========================
-                    extra = get_anime_extra(anime)
-
-                    st.markdown("---")
-                    st.subheader("📊 Extra Anime Info (NEW FEATURE)")
-
-                    st.write(f"🎬 Total Episodes: {extra['episodes']}")
-                    st.write(f"📌 Status: {extra['status']}")
-                    st.write(f"⭐ Score: {extra['score']}")
-                    st.write(f"📅 Year: {extra['year']}")
-
+                    st.write(f"📖 Synopsis: {anime.get('synopsis')}")
 
 
 # =========================
-# ⚔️ BATTLE (UNCHANGED)
+# BATTLE
 # =========================
-with tab3:
+with tab2:
     st.header("⚔️ Battle Simulator")
 
     mode = st.selectbox(
@@ -233,15 +226,24 @@ with tab3:
         b = st.text_input("Character B")
 
         if st.button("Start Battle"):
-            result = battle_1v1(a, b)
-            st.success(result["winner"])
+            if a and b:
+                result = battle_1v1(a, b)
+
+                st.markdown("## 🏆 WINNER!!")
+                st.success(result["winner"])
+
+                st.markdown("### 📖 Story")
+                st.write(result["story"])
+
+                st.markdown("### ⚔️ Category Winners 🏅")
+                for k, v in result["category_winners"].items():
+                    st.write(f"🏅 {k} → {v}")
 
 
 # =========================
-# ✨ QUOTES (UNCHANGED)
+# QUOTE
 # =========================
-with tab4:
-
+with tab3:
     st.header("✨ Quote Generator")
 
     theme = st.selectbox("Theme", ["Motivational","Friendship","Success","Sad","Funny"])
@@ -251,10 +253,9 @@ with tab4:
 
 
 # =========================
-# 🎭 QUIZ (UNCHANGED)
+# QUIZ
 # =========================
-with tab5:
-
+with tab4:
     st.header("🎭 Personality Quiz")
 
     q1 = st.radio("Motivation", ["Power","Friendship","Freedom","Knowledge"])
@@ -266,4 +267,5 @@ with tab5:
 
     if st.button("Reveal Result"):
         character = get_character_match(q1,q2,q3,q4,q5,q6)
+        st.markdown("## 🎌 Your Anime Match")
         st.success(character)

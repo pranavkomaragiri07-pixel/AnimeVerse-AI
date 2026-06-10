@@ -14,6 +14,26 @@ from battle import (
 )
 
 # =========================
+# PAGE CONFIG (FIRST)
+# =========================
+st.set_page_config(
+    page_title="AnimeVerse AI",
+    page_icon="⚔️",
+    layout="wide"
+)
+
+# =========================
+# 🔥 ADD THIS HERE (YOUR CODE)
+# =========================
+st.markdown("""
+<style>
+.stApp {
+    background-color: #0f172a !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# =========================
 # SAFE FALLBACK FUNCTIONS (FIX CRASHES)
 # =========================
 

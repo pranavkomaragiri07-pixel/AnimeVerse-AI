@@ -1,11 +1,11 @@
 /* =====================================
-   AnimeVerse AI - DEFINITIVE DARK FIX
+   AnimeVerse AI - FINAL WORKING DARK THEME
 ===================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* ===============================
-   GLOBAL RESET
+   GLOBAL RESET (VERY IMPORTANT)
 ================================ */
 html, body {
     font-family: 'Poppins', sans-serif !important;
@@ -14,25 +14,21 @@ html, body {
 }
 
 /* ===============================
-   FULL BACKGROUND FORCE (STREAMLIT ROOT FIX)
+   STREAMLIT MAIN BACKGROUND FIX (CRITICAL)
 ================================ */
-.stApp,
-.main,
-.block-container,
-.stMain,
-[data-testid="stAppViewContainer"],
-[data-testid="stAppViewBlockContainer"],
-[data-testid="stMainBlockContainer"] {
-    background-color: #0f172a !important;
+.stApp {
+    background: #0f172a !important;
 }
 
-/* EXTRA SAFETY LAYER */
-div {
-    background-color: transparent;
+[data-testid="stAppViewContainer"],
+[data-testid="stAppViewBlockContainer"],
+.main,
+.block-container {
+    background: #0f172a !important;
 }
 
 /* ===============================
-   TEXT FIX (NO WHITE BUGS)
+   FORCE ALL TEXT COLOR
 ================================ */
 h1, h2, h3 {
     color: #ffffff !important;
@@ -42,20 +38,15 @@ p, span, label, div {
     color: #e2e8f0 !important;
 }
 
-/* Streamlit markdown */
-.stMarkdown, .stMarkdown * {
-    color: #e2e8f0 !important;
-}
-
 /* ===============================
    INPUT FIELDS
 ================================ */
 .stTextInput input,
 .stTextArea textarea {
-    border-radius: 12px !important;
-    border: 2px solid #ff4b4b !important;
     background-color: #1e293b !important;
     color: white !important;
+    border: 2px solid #ff4b4b !important;
+    border-radius: 12px !important;
 }
 
 /* ===============================
@@ -66,8 +57,13 @@ p, span, label, div {
     color: white !important;
     border: none !important;
     border-radius: 12px !important;
-    padding: 10px 24px !important;
+    padding: 10px 20px !important;
     font-weight: bold !important;
+    transition: 0.3s ease;
+}
+
+.stButton > button:hover {
+    transform: scale(1.05);
 }
 
 /* ===============================
@@ -76,6 +72,8 @@ p, span, label, div {
 .stTabs [data-baseweb="tab"] {
     background-color: #1e293b !important;
     color: white !important;
+    border-radius: 10px !important;
+    padding: 8px 15px !important;
 }
 
 .stTabs [aria-selected="true"] {
@@ -89,6 +87,7 @@ p, span, label, div {
 .stSuccess {
     background-color: #14532d !important;
     color: white !important;
+    border-radius: 10px !important;
 }
 
 /* ===============================
@@ -98,8 +97,11 @@ p, span, label, div {
     background-color: #0f172a !important;
 }
 
-[data-testid="stSidebar"] * {
-    color: #e2e8f0 !important;
+/* ===============================
+   IMAGES
+================================ */
+img {
+    border-radius: 12px !important;
 }
 
 /* ===============================
@@ -125,4 +127,12 @@ p, span, label, div {
 
 ::-webkit-scrollbar-track {
     background: #1e293b;
+}
+
+/* ===============================
+   FIX STREAMLIT WHITE FLASH ISSUE
+================================ */
+[data-testid="stHeader"],
+[data-testid="stToolbar"] {
+    background: transparent !important;
 }

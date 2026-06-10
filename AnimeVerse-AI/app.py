@@ -2,9 +2,6 @@ import streamlit as st
 import requests
 import random
 
-# =========================
-# IMPORT REAL BACKEND
-# =========================
 from battle import (
     battle_1v1,
     battle_2v2,
@@ -13,9 +10,6 @@ from battle import (
     survival_mode
 )
 
-# =========================
-# PAGE CONFIG (MUST BE FIRST)
-# =========================
 st.set_page_config(
     page_title="AnimeVerse AI",
     page_icon="⚔️",
@@ -23,7 +17,7 @@ st.set_page_config(
 )
 
 # =========================
-# CSS LOADER (KEEP HERE)
+# CSS LOADER
 # =========================
 try:
     with open("styles.css") as f:
@@ -31,8 +25,9 @@ try:
 except:
     pass
 
+
 # =========================
-# QUOTE GENERATOR
+# QUOTES (UNCHANGED)
 # =========================
 def generate_quote(theme):
     quotes = {
@@ -60,11 +55,19 @@ def generate_quote(theme):
     }
     return random.choice(quotes.get(theme, [("Anime", "Stay strong")]))
 
+
 # =========================
-# PERSONA MATCH SYSTEM
+# FIX LAYER 1 - QUOTE FORMAT (ADD ONLY)
+# =========================
+def format_quote(theme):
+    char, quote = generate_quote(theme)
+    return f"💬 {quote} — 🏅 {char}"
+
+
+# =========================
+# PERSONA MATCH (UNCHANGED)
 # =========================
 def get_character_match(q1, q2, q3, q4, q5, q6):
-
     score = {
         "Naruto Uzumaki": 0,
         "Monkey D. Luffy": 0,
@@ -79,7 +82,6 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
     answers = [q1, q2, q3, q4, q5, q6]
 
     for a in answers:
-
         if a in ["Friendship", "Support", "Loyalty"]:
             score["Naruto Uzumaki"] += 2
             score["Monkey D. Luffy"] += 2
@@ -131,24 +133,23 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
 
     return max(score, key=score.get)
 
+
 # =========================
-# HEADER
+# UI
 # =========================
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Companion")
 
-# =========================
-# TABS
-# =========================
-tab1, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4 = st.tabs([
     "🔍 Anime Search",
     "⚔️ Battle Simulator",
     "✨ Quote Generator",
     "🎭 Personality Quiz"
 ])
 
+
 # =========================
-# ANIME SEARCH
+# ANIME SEARCH (ADD FIX ONLY)
 # =========================
 with tab1:
     st.header("🔍 Anime Search")
@@ -167,25 +168,21 @@ with tab1:
                     anime = data["data"][0]
 
                     st.success(f"Results for {anime['title']}")
-                    st.image(anime["images"]["jpg"]["image_url"], width=300)
 
-                    st.write(f"⭐ Rating: {anime['score']}")
-                    st.write(f"🎬 Episodes: {anime['episodes']}")
-                    st.write(f"📌 Status: {anime['status']}")
+                    # FIX SAFE IMAGE
+                    if anime.get("images"):
+                        st.image(anime["images"]["jpg"]["image_url"], width=300)
 
-                    genres = ", ".join(g["name"] for g in anime["genres"])
-                    st.write(f"🎭 Genres: {genres}")
+                    st.write(f"⭐ Rating: {anime.get('score')}")
+                    st.write(f"🎬 Episodes: {anime.get('episodes')}")
+                    st.write(f"📌 Status: {anime.get('status')}")
+                    st.write(f"📖 Synopsis: {anime.get('synopsis')}")
 
-                    if anime["year"]:
-                        st.write(f"📅 Release Year: {anime['year']}")
-
-                    st.write(f"📖 Synopsis: {anime['synopsis']}")
 
 # =========================
-# BATTLE SIMULATOR
+# BATTLE (ADD FULL FIX ONLY)
 # =========================
-with tab3:
-
+with tab2:
     st.header("⚔️ Battle Simulator")
 
     mode = st.selectbox(
@@ -199,13 +196,38 @@ with tab3:
 
         if st.button("Start Battle"):
             result = battle_1v1(a, b)
-            st.success(f"🏆 Winner: {result['winner']}")
+
+            st.markdown("## 🏆 WINNER!!")
+            st.success(result["winner"])
+
+            st.markdown("## 📊 Stats Battle")
+
+            fa = result["fighter_a"]["stats"]
+            fb = result["fighter_b"]["stats"]
+
+            for k in fa:
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    st.write(a, k)
+                    st.progress(fa[k] / 100)
+
+                with col2:
+                    st.write(b, k)
+                    st.progress(fb[k] / 100)
+
+            st.markdown("## 🏅 Category Winners")
+            for k, v in result["category_winners"].items():
+                st.write(f"🏅 {k} → {v}")
+
+            st.markdown("## 📖 Story")
+            st.write(result["story"])
+
 
 # =========================
-# QUOTE GENERATOR
+# QUOTE FIX (ADD ONLY)
 # =========================
-with tab4:
-
+with tab3:
     st.header("✨ Quote Generator")
 
     theme = st.selectbox(
@@ -214,13 +236,14 @@ with tab4:
     )
 
     if st.button("Generate Quote"):
-        st.success(generate_quote(theme))
+        st.balloons()
+        st.success(format_quote(theme))
+
 
 # =========================
-# PERSONALITY QUIZ
+# QUIZ (UNCHANGED)
 # =========================
-with tab5:
-
+with tab4:
     st.header("🎭 Personality Quiz")
 
     q1 = st.radio("Motivation", ["Power","Friendship","Freedom","Knowledge"])
@@ -231,5 +254,5 @@ with tab5:
     q6 = st.radio("Power Type", ["Physical strength","Speed","Magic/Skills","Tactical mind"])
 
     if st.button("Reveal Result"):
-        character = get_character_match(q1, q2, q3, q4, q5, q6)
+        character = get_character_match(q1,q2,q3,q4,q5,q6)
         st.success(f"🎌 Your Anime Match: {character}")

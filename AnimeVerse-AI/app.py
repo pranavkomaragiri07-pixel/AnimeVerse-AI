@@ -132,7 +132,7 @@ with tab1:
             res = requests.get(url).json()
 
             if res["data"]:
-                anime = res["data"][0]
+                anime = res["data"][0];
 
                 st.success(anime["title"])
                 st.image(anime["images"]["jpg"]["image_url"])

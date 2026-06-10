@@ -1,5 +1,5 @@
 /* =====================================
-   AnimeVerse AI - ULTRA DARK FINAL FIX
+   AnimeVerse AI - ULTRA DARK FINAL FIX (UPDATED)
 ===================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -14,27 +14,26 @@ html, body {
 }
 
 /* ===============================
-   STREAMLIT MAIN BACKGROUND FIX
+   🔥 FORCE STREAMLIT FULL DARK BACKGROUND (IMPORTANT FIX)
 ================================ */
 .stApp {
-    background: linear-gradient(135deg, #0f172a, #1e293b, #111827) !important;
+    background: #0f172a !important;
     color: #e2e8f0 !important;
 }
 
+/* MAIN CONTAINER FIX */
 [data-testid="stAppViewContainer"] {
-    background: transparent !important;
-}
-
-[data-testid="stHeader"] {
-    background: transparent !important;
-}
-
-[data-testid="stToolbar"] {
-    background: transparent !important;
+    background: #0f172a !important;
 }
 
 [data-testid="stAppViewBlockContainer"] {
-    background-color: transparent !important;
+    background: #0f172a !important;
+}
+
+/* HEADER + TOOLBAR */
+[data-testid="stHeader"],
+[data-testid="stToolbar"] {
+    background: transparent !important;
 }
 
 /* ===============================
@@ -68,12 +67,14 @@ h2, h3 {
     color: #e2e8f0 !important;
 }
 
-/* Markdown text fix */
-.stMarkdown, .stMarkdown p, .stMarkdown span {
+/* Markdown fix */
+.stMarkdown,
+.stMarkdown p,
+.stMarkdown span {
     color: #e2e8f0 !important;
 }
 
-/* Labels fix (radio, input, etc.) */
+/* Labels fix */
 label {
     color: #e2e8f0 !important;
 }

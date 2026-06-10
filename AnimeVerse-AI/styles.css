@@ -1,89 +1,109 @@
 /* =====================================
-   AnimeVerse AI Theme
+   AnimeVerse AI - FINAL DARK THEME FIX
 ===================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-html, body, [class*="css"] {
-    font-family: 'Poppins', sans-serif;
+/* ===============================
+   GLOBAL FONT + FORCE COLOR
+================================ */
+html, body {
+    font-family: 'Poppins', sans-serif !important;
+    background-color: #0f172a !important;
+    color: white !important;
 }
 
-/* Main Background */
+/* ===============================
+   STREAMLIT MAIN APP BACKGROUND
+   (IMPORTANT FIX FOR WHITE SCREEN)
+================================ */
 .stApp {
-    background: linear-gradient(
-        135deg,
-        #0f172a,
-        #1e293b,
-        #111827
-    );
-    color: white;
+    background: linear-gradient(135deg, #0f172a, #1e293b, #111827) !important;
+    color: white !important;
 }
 
-/* Title */
+/* Extra Streamlit container fix */
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(135deg, #0f172a, #1e293b, #111827) !important;
+}
+
+[data-testid="stHeader"] {
+    background: transparent !important;
+}
+
+[data-testid="stToolbar"] {
+    background: transparent !important;
+}
+
+/* ===============================
+   TITLES
+================================ */
 h1 {
     text-align: center;
-    color: #ff4b4b;
-    font-weight: 700;
+    color: #ff4b4b !important;
+    font-weight: 800;
 }
 
 h2, h3 {
-    color: #f8fafc;
+    color: #f8fafc !important;
 }
 
-/* Subtitle */
-p {
-    color: #e2e8f0;
+/* ===============================
+   TEXT
+================================ */
+p, span, label {
+    color: #e2e8f0 !important;
 }
 
-/* Input Fields */
+/* ===============================
+   INPUT FIELDS
+================================ */
 .stTextInput input,
 .stTextArea textarea {
-    border-radius: 12px;
-    border: 2px solid #ff4b4b;
-    background-color: #1e293b;
-    color: white;
+    border-radius: 12px !important;
+    border: 2px solid #ff4b4b !important;
+    background-color: #1e293b !important;
+    color: white !important;
 }
 
-/* Select Box */
+/* ===============================
+   SELECT BOX
+================================ */
 .stSelectbox div {
-    border-radius: 10px;
+    border-radius: 10px !important;
 }
 
-/* Buttons */
+/* ===============================
+   BUTTONS
+================================ */
 .stButton > button {
-    background: linear-gradient(
-        90deg,
-        #ff4b4b,
-        #ff6b6b
-    );
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 24px;
-    font-size: 16px;
-    font-weight: bold;
-    transition: 0.3s;
+    background: linear-gradient(90deg, #ff4b4b, #ff6b6b) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 10px 24px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    transition: 0.3s ease-in-out;
 }
 
 .stButton > button:hover {
     transform: scale(1.05);
-    background: linear-gradient(
-        90deg,
-        #ff6b6b,
-        #ff8787
-    );
+    background: linear-gradient(90deg, #ff6b6b, #ff8787) !important;
 }
 
-/* Tabs */
+/* ===============================
+   TABS
+================================ */
 .stTabs [data-baseweb="tab-list"] {
     gap: 10px;
 }
 
 .stTabs [data-baseweb="tab"] {
-    background-color: #1e293b;
-    color: white;
-    border-radius: 10px;
-    padding: 10px 20px;
+    background-color: #1e293b !important;
+    color: white !important;
+    border-radius: 10px !important;
+    padding: 10px 20px !important;
 }
 
 .stTabs [aria-selected="true"] {
@@ -91,18 +111,24 @@ p {
     color: white !important;
 }
 
-/* Success Boxes */
+/* ===============================
+   SUCCESS BOX
+================================ */
 .stSuccess {
-    border-radius: 12px;
+    border-radius: 12px !important;
 }
 
-/* Images */
+/* ===============================
+   IMAGES
+================================ */
 img {
-    border-radius: 15px;
+    border-radius: 15px !important;
     box-shadow: 0px 4px 20px rgba(255, 75, 75, 0.3);
 }
 
-/* Anime Cards */
+/* ===============================
+   CUSTOM ANIME CARD
+================================ */
 .anime-card {
     background: #1e293b;
     padding: 20px;
@@ -111,9 +137,18 @@ img {
     box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
 }
 
-/* Footer */
+/* ===============================
+   FOOTER
+================================ */
 .footer {
     text-align: center;
     margin-top: 30px;
     color: #94a3b8;
+}
+
+/* ===============================
+   FORCE EVERYTHING DARK (IMPORTANT)
+================================ */
+* {
+    scrollbar-color: #ff4b4b #1e293b;
 }

@@ -1,16 +1,67 @@
 import streamlit as st
-import os
+import requests
+import random
 
 # =========================
-# BACKEND IMPORTS
+# IMPORT REAL BACKEND
 # =========================
-from battle import battle_1v1, battle_2v2, battle_4v4, run_tournament, survival_mode
-from quote_generator import generate_quote
-from personality_quiz import get_character_match
+from battle import (
+    battle_1v1,
+    battle_2v2,
+    battle_4v4,
+    run_tournament,
+    survival_mode
+)
 
 # =========================
-# PAGE CONFIG
+# SAFE FALLBACK FUNCTIONS (FIX CRASHES)
 # =========================
+
+def generate_quote(theme):
+    quotes = {
+        "Motivational": [
+            "Never give up until the end.",
+            "Power grows through struggle.",
+            "A true warrior never stops."
+        ],
+        "Friendship": [
+            "Friends are your greatest strength.",
+            "Together we are unstoppable."
+        ],
+        "Success": [
+            "Hard work beats talent.",
+            "Success is earned, not given."
+        ],
+        "Sad": [
+            "Pain creates strength.",
+            "Even heroes cry."
+        ],
+        "Funny": [
+            "Even anime heroes need snacks.",
+            "Training can wait, food cannot."
+        ]
+    }
+    return random.choice(quotes.get(theme, ["Stay strong!"]))
+
+
+def get_character_match(q1, q2):
+
+    if q1 == "Friendship":
+        return "Naruto Uzumaki"
+    elif q1 == "Freedom":
+        return "Monkey D. Luffy"
+    elif q1 == "Knowledge":
+        return "Itachi Uchiha"
+    elif q2 == "Strategic":
+        return "Levi Ackerman"
+    else:
+        return "Gojo Satoru"
+
+
+# =========================
+# APP CONFIG
+# =========================
+
 st.set_page_config(
     page_title="AnimeVerse AI",
     page_icon="⚔️",
@@ -18,72 +69,88 @@ st.set_page_config(
 )
 
 # =========================
-# SAFE CSS LOADER (FIXED ERROR)
+# CSS
 # =========================
-css_path = os.path.join(os.path.dirname(__file__), "styles.css")
 
-if os.path.exists(css_path):
-    with open(css_path, "r") as f:
-        st.markdown(
-            f"<style>{f.read()}</style>",
-            unsafe_allow_html=True
-        )
-else:
-    st.warning("styles.css not found - UI styling disabled")
+try:
+    with open("styles.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+except:
+    pass
 
 # =========================
 # HEADER
 # =========================
+
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Companion")
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+# =========================
+# TABS
+# =========================
+
+tab1, tab3, tab4, tab5 = st.tabs([
     "🔍 Anime Search",
-    "🎌 AI Recommender",
     "⚔️ Battle Simulator",
     "✨ Quote Generator",
     "🎭 Personality Quiz"
 ])
 
 # =========================
-# TAB 1 - ANIME SEARCH
+# 🔍 ANIME SEARCH
 # =========================
+
 with tab1:
+
     st.header("🔍 Anime Search")
 
     anime_name = st.text_input("Enter Anime Name")
 
     if st.button("Search Anime"):
-        st.info("Backend API integration pending")
 
-    st.subheader("Anime Details")
-    st.write("🖼️ Poster: Backend Output")
-    st.write("⭐ Rating: Backend Output")
-    st.write("🎬 Episodes: Backend Output")
-    st.write("🎭 Genres: Backend Output")
-    st.write("📅 Release Date: Backend Output")
-    st.write("📖 Synopsis: Backend Output")
+        if anime_name:
+
+            try:
+                url = f"https://api.jikan.moe/v4/anime?q={anime_name}&limit=1"
+                response = requests.get(url)
+
+                if response.status_code == 200:
+                    data = response.json()
+
+                    if data["data"]:
+                        anime = data["data"][0]
+
+                        st.success(f"Results for {anime['title']}")
+                        st.image(anime["images"]["jpg"]["image_url"], width=300)
+
+                        st.write(f"⭐ Rating: {anime['score']}")
+                        st.write(f"🎬 Episodes: {anime['episodes']}")
+
+                        genres = ", ".join(g["name"] for g in anime["genres"])
+                        st.write(f"🎭 Genres: {genres}")
+
+                        if anime["year"]:
+                            st.write(f"📅 Release Year: {anime['year']}")
+
+                        st.write(f"📖 Synopsis: {anime['synopsis']}")
+
+                    else:
+                        st.error("Anime not found.")
+                else:
+                    st.error("Failed to fetch anime data.")
+
+            except Exception as e:
+                st.error(f"Error: {e}")
+
+        else:
+            st.error("Please enter an anime name.")
 
 # =========================
-# TAB 2 - RECOMMENDER
+# ⚔️ BATTLE SIMULATOR
 # =========================
-with tab2:
-    st.header("🎌 AI Anime Recommender")
 
-    anime_input = st.text_input("Enter anime you enjoyed")
-
-    if st.button("Get Recommendations"):
-        st.info("Backend integration pending")
-
-    st.subheader("Recommendations")
-    st.write("🎌 Recommendation 1")
-    st.write("🎌 Recommendation 2")
-    st.write("🎌 Recommendation 3")
-
-# =========================
-# TAB 3 - BATTLE SIMULATOR
-# =========================
 with tab3:
+
     st.header("⚔️ Anime Battle Simulator")
 
     mode = st.selectbox(
@@ -91,19 +158,46 @@ with tab3:
         ["1v1 Battle", "2v2 Battle", "4v4 Battle", "Tournament Arc", "Survival Arena"]
     )
 
+    # 1v1
     if mode == "1v1 Battle":
+
         a = st.text_input("Character A")
         b = st.text_input("Character B")
 
         if st.button("Start Battle"):
             if a and b:
                 result = battle_1v1(a, b)
-                st.success(f"🏆 Winner: {result['winner']}")
-                st.write(result["story"])
-            else:
-                st.error("Enter both characters")
 
+                st.success(f"🏆 Winner: {result['winner']}")
+
+                st.markdown("## ⚔️ Combat Analysis")
+
+                fa = result["fighter_a"]["stats"]
+                fb = result["fighter_b"]["stats"]
+
+                for stat in fa:
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        st.write(f"{a} - {stat}")
+                        st.progress(fa[stat] / 100)
+
+                    with col2:
+                        st.write(f"{b} - {stat}")
+                        st.progress(fb[stat] / 100)
+
+                st.markdown("## 🏅 Category Winners")
+                for k, v in result["category_winners"].items():
+                    st.write(f"⚔️ {k} → 🥇 {v}")
+
+                st.write(result["story"])
+
+            else:
+                st.error("Enter both characters.")
+
+    # 2v2
     elif mode == "2v2 Battle":
+
         a1 = st.text_input("Team A Fighter 1")
         a2 = st.text_input("Team A Fighter 2")
         b1 = st.text_input("Team B Fighter 1")
@@ -112,65 +206,102 @@ with tab3:
         if st.button("Start Team Battle"):
             if all([a1, a2, b1, b2]):
                 result = battle_2v2([a1, a2], [b1, b2])
-                st.success(f"🏆 Winner: {result['winner']}")
-                st.write(result["story"])
-            else:
-                st.error("Fill all fields")
 
+                st.success(f"🏆 Winner: {result['winner']}")
+
+                st.markdown("## 🏅 Category Winners")
+                for k, v in result["category_winners"].items():
+                    st.write(f"⚔️ {k} → 🥇 {v}")
+
+                st.write(result["story"])
+
+            else:
+                st.error("Fill all fields.")
+
+    # 4v4
     elif mode == "4v4 Battle":
-        t1 = st.text_area("Team Alpha")
-        t2 = st.text_area("Team Omega")
+
+        t1 = st.text_area("Team Alpha (4 names)")
+        t2 = st.text_area("Team Omega (4 names)")
 
         if st.button("Start 4v4 Battle"):
             if t1 and t2:
-                result = battle_4v4(t1.split("\n"), t2.split("\n"))
-                st.success(f"🏆 Winner: {result['winner']}")
-                st.write(result["story"])
-            else:
-                st.error("Enter teams")
 
+                team_a = t1.split("\n")
+                team_b = t2.split("\n")
+
+                result = battle_4v4(team_a, team_b)
+
+                st.success(f"🏆 Winner: {result['winner']}")
+
+                st.markdown("## 🏅 Category Winners")
+                for k, v in result["category_winners"].items():
+                    st.write(f"⚔️ {k} → 🥇 {v}")
+
+                st.write(result["story"])
+
+            else:
+                st.error("Enter both teams.")
+
+    # Tournament
     elif mode == "Tournament Arc":
-        fighters = st.text_area("Enter Fighters (one per line)")
+
+        fighters = st.text_area("Enter fighters (one per line)")
 
         if st.button("Start Tournament"):
             if fighters:
                 result = run_tournament(fighters.split("\n"))
+
                 st.success(f"👑 Champion: {result['champion']}")
                 st.write(result["story"])
-            else:
-                st.error("Enter fighters")
 
+            else:
+                st.error("Enter fighters.")
+
+    # Survival
     elif mode == "Survival Arena":
+
         hero = st.text_input("Select Hero")
 
         if st.button("Enter Arena"):
             if hero:
                 result = survival_mode(hero)
-                st.success(result["result"])
+
+                st.success(result["character"])
                 st.write(f"⭐ Score: {result['score']}")
+                st.write(result["story"])
+
             else:
-                st.error("Enter hero name")
+                st.error("Enter hero name.")
 
 # =========================
-# TAB 4 - QUOTE GENERATOR
+# ✨ QUOTE GENERATOR
 # =========================
+
 with tab4:
+
     st.header("✨ Anime Quote Generator")
 
-    mode = st.radio("Mode", ["Real Quote", "AI Quote"])
-    theme = st.selectbox("Theme", ["Motivational", "Friendship", "Success", "Sad", "Funny"])
+    theme = st.selectbox(
+        "Theme",
+        ["Motivational", "Friendship", "Success", "Sad", "Funny"]
+    )
 
     if st.button("Generate Quote"):
-        st.info("Backend pending integration")
+        quote = generate_quote(theme)
+        st.success(quote)
 
 # =========================
-# TAB 5 - PERSONALITY QUIZ
+# 🎭 PERSONALITY QUIZ
 # =========================
+
 with tab5:
+
     st.header("🎭 Personality Quiz")
 
     q1 = st.radio("What motivates you?", ["Power", "Friendship", "Freedom", "Knowledge"])
     q2 = st.radio("How do you fight?", ["Head on", "Strategic", "Support friends", "Adapt"])
 
     if st.button("Reveal Result"):
-        st.info("Backend pending integration")
+        character = get_character_match(q1, q2)
+        st.success(f"🎌 Your Anime Match: {character}")

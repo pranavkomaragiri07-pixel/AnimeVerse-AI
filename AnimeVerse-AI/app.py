@@ -1,3 +1,5 @@
+app.py
+
 import streamlit as st
 import requests
 import random
@@ -241,31 +243,68 @@ with tab3:
 
     # ---------------- 2v2 ----------------
     elif mode == "2v2 Battle":
-
         a1 = st.text_input("A1")
         a2 = st.text_input("A2")
         b1 = st.text_input("B1")
         b2 = st.text_input("B2")
-
         if st.button("Fight") and all([a1, a2, b1, b2]):
-
             result = battle_2v2([a1, a2], [b1, b2])
-
-            st.success(result["winner"])
+            st.success("🏆 Winner: " + result["winner"])
             st.info(result["story"])
+            team_a = result["team_a_total"]
+            team_b = result["team_b_total"]
+            st.markdown("## ⚔️ TEAM STATS COMPARISON")
+            for stat in team_a.keys():
+                col1, col2 = st.columns([1,1])
+                with col1:
+                    st.markdown("### 🔵 TEAM A")
+                    st.write(stat)
+                    st.progress(team_a[stat] / 100)
+                with col2:
+                    st.markdown("### 🔴 TEAM B")
+                    st.write(stat)
+                    st.progress(team_b[stat] / 100)
 
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
 
-        t1 = st.text_area("Team Alpha")
-        t2 = st.text_area("Team Omega")
+        t1 = st.text_area("Phantom troupe")
+
+        t2 = st.text_area("Oración Seis")
 
         if st.button("Battle") and t1 and t2:
 
             result = battle_4v4(t1.split("\n"), t2.split("\n"))
 
-            st.success(result["winner"])
+            st.success("🏆 Winner: " + result["winner"])
+
             st.info(result["story"])
+
+            team_a = result["team_a_total"]
+
+            team_b = result["team_b_total"]
+
+            st.markdown("## ⚔️ TEAM STATS COMPARISON")
+
+            for stat in team_a.keys():
+
+                col1, col2 = st.columns([1,1])
+
+                with col1:
+
+                    st.markdown("### 🔵 TEAM ALPHA")
+
+                    st.write(stat)
+
+                    st.progress(team_a[stat] / 100)
+
+                with col2:
+
+                    st.markdown("### 🔴 TEAM OMEGA")
+
+                    st.write(stat)
+
+                    st.progress(team_b[stat] / 100)
 
     # ---------------- TOURNAMENT ----------------
     elif mode == "Tournament Arc":

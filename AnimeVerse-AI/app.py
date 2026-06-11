@@ -164,17 +164,23 @@ with tab3:
             fa = result["fighter_a"]["stats"]
             fb = result["fighter_b"]["stats"]
 
+            st.markdown("## ⚔️ Stats Comparison")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+            st.markdown(f"### 🔵 {a}")
+    
             for stat in fa:
+            st.write(stat)
+            st.progress(fa[stat] / 100)
 
-                col1, col2 = st.columns(2)
-
-                with col1:
-                    st.write(a, stat)
-                    st.progress(fa[stat] / 100)
-
-                with col2:
-                    st.write(b, stat)
-                    st.progress(fb[stat] / 100)
+            with col2:
+            st.markdown(f"### 🔴 {b}")
+    
+            for stat in fb:
+                st.write(stat)
+                st.progress(fb[stat] / 100)
 
             st.markdown("### 🏅 Category Winners")
 

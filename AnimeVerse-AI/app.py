@@ -17,28 +17,37 @@ from battle import (
 # SAFE FUNCTIONS
 # =========================
 def generate_quote(theme):
-    quotes = {
-        "Motivational": [
-            ("Naruto Uzumaki", "I'm not gonna run away!"),
-            ("All Might", "It's fine now! Because I am here!"),
-        ],
-        "Friendship": [
-            ("Luffy", "I will never abandon my friends!"),
-            ("Naruto", "Friends are my power!"),
-        ],
-        "Success": [
-            ("Levi", "The only thing we can do is move forward."),
-            ("Itachi", "Growth comes from sacrifice."),
-        ],
-        "Sad": [
-            ("Pain", "Pain is the only way to understand peace."),
-            ("Itachi", "Even heroes suffer."),
-        ],
-        "Funny": [
-            ("Saitama", "Ok."),
-            ("Goku", "I’m hungry again."),
-        ]
-    }
+    "Motivational": [
+    ("Naruto Uzumaki", "Hard work is worthless for those that don't believe in themselves."),
+    ("Rock Lee", "A dropout will beat a genius through hard work."),
+    ("All Might", "You too can become a hero if you push forward!"),
+    ("Izuku Midoriya", "If you want to win, work harder than anyone else."),
+],
+
+"Friendship": [
+    ("Naruto Uzumaki", "Failing doesn’t give you a reason to give up."),
+    ("Luffy", "I don’t care if I die fighting for my friends."),
+    ("Natsu Dragneel", "We fight together, no matter what."),
+],
+
+"Success": [
+    ("Itachi Uchiha", "People live their lives bound by what they accept as correct."),
+    ("Levi Ackerman", "The only thing we are allowed to do is believe that we won't regret the choice we made."),
+    ("Tanjiro Kamado", "No matter how many times it breaks your heart, stand up."),
+],
+
+"Sad": [
+    ("Pain", "Feel pain, accept pain, know pain."),
+    ("Itachi Uchiha", "Even the strongest of us carry suffering."),
+    ("Griffith", "Dreams aren’t meant to be easy."),
+],
+
+"Funny": [
+    ("Saitama", "Ok."),
+    ("Goku", "Training? I prefer eating first."),
+    ("Konosuba Kazuma", "I just want a normal life… why is this so hard?"),
+]
+}
 
     char, quote = random.choice(quotes.get(theme, [("Anime", "Stay strong!")]))
     return f"{quote}\n\n— {char}"

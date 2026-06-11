@@ -15,7 +15,7 @@ def generate_stats():
 
 
 # =========================
-# ⚔️ 1v1 BATTLE (KEEP CATEGORY WINNERS)
+# ⚔️ 1v1 BATTLE (FIXED)
 # =========================
 def battle_1v1(a, b):
 
@@ -31,19 +31,27 @@ def battle_1v1(a, b):
         "Weapon Mastery": a if fa["Weapon Mastery"] > fb["Weapon Mastery"] else b
     }
 
-    winner = a if sum(fa.values()) > sum(fb.values()) else b
+    total_a = sum(fa.values())
+    total_b = sum(fb.values())
+
+    winner = a if total_a > total_b else b
+
+    battle_score = abs(total_a - total_b)
+    difficulty = "Hard" if battle_score > 200 else "Medium" if battle_score > 100 else "Easy"
 
     return {
         "fighter_a": {"name": a, "stats": fa},
         "fighter_b": {"name": b, "stats": fb},
         "category_winners": category_winners,
         "winner": winner,
+        "battle_score": battle_score,
+        "difficulty": difficulty,
         "story": f"{a} vs {b} ended in an epic battle. {winner} won."
     }
 
 
 # =========================
-# 👥 2v2 BATTLE (KEEP CATEGORY WINNERS)
+# 👥 2v2 BATTLE
 # =========================
 def battle_2v2(team_a, team_b):
 
@@ -67,7 +75,7 @@ def battle_2v2(team_a, team_b):
 
 
 # =========================
-# ⚔️ 4v4 BATTLE (KEEP CATEGORY WINNERS)
+# ⚔️ 4v4 BATTLE
 # =========================
 def battle_4v4(team_a, team_b):
 
@@ -91,7 +99,7 @@ def battle_4v4(team_a, team_b):
 
 
 # =========================
-# 🏆 TOURNAMENT MODE (REMOVED CATEGORY WINNERS)
+# 🏆 TOURNAMENT MODE
 # =========================
 def run_tournament(fighters):
 
@@ -134,7 +142,7 @@ def run_tournament(fighters):
 
 
 # =========================
-# 🔥 SURVIVAL MODE (REMOVED CATEGORY WINNERS)
+# 🔥 SURVIVAL MODE
 # =========================
 def survival_mode(character):
 

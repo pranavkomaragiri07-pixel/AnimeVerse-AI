@@ -266,12 +266,7 @@ with tab3:
                 with col3:
                     st.write(stat)
                     st.progress(team_b[stat] / 100)
-            st.markdown("---")
-            col1, col2 = st.columns(2)
-            with col1:
-                st.markdown(f"### 🔵 Team A: {a1}, {a2}")
-            with col2:
-                st.markdown(f"### 🔴 Team B: {b1}, {b2}")
+            
             st.markdown("## 🏅 Category Winners")
             for k, v in result["category_winners"].items():
                 st.write(f"{k} → 🥇 {v}")
@@ -301,12 +296,7 @@ with tab3:
                 with col3:
                     st.write(stat)
                     st.progress(team_b[stat] / 100)
-            st.markdown("---")
-            col1, col2 = st.columns(2)
-            with col1:
-                st.markdown("### 🔵 Team Alpha")
-            with col2:
-                st.markdown("### 🔴 Team Omega")
+          
             st.markdown("## 🏅 Category Winners")
             for k, v in result["category_winners"].items():
                 st.write(f"{k} → 🥇 {v}")

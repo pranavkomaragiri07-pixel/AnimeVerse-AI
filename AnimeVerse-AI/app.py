@@ -79,7 +79,6 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
 # =========================
 # APP CONFIG
 # =========================
-
 st.set_page_config(
     page_title="AnimeVerse AI",
     page_icon="⚔️",
@@ -89,7 +88,6 @@ st.set_page_config(
 # =========================
 # CSS
 # =========================
-
 try:
     with open("styles.css") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -99,14 +97,12 @@ except:
 # =========================
 # HEADER
 # =========================
-
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Battle Simulator")
 
 # =========================
 # TABS
 # =========================
-
 tab1, tab3, tab4, tab5 = st.tabs([
     "🔍 Anime Search",
     "⚔️ Battle Simulator",
@@ -117,7 +113,6 @@ tab1, tab3, tab4, tab5 = st.tabs([
 # =========================
 # 🔍 ANIME SEARCH
 # =========================
-
 with tab1:
 
     st.header("Search Anime")
@@ -143,7 +138,6 @@ with tab1:
 # =========================
 # ⚔️ BATTLE SYSTEM
 # =========================
-
 with tab3:
 
     mode = st.selectbox(
@@ -175,20 +169,35 @@ with tab3:
                 col1, col2 = st.columns(2)
 
                 with col1:
-                    st.write(a, stat, fa[stat])
+                    st.write(a, stat)
                     st.progress(fa[stat] / 100)
 
                 with col2:
-                    st.write(b, stat, fb[stat])
+                    st.write(b, stat)
                     st.progress(fb[stat] / 100)
 
             st.markdown("### 🏅 Category Winners")
 
+            a_wins = 0
+            b_wins = 0
+
             for k, v in result["category_winners"].items():
-                st.write(f"{k} → {v}")
+                if v == a:
+                    a_wins += 1
+                    st.markdown(f"⚡ {k} → 🏅 **{a}**")
+                else:
+                    b_wins += 1
+                    st.markdown(f"⚡ {k} → 🏅 **{b}**")
+
+            if a_wins > b_wins:
+                final = a
+            else:
+                final = b
+
+            st.success(f"🔥 FINAL WINNER: {final}")
 
             st.markdown("### 📖 Story")
-            st.write(result["story"])
+            st.info(result["story"])
 
     # -----------------
     # 2v2
@@ -205,11 +214,12 @@ with tab3:
             result = battle_2v2([a1, a2], [b1, b2])
 
             st.success(result["winner"])
-            st.write(result["story"])
+            st.info(result["story"])
 
             st.markdown("### 🏅 Category Winners")
+
             for k, v in result["category_winners"].items():
-                st.write(k, "→", v)
+                st.markdown(f"⚡ {k} → 🏅 {v}")
 
     # -----------------
     # 4v4
@@ -227,29 +237,35 @@ with tab3:
             result = battle_4v4(team_a, team_b)
 
             st.success(result["winner"])
-            st.write(result["story"])
+            st.info(result["story"])
 
             st.markdown("### 🏅 Category Winners")
+
             for k, v in result["category_winners"].items():
-                st.write(k, "→", v)
+                st.markdown(f"⚡ {k} → 🏅 {v}")
 
     # -----------------
-    # TOURNAMENT
+    # TOURNAMENT (FIXED DISPLAY)
     # -----------------
     elif mode == "Tournament Arc":
 
-        fighters = st.text_area("Enter fighters")
+        fighters = st.text_area("Enter fighters (one per line)")
 
         if st.button("Run") and fighters:
 
             result = run_tournament(fighters.split("\n"))
 
-            st.success("👑 Champion: " + result["champion"])
-            st.write(result["rounds"])
-            st.write(result["story"])
+            st.success(f"👑 Champion: {result['champion']}")
+
+            st.markdown("### ⚔️ Rounds")
+
+            for r in result["rounds"]:
+                st.write("⚔️", r)
+
+            st.info(result["story"])
 
     # -----------------
-    # SURVIVAL
+    # SURVIVAL (FIXED DISPLAY)
     # -----------------
     elif mode == "Survival Arena":
 
@@ -259,15 +275,19 @@ with tab3:
 
             result = survival_mode(hero)
 
-            st.success(result["character"])
-            st.write("Score:", result["score"])
-            st.write(result["rounds"])
-            st.write(result["story"])
+            st.success(f"🏆 Survivor: {result['character']}")
+            st.write(f"⭐ Score: {result['score']}")
+
+            st.markdown("### ⚔️ Rounds")
+
+            for r in result["rounds"]:
+                st.write("⚔️", r)
+
+            st.info(result["story"])
 
 # =========================
 # ✨ QUOTE
 # =========================
-
 with tab4:
 
     theme = st.selectbox("Theme", ["Motivational", "Friendship", "Success", "Sad", "Funny"])
@@ -278,7 +298,6 @@ with tab4:
 # =========================
 # 🎭 QUIZ
 # =========================
-
 with tab5:
 
     q1 = st.radio("Motivation", ["Power", "Friendship", "Freedom", "Knowledge"])

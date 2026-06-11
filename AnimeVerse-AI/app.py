@@ -273,8 +273,8 @@ with tab3:
             st.info(result["story"])
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
-        t1 = st.text_area("Team Alpha")
-        t2 = st.text_area("Team Omega")
+        t1 = st.text_area("Phantum Troupe")
+        t2 = st.text_area("Oración Seis")
         if st.button("Battle") and t1 and t2:
             result = battle_4v4(t1.split("\n"), t2.split("\n"))
             st.success("🏆 Winner: " + result["winner"])
@@ -283,9 +283,9 @@ with tab3:
             st.markdown("## ⚔️ TEAM STATS COMPARISON")
             col1, col2, col3 = st.columns([4, 1, 4])
             with col1:
-                st.markdown("### 🔵 TEAM ALPHA TOTAL STATS")
+                st.markdown("### 🔵 Phantum Troupe TOTAL STATS")
             with col3:
-                st.markdown("### 🔴 TEAM OMEGA TOTAL STATS")
+                st.markdown("### 🔴 Oración Seis TOTAL STATS")
             for stat in team_a.keys():
                 col1, col2, col3 = st.columns([4, 1, 4])
                 with col1:

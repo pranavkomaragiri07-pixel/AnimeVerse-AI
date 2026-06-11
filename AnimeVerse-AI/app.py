@@ -257,8 +257,8 @@ with tab3:
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
 
-        t1 = st.text_area("Team Alpha")
-        t2 = st.text_area("Team Omega")
+        t1 = st.text_area("Dark Triad")
+        t2 = st.text_area("Phantom Troupe")
 
         if st.button("Battle") and t1 and t2:
 

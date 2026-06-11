@@ -16,7 +16,7 @@ from battle import (
 # =========================
 # SAFE FUNCTIONS
 # =========================
-def generate_quote(theme):
+def generate_quote(theme):{
     "Motivational": [
     ("Naruto Uzumaki", "Hard work is worthless for those that don't believe in themselves."),
     ("Rock Lee", "A dropout will beat a genius through hard work."),
@@ -47,7 +47,7 @@ def generate_quote(theme):
     ("Goku", "Training? I prefer eating first."),
     ("Konosuba Kazuma", "I just want a normal life… why is this so hard?"),
 ]
-
+}
 char, quote = random.choice(quotes.get(theme, [("Anime", "Stay strong!")]))
 return f"{quote}\n\n— {char}"
 

@@ -49,8 +49,8 @@ def generate_quote(theme):
 ]
 }
 
-    char, quote = random.choice(quotes.get(theme, [("Anime", "Stay strong!")]))
-    return f"{quote}\n\n— {char}"
+char, quote = random.choice(quotes.get(theme, [("Anime", "Stay strong!")]))
+return f"{quote}\n\n— {char}"
 
 
 def get_character_match(q1, q2, q3, q4, q5, q6):

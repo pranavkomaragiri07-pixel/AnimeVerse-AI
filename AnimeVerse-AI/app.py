@@ -336,6 +336,14 @@ with tab4:
 # =========================
 # QUIZ
 # =========================
+CHAR_IMAGES = {
+    "goku": "https://i.imgur.com/1bX5QH6.png",
+    "naruto uzumaki": "https://i.imgur.com/7Q1Yp.png",
+    "luffy": "https://i.imgur.com/8Q9ZV.png",
+    "itachi uchiha": "https://i.imgur.com/3QZQZ.png",
+    "levi ackerman": "https://i.imgur.com/9XQxZ.png"
+}
+
 with tab5:
 
     q1 = st.radio("Motivation", ["Power", "Friendship", "Freedom", "Knowledge"])
@@ -346,5 +354,45 @@ with tab5:
     q6 = st.radio("Power Type", ["Physical strength", "Speed", "Magic/Skills", "Tactical mind"])
 
     if st.button("Result"):
+
         result = get_character_match(q1, q2, q3, q4, q5, q6)
-        st.success("🎌 You are: " + result)
+
+        key = result.lower()
+        img = CHAR_IMAGES.get(key, "")
+
+        st.markdown(f"""
+        <style>
+        .result-box {{
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            width: 260px;
+            padding: 15px;
+            background: #0f172a;
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(34,197,94,0.6);
+            z-index: 9999;
+            animation: glow 1.5s infinite alternate;
+        }}
+
+        @keyframes glow {{
+            from {{ box-shadow: 0 0 10px #22c55e; }}
+            to {{ box-shadow: 0 0 25px #22c55e; }}
+        }}
+
+        .result-box img {{
+            width: 120px;
+            margin-top: 10px;
+            border-radius: 10px;
+        }}
+        </style>
+
+        <div class="result-box">
+            <h3>🎌 You are</h3>
+            <h2>{result}</h2>
+            <img src="{img}">
+        </div>
+        """, unsafe_allow_html=True)

@@ -43,7 +43,7 @@ def battle_1v1(a, b):
 
 
 # =========================
-# 👥 2v2 BATTLE (FIXED)
+# 👥 2v2 BATTLE (FIXED FOR UI)
 # =========================
 def battle_2v2(team_a, team_b):
 
@@ -55,6 +55,25 @@ def battle_2v2(team_a, team_b):
         {"name": x, "stats": generate_stats()} for x in team_b
     ]
 
+    # team totals (IMPORTANT FOR YOUR BAR UI)
+    team_a_total = {k: 0 for k in generate_stats().keys()}
+    team_b_total = {k: 0 for k in generate_stats().keys()}
+
+    for member in team_a_stats:
+        for k, v in member["stats"].items():
+            team_a_total[k] += v
+
+    for member in team_b_stats:
+        for k, v in member["stats"].items():
+            team_b_total[k] += v
+
+    # normalize (average for clean UI bars)
+    for k in team_a_total:
+        team_a_total[k] //= len(team_a)
+
+    for k in team_b_total:
+        team_b_total[k] //= len(team_b)
+
     score_a = sum(sum(p["stats"].values()) for p in team_a_stats)
     score_b = sum(sum(p["stats"].values()) for p in team_b_stats)
 
@@ -64,6 +83,8 @@ def battle_2v2(team_a, team_b):
         "winner": winner,
         "team_a_stats": team_a_stats,
         "team_b_stats": team_b_stats,
+        "team_a_total": team_a_total,
+        "team_b_total": team_b_total,
         "category_winners": {
             "Attack Power": winner,
             "Defense": winner,
@@ -73,12 +94,12 @@ def battle_2v2(team_a, team_b):
             "Teamwork": winner,
             "Combat Skills": winner
         },
-        "story": f"{team_a} vs {team_b} was a brutal clash!"
+        "story": f"{' , '.join(team_a)} vs {' , '.join(team_b)} was a brutal clash!"
     }
 
 
 # =========================
-# ⚔️ 4v4 BATTLE (FIXED)
+# ⚔️ 4v4 BATTLE (FIXED FOR UI)
 # =========================
 def battle_4v4(team_a, team_b):
 
@@ -90,6 +111,23 @@ def battle_4v4(team_a, team_b):
         {"name": x, "stats": generate_stats()} for x in team_b
     ]
 
+    team_a_total = {k: 0 for k in generate_stats().keys()}
+    team_b_total = {k: 0 for k in generate_stats().keys()}
+
+    for member in team_a_stats:
+        for k, v in member["stats"].items():
+            team_a_total[k] += v
+
+    for member in team_b_stats:
+        for k, v in member["stats"].items():
+            team_b_total[k] += v
+
+    for k in team_a_total:
+        team_a_total[k] //= len(team_a)
+
+    for k in team_b_total:
+        team_b_total[k] //= len(team_b)
+
     score_a = sum(sum(p["stats"].values()) for p in team_a_stats)
     score_b = sum(sum(p["stats"].values()) for p in team_b_stats)
 
@@ -99,6 +137,8 @@ def battle_4v4(team_a, team_b):
         "winner": winner,
         "team_a_stats": team_a_stats,
         "team_b_stats": team_b_stats,
+        "team_a_total": team_a_total,
+        "team_b_total": team_b_total,
         "category_winners": {
             "Power": winner,
             "Speed": winner,
@@ -108,7 +148,7 @@ def battle_4v4(team_a, team_b):
             "Weapon Mastery": winner,
             "Combat Skills": winner
         },
-        "story": f"4v4 battle ended in destruction!"
+        "story": "4v4 battle ended in total domination!"
     }
 
 
@@ -151,7 +191,7 @@ def run_tournament(fighters):
     return {
         "champion": champion,
         "rounds": rounds,
-        "story": f"{champion} became the champion!"
+        "story": f"{champion} became the ultimate champion!"
     }
 
 
@@ -181,5 +221,5 @@ def survival_mode(character):
         "character": character,
         "score": score,
         "rounds": rounds,
-        "story": f"{character} survived {len(rounds)} rounds!"
+        "story": f"{character} survived {len(rounds)} rounds in survival mode!"
     }

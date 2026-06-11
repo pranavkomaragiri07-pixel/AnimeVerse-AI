@@ -15,7 +15,7 @@ def generate_stats():
 
 
 # =========================
-# ⚔️ 1v1 BATTLE
+# ⚔️ 1v1 BATTLE (CLEAN + UI FRIENDLY)
 # =========================
 def battle_1v1(a, b):
 
@@ -37,7 +37,7 @@ def battle_1v1(a, b):
         "fighter_b": {"name": b, "stats": fb},
         "category_winners": category_winners,
         "winner": winner,
-        "story": f"{a} vs {b} ended in an epic battle. {winner} won."
+        "story": f"{a} vs {b} was an intense battle. {winner} emerged victorious!"
     }
 
 
@@ -66,7 +66,7 @@ def battle_2v2(team_a, team_b):
     return {
         "winner": winner,
         "category_winners": category_winners,
-        "story": f"{team_a} vs {team_b} was a brutal team clash. {winner} dominated."
+        "story": f"{team_a} vs {team_b} turned into a chaotic team war. {winner} dominated!"
     }
 
 
@@ -95,7 +95,7 @@ def battle_4v4(team_a, team_b):
     return {
         "winner": winner,
         "category_winners": category_winners,
-        "story": f"4v4 war ended. {winner} completely destroyed the opponent team."
+        "story": f"4v4 battle ended in destruction. {winner} completely overpowered the enemy team!"
     }
 
 
@@ -138,7 +138,7 @@ def run_tournament(fighters):
     return {
         "champion": champion,
         "rounds": rounds,
-        "story": f"{champion} became the tournament champion after intense battles."
+        "story": f"{champion} conquered the tournament and became the ultimate champion!"
     }
 
 
@@ -158,15 +158,15 @@ def survival_mode(character):
         e_stats = sum(generate_stats().values())
 
         if c_stats > e_stats:
-            score += 100
+            score += 1
             rounds.append(f"Round {i}: {character} defeated {enemy}")
         else:
-            rounds.append(f"Round {i}: {character} lost to {enemy}")
+            rounds.append(f"Round {i}: {character} was defeated by {enemy}")
             break
 
     return {
         "character": character,
         "score": score,
         "rounds": rounds,
-        "story": f"{character} survived {len(rounds)} arena rounds."
+        "story": f"{character} survived {len(rounds)} rounds in the survival arena!"
     }

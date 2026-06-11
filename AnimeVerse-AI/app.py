@@ -172,7 +172,7 @@ with tab3:
                 st.markdown(f"### 🔵 {a}")
     
             for stat in fa:
-                .write(stat)
+                st.write(stat)
                 st.progress(fa[stat] / 100)
 
             with col2:

@@ -11,6 +11,7 @@ def generate_stats():
         "Durability": random.randint(60, 100),
         "Stamina": random.randint(60, 100),
         "Weapon Mastery": random.randint(60, 100)
+        "Combat Skills": random.randint(60, 100)
     }
 
 
@@ -60,6 +61,7 @@ def battle_2v2(team_a, team_b):
         "Strategy": winner,
         "Stamina": winner,
         "Weapon Mastery": winner,
+        "teamwork": winner,
         "Team Synergy": winner
     }
 
@@ -89,6 +91,7 @@ def battle_4v4(team_a, team_b):
         "Battle IQ": winner,
         "Durability": winner,
         "Stamina": winner,
+        "Teamwork": winner,
         "Weapon Mastery": winner
     }
 

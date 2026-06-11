@@ -16,7 +16,6 @@ from battle import (
 # =========================
 # SAFE FUNCTIONS
 # =========================
-
 def generate_quote(theme):
     quotes = {
         "Motivational": [
@@ -46,7 +45,6 @@ def generate_quote(theme):
 
 
 def get_character_match(q1, q2, q3, q4, q5, q6):
-
     score = {
         "Naruto Uzumaki": 0,
         "Monkey D. Luffy": 0,
@@ -58,7 +56,6 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
     answers = [q1, q2, q3, q4, q5, q6]
 
     for a in answers:
-
         if a in ["Friendship", "Support", "Loyalty"]:
             score["Naruto Uzumaki"] += 2
             score["Monkey D. Luffy"] += 1
@@ -94,11 +91,13 @@ try:
 except:
     pass
 
+
 # =========================
 # HEADER
 # =========================
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Battle Simulator")
+
 
 # =========================
 # TABS
@@ -109,6 +108,7 @@ tab1, tab3, tab4, tab5 = st.tabs([
     "✨ Quote Generator",
     "🎭 Personality Quiz"
 ])
+
 
 # =========================
 # 🔍 ANIME SEARCH
@@ -135,6 +135,7 @@ with tab1:
                 st.write("🎬 Episodes:", anime["episodes"])
                 st.write("📖", anime["synopsis"])
 
+
 # =========================
 # ⚔️ BATTLE SYSTEM
 # =========================
@@ -145,9 +146,7 @@ with tab3:
         ["1v1 Battle", "2v2 Battle", "4v4 Battle", "Tournament Arc", "Survival Arena"]
     )
 
-    # -----------------
-    # 1v1
-    # -----------------
+    # ----------------- 1v1 -----------------
     if mode == "1v1 Battle":
 
         a = st.text_input("Character A")
@@ -159,30 +158,29 @@ with tab3:
 
             st.success(f"🏆 Winner: {result['winner']}")
 
-            st.markdown("### ⚔️ Stats Comparison")
-
+            # =========================
+            # FIXED VS LAYOUT (MAIN CHANGE)
+            # =========================
             fa = result["fighter_a"]["stats"]
             fb = result["fighter_b"]["stats"]
 
-            st.markdown("## ⚔️ Stats Comparison")
+            st.markdown("## ⚔️ VS BATTLE STATS")
 
             col1, col2 = st.columns(2)
 
             with col1:
-                st.markdown(f"### 🔵 {a}")
-    
-            for stat in fa:
-                st.write(stat)
-                st.progress(fa[stat] / 100)
+                st.markdown(f"## 🔵 {a}")
+                for stat in fa:
+                    st.write(stat)
+                    st.progress(fa[stat] / 100)
 
             with col2:
-                st.markdown(f"### 🔴 {b}")
-    
-            for stat in fb:
-                st.write(stat)
-                st.progress(fb[stat] / 100)
+                st.markdown(f"## 🔴 {b}")
+                for stat in fb:
+                    st.write(stat)
+                    st.progress(fb[stat] / 100)
 
-            st.markdown("### 🏅 Category Winners")
+            st.markdown("## 🏅 Category Winners")
 
             a_wins = 0
             b_wins = 0
@@ -195,19 +193,13 @@ with tab3:
                     b_wins += 1
                     st.markdown(f"⚡ {k} → 🏅 **{b}**")
 
-            if a_wins > b_wins:
-                final = a
-            else:
-                final = b
-
+            final = a if a_wins > b_wins else b
             st.success(f"🔥 FINAL WINNER: {final}")
 
-            st.markdown("### 📖 Story")
             st.info(result["story"])
 
-    # -----------------
-    # 2v2
-    # -----------------
+
+    # ----------------- 2v2 -----------------
     elif mode == "2v2 Battle":
 
         a1 = st.text_input("A1")
@@ -223,13 +215,11 @@ with tab3:
             st.info(result["story"])
 
             st.markdown("### 🏅 Category Winners")
-
             for k, v in result["category_winners"].items():
                 st.markdown(f"⚡ {k} → 🏅 {v}")
 
-    # -----------------
-    # 4v4
-    # -----------------
+
+    # ----------------- 4v4 -----------------
     elif mode == "4v4 Battle":
 
         t1 = st.text_area("Team Alpha")
@@ -246,33 +236,29 @@ with tab3:
             st.info(result["story"])
 
             st.markdown("### 🏅 Category Winners")
-
             for k, v in result["category_winners"].items():
                 st.markdown(f"⚡ {k} → 🏅 {v}")
 
-    # -----------------
-    # TOURNAMENT (FIXED DISPLAY)
-    # -----------------
+
+    # ----------------- TOURNAMENT -----------------
     elif mode == "Tournament Arc":
 
-        fighters = st.text_area("Enter fighters (one per line)")
+        fighters = st.text_area("Enter fighters")
 
         if st.button("Run") and fighters:
 
             result = run_tournament(fighters.split("\n"))
 
-            st.success(f"👑 Champion: {result['champion']}")
+            st.success("👑 Champion: " + result["champion"])
 
             st.markdown("### ⚔️ Rounds")
-
             for r in result["rounds"]:
                 st.write("⚔️", r)
 
             st.info(result["story"])
 
-    # -----------------
-    # SURVIVAL (FIXED DISPLAY)
-    # -----------------
+
+    # ----------------- SURVIVAL -----------------
     elif mode == "Survival Arena":
 
         hero = st.text_input("Hero")
@@ -281,18 +267,14 @@ with tab3:
 
             result = survival_mode(hero)
 
-            st.success(f"🏆 Survivor: {result['character']}")
-            st.write(f"⭐ Score: {result['score']}")
-
-            st.markdown("### ⚔️ Rounds")
-
-            for r in result["rounds"]:
-                st.write("⚔️", r)
-
+            st.success(result["character"])
+            st.write("⭐ Score:", result["score"])
+            st.write(result["rounds"])
             st.info(result["story"])
 
+
 # =========================
-# ✨ QUOTE
+# ✨ QUOTE GENERATOR
 # =========================
 with tab4:
 
@@ -300,6 +282,7 @@ with tab4:
 
     if st.button("Generate Quote"):
         st.success(generate_quote(theme))
+
 
 # =========================
 # 🎭 QUIZ

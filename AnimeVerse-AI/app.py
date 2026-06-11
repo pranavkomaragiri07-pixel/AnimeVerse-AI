@@ -337,8 +337,8 @@ with tab4:
 # QUIZ
 # =========================
 CHAR_IMAGES = {
-    "goku": "https://i.imgur.com/1bX5QH6.png",
-    "naruto uzumaki": "https://i.imgur.com/7Q1Yp.png",
+    "goku": "https://www.deviantart.com/gamerpro20089/art/Ultra-instinct-goku-mastered-for-mobile-db-legends-943021334",
+    "naruto uzumaki": "https://www.reddit.com/r/Naruto/comments/qqg4zb/explain_of_six_paths_sage_mode_and_six_paths/",
     "luffy": "https://i.imgur.com/8Q9ZV.png",
     "itachi uchiha": "https://i.imgur.com/3QZQZ.png",
     "levi ackerman": "https://i.imgur.com/9XQxZ.png"

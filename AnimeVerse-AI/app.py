@@ -359,40 +359,49 @@ with tab5:
 
         key = result.lower()
         img = CHAR_IMAGES.get(key, "")
-
         st.markdown(f"""
-        <style>
-        .result-box {{
-            position: fixed;
-            top: 90px;
-            right: 20px;
-            width: 260px;
-            padding: 15px;
-            background: #0f172a;
-            border: 2px solid #22c55e;
-            border-radius: 12px;
-            color: white;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(34,197,94,0.6);
-            z-index: 9999;
-            animation: glow 1.5s infinite alternate;
-        }}
+<style>
+.result-overlay {{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}}
 
-        @keyframes glow {{
-            from {{ box-shadow: 0 0 10px #22c55e; }}
-            to {{ box-shadow: 0 0 25px #22c55e; }}
-        }}
+.result-card {{
+    width: 380px;
+    background: #0f172a;
+    border: 3px solid #22c55e;
+    border-radius: 20px;
+    text-align: center;
+    padding: 25px;
+    box-shadow: 0 0 40px rgba(34,197,94,0.6);
+    animation: pop 0.4s ease-in-out;
+}}
 
-        .result-box img {{
-            width: 120px;
-            margin-top: 10px;
-            border-radius: 10px;
-        }}
-        </style>
+.result-card img {{
+    width: 200px;
+    margin-top: 15px;
+    border-radius: 15px;
+}}
 
-        <div class="result-box">
-            <h3>🎌 You are</h3>
-            <h2>{result}</h2>
-            <img src="{img}">
-        </div>
-        """, unsafe_allow_html=True)
+@keyframes pop {{
+    0% {{ transform: scale(0.5); opacity: 0; }}
+    100% {{ transform: scale(1); opacity: 1; }}
+}}
+</style>
+
+<div class="result-overlay">
+    <div class="result-card">
+        <h2>🎌 You are</h2>
+        <h1>{result}</h1>
+        <img src="{img}">
+    </div>
+</div>
+""", unsafe_allow_html=True)

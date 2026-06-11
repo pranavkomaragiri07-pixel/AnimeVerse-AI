@@ -169,14 +169,14 @@ with tab3:
             col1, col2 = st.columns(2)
 
             with col1:
-            st.markdown(f"### 🔵 {a}")
+                st.markdown(f"### 🔵 {a}")
     
             for stat in fa:
-            st.write(stat)
-            st.progress(fa[stat] / 100)
+                .write(stat)
+                st.progress(fa[stat] / 100)
 
             with col2:
-            st.markdown(f"### 🔴 {b}")
+                st.markdown(f"### 🔴 {b}")
     
             for stat in fb:
                 st.write(stat)

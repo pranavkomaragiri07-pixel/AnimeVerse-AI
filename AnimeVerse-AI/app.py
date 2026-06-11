@@ -21,22 +21,18 @@ def generate_quote(theme):
             ("Rock Lee", "A dropout will beat a genius through hard work."),
             ("All Might", "You too can become a hero if you push forward!"),
         ],
-
         "Friendship": [
             ("Naruto Uzumaki", "Failing doesn’t give you a reason to give up."),
             ("Luffy", "I don’t care if I die fighting for my friends."),
         ],
-
         "Success": [
             ("Itachi Uchiha", "People live bound by what they accept as correct."),
             ("Levi Ackerman", "Regret comes from hesitation."),
         ],
-
         "Sad": [
             ("Pain", "Feel pain, accept pain, know pain."),
             ("Itachi Uchiha", "Even the strongest carry suffering."),
         ],
-
         "Funny": [
             ("Saitama", "Ok."),
             ("Goku", "Training? I prefer eating."),
@@ -48,7 +44,7 @@ def generate_quote(theme):
 
 
 # =========================
-# PERSONA QUIZ
+# CHARACTER QUIZ
 # =========================
 def get_character_match(q1, q2, q3, q4, q5, q6):
 
@@ -90,7 +86,6 @@ st.set_page_config(page_title="AnimeVerse AI", page_icon="⚔️", layout="wide"
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI Anime Battle System")
 
-
 tab1, tab3, tab4, tab5 = st.tabs([
     "🔍 Anime Search",
     "⚔️ Battle Simulator",
@@ -98,38 +93,29 @@ tab1, tab3, tab4, tab5 = st.tabs([
     "🎭 Personality Quiz"
 ])
 
-
 # =========================
 # ANIME SEARCH
 # =========================
 with tab1:
 
     st.header("Search Anime")
-
     name = st.text_input("Enter anime name")
 
     if st.button("Search") and name:
 
-        try:
-            url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
-            res = requests.get(url).json()
-            data = res.get("data", [])
+        url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
+        res = requests.get(url).json()
+        data = res.get("data", [])
 
-            if data:
-                anime = data[0]
-
-                st.success(anime["title"])
-                st.image(anime["images"]["jpg"]["image_url"])
-
-                st.write("⭐ Rating:", anime.get("score"))
-                st.write("🎬 Episodes:", anime.get("episodes"))
-                st.write("📖 Synopsis:", anime.get("synopsis"))
-
-            else:
-                st.error("No anime found")
-
-        except:
-            st.error("API error")
+        if data:
+            anime = data[0]
+            st.success(anime["title"])
+            st.image(anime["images"]["jpg"]["image_url"])
+            st.write("⭐ Rating:", anime.get("score"))
+            st.write("🎬 Episodes:", anime.get("episodes"))
+            st.write("📖 Synopsis:", anime.get("synopsis"))
+        else:
+            st.error("No anime found")
 
 
 # =========================
@@ -157,8 +143,6 @@ with tab3:
             fa = result["fighter_a"]["stats"]
             fb = result["fighter_b"]["stats"]
 
-            st.markdown("## ⚔️ VS BATTLE")
-
             col1, col2 = st.columns(2)
 
             with col1:
@@ -172,22 +156,6 @@ with tab3:
                 for k, v in fb.items():
                     st.write(k)
                     st.progress(v / 100)
-
-            st.markdown("## 🏅 Category Winners")
-
-            a_win = 0
-            b_win = 0
-
-            for k, v in result["category_winners"].items():
-                if v == a:
-                    a_win += 1
-                else:
-                    b_win += 1
-
-                st.write(f"{k} → 🏅 {v}")
-
-            final = a if a_win > b_win else b
-            st.success(f"🔥 FINAL WINNER: {final}")
 
             st.info(result["story"])
 
@@ -206,41 +174,24 @@ with tab3:
 
             st.success(f"🏆 Winner: {result['winner']}")
 
-            col1, col2 = st.columns(2)
-
-            with col1:
-                st.markdown("## 🔵 Team A")
-                for f in result["team_a_stats"]:
-                    st.write(f["name"])
-                    for k, v in f["stats"].items():
-                        st.write(k)
-                        st.progress(v / 100)
-
-            with col2:
-                st.markdown("## 🔴 Team B")
-                for f in result["team_b_stats"]:
-                    st.write(f["name"])
-                    for k, v in f["stats"].items():
-                        st.write(k)
-                        st.progress(v / 100)
-            
+            # TEAM COMPARISON CENTERED
             st.markdown("## ⚔️ TEAM STATS COMPARISON")
 
             team_a = result["team_a_total"]
             team_b = result["team_b_total"]
-            col1, col2 = st.columns(2)
-            with col1:
-                st.markdown("### 🔵 Team A")
-            with col2:
-                st.markdown("### 🔴 Team B")
+
             for stat in team_a.keys():
                 col1, col2 = st.columns(2)
+
                 with col1:
-                    st.write(f"{stat}")
+                    st.write(f"🔵 {stat}")
                     st.progress(team_a[stat] / 100)
+
                 with col2:
-                    st.write(f"{stat}")
+                    st.write(f"🔴 {stat}")
                     st.progress(team_b[stat] / 100)
+
+            st.info(result["story"])
 
 
     # ---------------- 4v4 ----------------
@@ -258,41 +209,23 @@ with tab3:
 
             st.success(f"🏆 Winner: {result['winner']}")
 
-            col1, col2 = st.columns(2)
-
-            with col1:
-                st.markdown("## 🔵 Team Alpha")
-                for f in result["team_a_stats"]:
-                    st.write(f["name"])
-                    for k, v in f["stats"].items():
-                        st.write(k)
-                        st.progress(v / 100)
-
-            with col2:
-                st.markdown("## 🔴 Team Omega")
-                for f in result["team_b_stats"]:
-                    st.write(f["name"])
-                    for k, v in f["stats"].items():
-                        st.write(k)
-                        st.progress(v / 100)
-
             st.markdown("## ⚔️ TEAM STATS COMPARISON")
 
             team_a = result["team_a_total"]
             team_b = result["team_b_total"]
-            col1, col2 = st.columns(2)
-            with col1:
-                st.markdown("### 🔵 Team A")
-            with col2:
-                st.markdown("### 🔴 Team B")
+
             for stat in team_a.keys():
                 col1, col2 = st.columns(2)
+
                 with col1:
-                    st.write(f"{stat}")
+                    st.write(f"🔵 {stat}")
                     st.progress(team_a[stat] / 100)
+
                 with col2:
-                    st.write(f"{stat}")
+                    st.write(f"🔴 {stat}")
                     st.progress(team_b[stat] / 100)
+
+            st.info(result["story"])
 
 
     # ---------------- TOURNAMENT ----------------
@@ -334,8 +267,9 @@ with tab4:
 
 
 # =========================
-# QUIZ
+# QUIZ (CENTER RESULT + IMAGE OVERLAY)
 # =========================
+
 CHAR_IMAGES = {
     "goku": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/fcc8540c-16f2-442f-9a10-1b35f518cdd4/dflg7x2-6d37bf82-41e6-41d9-99ba-e4cf0ee6bb93.jpg",
     "naruto uzumaki": "https://preview.redd.it/explain-of-six-paths-sage-mode-and-six-paths-senjutsu-does-v0-5yluzjjtjny71.png",
@@ -355,53 +289,54 @@ with tab5:
 
     if st.button("Result"):
 
-        result = get_character_match(q1, q2, q3, q4, q5, q6)
+        result = get_character_match(q1, q2, q3, q4, q5, q6).lower()
+        img = CHAR_IMAGES.get(result, "")
 
-        key = result.lower()
-        img = CHAR_IMAGES.get(key, "")
         st.markdown(f"""
-<style>
-.result-overlay {{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}}
+        <style>
+        .overlay {{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }}
 
-.result-card {{
-    width: 380px;
-    background: #0f172a;
-    border: 3px solid #22c55e;
-    border-radius: 20px;
-    text-align: center;
-    padding: 25px;
-    box-shadow: 0 0 40px rgba(34,197,94,0.6);
-    animation: pop 0.4s ease-in-out;
-}}
+        .card {{
+            width: 450px;
+            background: #0f172a;
+            border: 3px solid #22c55e;
+            border-radius: 20px;
+            text-align: center;
+            padding: 30px;
+            box-shadow: 0 0 60px rgba(34,197,94,0.7);
+            animation: pop 0.4s ease-in-out;
+        }}
 
-.result-card img {{
-    width: 200px;
-    margin-top: 15px;
-    border-radius: 15px;
-}}
+        .card img {{
+            width: 100%;
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-top: 15px;
+        }}
 
-@keyframes pop {{
-    0% {{ transform: scale(0.5); opacity: 0; }}
-    100% {{ transform: scale(1); opacity: 1; }}
-}}
-</style>
+        @keyframes pop {{
+            0% {{ transform: scale(0.6); opacity: 0; }}
+            100% {{ transform: scale(1); opacity: 1; }}
+        }}
+        </style>
 
-<div class="result-overlay">
-    <div class="result-card">
-        <h2>🎌 You are</h2>
-        <h1>{result}</h1>
-        <img src="{img}">
-    </div>
-</div>
-""", unsafe_allow_html=True)
+        <div class="overlay">
+            <div class="card">
+                <h2>🎌 You are</h2>
+                <h1>{result.title()}</h1>
+                <img src="{img}">
+            </div>
+        </div>
+        """, unsafe_allow_html=True)

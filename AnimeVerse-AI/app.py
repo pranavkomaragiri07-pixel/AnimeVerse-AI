@@ -223,12 +223,24 @@ with tab3:
                     for k, v in f["stats"].items():
                         st.write(k)
                         st.progress(v / 100)
+            
+            st.markdown("## ⚔️ TEAM STATS COMPARISON")
 
-            st.markdown("## 🏅 Category Winners")
-            for k, v in result["category_winners"].items():
-                st.write(f"{k} → 🏅 {v}")
-
-            st.info(result["story"])
+            team_a = result["team_a_total"]
+            team_b = result["team_b_total"]
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown("### 🔵 Team A")
+            with col2:
+                st.markdown("### 🔴 Team B")
+            for stat in team_a.keys():
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.write(f"{stat}")
+                    st.progress(team_a[stat] / 100)
+                with col2:
+                    st.write(f"{stat}")
+                    st.progress(team_b[stat] / 100)
 
 
     # ---------------- 4v4 ----------------
@@ -264,11 +276,23 @@ with tab3:
                         st.write(k)
                         st.progress(v / 100)
 
-            st.markdown("## 🏅 Category Winners")
-            for k, v in result["category_winners"].items():
-                st.write(f"{k} → 🏅 {v}")
+            st.markdown("## ⚔️ TEAM STATS COMPARISON")
 
-            st.info(result["story"])
+            team_a = result["team_a_total"]
+            team_b = result["team_b_total"]
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown("### 🔵 Team A")
+            with col2:
+                st.markdown("### 🔴 Team B")
+            for stat in team_a.keys():
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.write(f"{stat}")
+                    st.progress(team_a[stat] / 100)
+                with col2:
+                    st.write(f"{stat}")
+                    st.progress(team_b[stat] / 100)
 
 
     # ---------------- TOURNAMENT ----------------

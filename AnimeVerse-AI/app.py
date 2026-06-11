@@ -17,28 +17,36 @@ def generate_quote(theme):
 
     quotes = {
         "Motivational": [
-            ("Naruto Uzumaki", "Hard work is worthless for those that don't believe in themselves."),
-            ("Rock Lee", "A dropout will beat a genius through hard work."),
-            ("All Might", "You too can become a hero if you push forward!"),
-        ],
-        "Friendship": [
-            ("Naruto Uzumaki", "Failing doesn’t give you a reason to give up."),
-            ("Luffy", "I don’t care if I die fighting for my friends."),
-        ],
-        "Success": [
-            ("Itachi Uchiha", "People live bound by what they accept as correct."),
-            ("Levi Ackerman", "Regret comes from hesitation."),
-        ],
-        "Sad": [
-            ("Pain", "Feel pain, accept pain, know pain."),
-            ("Itachi Uchiha", "Even the strongest carry suffering."),
-        ],
-        "Funny": [
-            ("Saitama", "Ok."),
-            ("Goku", "Training? I prefer eating."),
-        ]
-    }
+    ("Naruto Uzumaki", "Hard work is worthless for those that don't believe in themselves."),
+    ("Rock Lee", "A dropout will beat a genius through hard work."),
+    ("All Might", "You too can become a hero if you push forward!"),
+    ("Izuku Midoriya", "If you want to win, work harder than anyone else."),
+],
 
+"Friendship": [
+    ("Naruto Uzumaki", "Failing doesn’t give you a reason to give up."),
+    ("Luffy", "I don’t care if I die fighting for my friends."),
+    ("Natsu Dragneel", "We fight together, no matter what."),
+],
+
+"Success": [
+    ("Itachi Uchiha", "People live their lives bound by what they accept as correct."),
+    ("Levi Ackerman", "The only thing we are allowed to do is believe that we won't regret the choice we made."),
+    ("Tanjiro Kamado", "No matter how many times it breaks your heart, stand up."),
+],
+
+"Sad": [
+    ("Pain", "Feel pain, accept pain, know pain."),
+    ("Itachi Uchiha", "Even the strongest of us carry suffering."),
+    ("Griffith", "Dreams aren’t meant to be easy."),
+],
+
+"Funny": [
+    ("Saitama", "Ok."),
+    ("Goku", "Training? I prefer eating first."),
+    ("Konosuba Kazuma", "I just want a normal life… why is this so hard?"),
+]
+    }
     char, quote = random.choice(quotes.get(theme, [("Anime", "Stay strong!")]))
     return f"{quote}\n\n— {char}"
 
@@ -288,16 +296,11 @@ with tab5:
     q6 = st.radio("Power Type", ["Physical strength", "Speed", "Magic/Skills", "Tactical mind"])
      
     if st.button("Result"):
-
-    result = get_character_match(q1, q2, q3, q4, q5, q6).lower()
-    img = CHAR_IMAGES.get(result, None)
-
-    # FULL SCREEN CENTER CARD
-    col1, col2, col3 = st.columns([1,2,1])
-
-    with col2:
-
-        st.markdown("""
+        result = get_character_match(q1, q2, q3, q4, q5, q6).lower()
+        img = CHAR_IMAGES.get(result, None)
+        col1, col2, col3 = st.columns([1,2,1])
+        with col2:
+            st.markdown("""
         <style>
         .card {
             background: #0f172a;
@@ -309,16 +312,11 @@ with tab5:
         }
         </style>
         """, unsafe_allow_html=True)
-
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-
-        st.markdown("## 🎌 You are")
-        st.markdown(f"# {result.title()}")
-
-        # 🔥 THIS FIXES YOUR IMAGE ISSUE
-        if img:
-            st.image(img, use_container_width=True)
-        else:
-            st.warning("Image not found")
-
-        st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown('<div class="card">', unsafe_allow_html=True)
+            st.markdown("## 🎌 You are")
+            st.markdown(f"# {result.title()}")
+            if img:
+                st.image(img, use_container_width=True)
+            else:
+                st.warning("Image not found")
+                st.markdown("</div>", unsafe_allow_html=True)

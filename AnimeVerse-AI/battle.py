@@ -10,7 +10,7 @@ def generate_stats():
         "Battle IQ": random.randint(60, 100),
         "Durability": random.randint(60, 100),
         "Stamina": random.randint(60, 100),
-        "Weapon Mastery": random.randint(60, 100)
+        "Weapon Mastery": random.randint(60, 100),
         "Combat Skills": random.randint(60, 100)
     }
 

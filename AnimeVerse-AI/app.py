@@ -65,7 +65,9 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
         "Monkey D. Luffy": 0,
         "Gojo Satoru": 0,
         "Itachi Uchiha": 0,
-        "Levi Ackerman": 0
+        "Levi Ackerman": 0,
+        "Eren Yeager": 0,
+        "Saitama": 0
     }
     for a in [q1, q2, q3, q4, q5, q6]:
 

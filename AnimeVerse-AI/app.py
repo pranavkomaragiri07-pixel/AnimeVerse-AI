@@ -286,57 +286,39 @@ with tab5:
     q4 = st.radio("Role", ["Leader", "Support", "Lone wolf", "Strategist"])
     q5 = st.radio("Weakness", ["Anger", "Trust issues", "Overconfidence", "Fear"])
     q6 = st.radio("Power Type", ["Physical strength", "Speed", "Magic/Skills", "Tactical mind"])
-
+     
     if st.button("Result"):
 
-        result = get_character_match(q1, q2, q3, q4, q5, q6).lower()
-        img = CHAR_IMAGES.get(result, "")
+    result = get_character_match(q1, q2, q3, q4, q5, q6).lower()
+    img = CHAR_IMAGES.get(result, None)
 
-        st.markdown(f"""
+    # FULL SCREEN CENTER CARD
+    col1, col2, col3 = st.columns([1,2,1])
+
+    with col2:
+
+        st.markdown("""
         <style>
-        .overlay {{
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.92);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }}
-
-        .card {{
-            width: 450px;
+        .card {
             background: #0f172a;
-            border: 3px solid #22c55e;
-            border-radius: 20px;
-            text-align: center;
             padding: 30px;
-            box-shadow: 0 0 60px rgba(34,197,94,0.7);
-            animation: pop 0.4s ease-in-out;
-        }}
-
-        .card img {{
-            width: 100%;
-            max-height: 350px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin-top: 15px;
-        }}
-
-        @keyframes pop {{
-            0% {{ transform: scale(0.6); opacity: 0; }}
-            100% {{ transform: scale(1); opacity: 1; }}
-        }}
+            border-radius: 20px;
+            border: 2px solid #22c55e;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(34,197,94,0.5);
+        }
         </style>
-
-        <div class="overlay">
-            <div class="card">
-                <h2>🎌 You are</h2>
-                <h1>{result.title()}</h1>
-                <img src="{img}">
-            </div>
-        </div>
         """, unsafe_allow_html=True)
+
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+
+        st.markdown("## 🎌 You are")
+        st.markdown(f"# {result.title()}")
+
+        # 🔥 THIS FIXES YOUR IMAGE ISSUE
+        if img:
+            st.image(img, use_container_width=True)
+        else:
+            st.warning("Image not found")
+
+        st.markdown("</div>", unsafe_allow_html=True)

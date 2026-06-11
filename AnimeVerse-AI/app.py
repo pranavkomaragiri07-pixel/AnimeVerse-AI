@@ -47,7 +47,6 @@ def generate_quote(theme):
     ("Goku", "Training? I prefer eating first."),
     ("Konosuba Kazuma", "I just want a normal life… why is this so hard?"),
 ]
-}
 
 char, quote = random.choice(quotes.get(theme, [("Anime", "Stay strong!")]))
 return f"{quote}\n\n— {char}"

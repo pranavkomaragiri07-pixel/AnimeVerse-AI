@@ -14,45 +14,52 @@ from battle import (
 )
 
 # =========================
-# SAFE FUNCTIONS
+# SAFE QUOTE FUNCTION (FIXED)
 # =========================
-def generate_quote(theme):{
-    "Motivational": [
-    ("Naruto Uzumaki", "Hard work is worthless for those that don't believe in themselves."),
-    ("Rock Lee", "A dropout will beat a genius through hard work."),
-    ("All Might", "You too can become a hero if you push forward!"),
-    ("Izuku Midoriya", "If you want to win, work harder than anyone else."),
-],
+def generate_quote(theme):
 
-"Friendship": [
-    ("Naruto Uzumaki", "Failing doesn’t give you a reason to give up."),
-    ("Luffy", "I don’t care if I die fighting for my friends."),
-    ("Natsu Dragneel", "We fight together, no matter what."),
-],
+    quotes = {
+        "Motivational": [
+            ("Naruto Uzumaki", "Hard work is worthless for those that don't believe in themselves."),
+            ("Rock Lee", "A dropout will beat a genius through hard work."),
+            ("All Might", "You too can become a hero if you push forward!"),
+            ("Izuku Midoriya", "If you want to win, work harder than anyone else."),
+        ],
 
-"Success": [
-    ("Itachi Uchiha", "People live their lives bound by what they accept as correct."),
-    ("Levi Ackerman", "The only thing we are allowed to do is believe that we won't regret the choice we made."),
-    ("Tanjiro Kamado", "No matter how many times it breaks your heart, stand up."),
-],
+        "Friendship": [
+            ("Naruto Uzumaki", "Failing doesn’t give you a reason to give up."),
+            ("Luffy", "I don’t care if I die fighting for my friends."),
+            ("Natsu Dragneel", "We fight together, no matter what."),
+        ],
 
-"Sad": [
-    ("Pain", "Feel pain, accept pain, know pain."),
-    ("Itachi Uchiha", "Even the strongest of us carry suffering."),
-    ("Griffith", "Dreams aren’t meant to be easy."),
-],
+        "Success": [
+            ("Itachi Uchiha", "People live their lives bound by what they accept as correct."),
+            ("Levi Ackerman", "The only thing we are allowed to do is believe that we won't regret the choice we made."),
+            ("Tanjiro Kamado", "No matter how many times it breaks your heart, stand up."),
+        ],
 
-"Funny": [
-    ("Saitama", "Ok."),
-    ("Goku", "Training? I prefer eating first."),
-    ("Konosuba Kazuma", "I just want a normal life… why is this so hard?"),
-]
-}
-char, quote = random.choice(quotes.get(theme, [("Anime", "Stay strong!")]))
-return f"{quote}\n\n— {char}"
+        "Sad": [
+            ("Pain", "Feel pain, accept pain, know pain."),
+            ("Itachi Uchiha", "Even the strongest of us carry suffering."),
+            ("Griffith", "Dreams aren’t meant to be easy."),
+        ],
+
+        "Funny": [
+            ("Saitama", "Ok."),
+            ("Goku", "Training? I prefer eating first."),
+            ("Kazuma", "I just want a normal life… why is this so hard?"),
+        ]
+    }
+
+    char, quote = random.choice(quotes.get(theme, [("Anime", "Stay strong!")]))
+    return f"{quote}\n\n— {char}"
 
 
+# =========================
+# PERSONA MATCH (UNCHANGED LOGIC)
+# =========================
 def get_character_match(q1, q2, q3, q4, q5, q6):
+
     score = {
         "Naruto Uzumaki": 0,
         "Monkey D. Luffy": 0,
@@ -64,6 +71,7 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
     answers = [q1, q2, q3, q4, q5, q6]
 
     for a in answers:
+
         if a in ["Friendship", "Support", "Loyalty"]:
             score["Naruto Uzumaki"] += 2
             score["Monkey D. Luffy"] += 1
@@ -91,21 +99,10 @@ st.set_page_config(
 )
 
 # =========================
-# CSS
-# =========================
-try:
-    with open("styles.css") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-except:
-    pass
-
-
-# =========================
 # HEADER
 # =========================
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Battle Simulator")
-
 
 # =========================
 # TABS
@@ -117,35 +114,38 @@ tab1, tab3, tab4, tab5 = st.tabs([
     "🎭 Personality Quiz"
 ])
 
-
 # =========================
-# 🔍 ANIME SEARCH
+# 🔍 ANIME SEARCH (FIXED SAFE)
 # =========================
 with tab1:
 
     st.header("Search Anime")
-
     name = st.text_input("Enter anime name")
 
-    if st.button("Search"):
+    if st.button("Search") and name:
 
-        if name:
+        url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
 
-            url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
+        try:
             res = requests.get(url).json()
+            data = res.get("data", [])
 
-            if res["data"]:
-                anime = res["data"][0]
+            if data:
+                anime = data[0]
 
-                st.success(anime["title"])
+                st.success(anime.get("title", "No title"))
                 st.image(anime["images"]["jpg"]["image_url"])
-                st.write("⭐", anime["score"])
-                st.write("🎬 Episodes:", anime["episodes"])
-                st.write("📖", anime["synopsis"])
+                st.write("⭐ Rating:", anime.get("score", "N/A"))
+                st.write("🎬 Episodes:", anime.get("episodes", "N/A"))
+                st.write("📖 Synopsis:", anime.get("synopsis", "N/A"))
+            else:
+                st.error("No anime found.")
 
+        except:
+            st.error("Failed to fetch anime data.")
 
 # =========================
-# ⚔️ BATTLE SYSTEM
+# ⚔️ BATTLE SYSTEM (FIXED UI)
 # =========================
 with tab3:
 
@@ -154,7 +154,7 @@ with tab3:
         ["1v1 Battle", "2v2 Battle", "4v4 Battle", "Tournament Arc", "Survival Arena"]
     )
 
-    # ----------------- 1v1 -----------------
+    # ---------------- 1v1 ----------------
     if mode == "1v1 Battle":
 
         a = st.text_input("Character A")
@@ -166,48 +166,46 @@ with tab3:
 
             st.success(f"🏆 Winner: {result['winner']}")
 
-            # =========================
-            # FIXED VS LAYOUT (MAIN CHANGE)
-            # =========================
             fa = result["fighter_a"]["stats"]
             fb = result["fighter_b"]["stats"]
 
-            st.markdown("## ⚔️ VS BATTLE STATS")
+            st.markdown("## ⚔️ BATTLE STATS")
 
             col1, col2 = st.columns(2)
 
+            # LEFT = A
             with col1:
-                st.markdown(f"## 🔵 {a}")
-                for stat in fa:
-                    st.write(stat)
-                    st.progress(fa[stat] / 100)
+                st.markdown(f"### 🔵 {a}")
+                for k, v in fa.items():
+                    st.write(k)
+                    st.progress(v / 100)
 
+            # RIGHT = B
             with col2:
-                st.markdown(f"## 🔴 {b}")
-                for stat in fb:
-                    st.write(stat)
-                    st.progress(fb[stat] / 100)
+                st.markdown(f"### 🔴 {b}")
+                for k, v in fb.items():
+                    st.write(k)
+                    st.progress(v / 100)
 
-            st.markdown("## 🏅 Category Winners")
+            st.markdown("## 🏅 CATEGORY WINNERS")
 
-            a_wins = 0
-            b_wins = 0
+            a_win = 0
+            b_win = 0
 
             for k, v in result["category_winners"].items():
                 if v == a:
-                    a_wins += 1
-                    st.markdown(f"⚡ {k} → 🏅 **{a}**")
+                    a_win += 1
+                    st.write(f"⚡ {k} → 🥇 {a}")
                 else:
-                    b_wins += 1
-                    st.markdown(f"⚡ {k} → 🏅 **{b}**")
+                    b_win += 1
+                    st.write(f"⚡ {k} → 🥇 {b}")
 
-            final = a if a_wins > b_wins else b
+            final = a if a_win > b_win else b
+
             st.success(f"🔥 FINAL WINNER: {final}")
-
             st.info(result["story"])
 
-
-    # ----------------- 2v2 -----------------
+    # ---------------- 2v2 ----------------
     elif mode == "2v2 Battle":
 
         a1 = st.text_input("A1")
@@ -222,12 +220,7 @@ with tab3:
             st.success(result["winner"])
             st.info(result["story"])
 
-            st.markdown("### 🏅 Category Winners")
-            for k, v in result["category_winners"].items():
-                st.markdown(f"⚡ {k} → 🏅 {v}")
-
-
-    # ----------------- 4v4 -----------------
+    # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
 
         t1 = st.text_area("Team Alpha")
@@ -235,20 +228,12 @@ with tab3:
 
         if st.button("Battle") and t1 and t2:
 
-            team_a = t1.split("\n")
-            team_b = t2.split("\n")
-
-            result = battle_4v4(team_a, team_b)
+            result = battle_4v4(t1.split("\n"), t2.split("\n"))
 
             st.success(result["winner"])
             st.info(result["story"])
 
-            st.markdown("### 🏅 Category Winners")
-            for k, v in result["category_winners"].items():
-                st.markdown(f"⚡ {k} → 🏅 {v}")
-
-
-    # ----------------- TOURNAMENT -----------------
+    # ---------------- TOURNAMENT ----------------
     elif mode == "Tournament Arc":
 
         fighters = st.text_area("Enter fighters")
@@ -257,16 +242,10 @@ with tab3:
 
             result = run_tournament(fighters.split("\n"))
 
-            st.success("👑 Champion: " + result["champion"])
-
-            st.markdown("### ⚔️ Rounds")
-            for r in result["rounds"]:
-                st.write("⚔️", r)
-
+            st.success("👑 " + result["champion"])
             st.info(result["story"])
 
-
-    # ----------------- SURVIVAL -----------------
+    # ---------------- SURVIVAL ----------------
     elif mode == "Survival Arena":
 
         hero = st.text_input("Hero")
@@ -277,12 +256,10 @@ with tab3:
 
             st.success(result["character"])
             st.write("⭐ Score:", result["score"])
-            st.write(result["rounds"])
             st.info(result["story"])
 
-
 # =========================
-# ✨ QUOTE GENERATOR
+# ✨ QUOTES
 # =========================
 with tab4:
 
@@ -290,7 +267,6 @@ with tab4:
 
     if st.button("Generate Quote"):
         st.success(generate_quote(theme))
-
 
 # =========================
 # 🎭 QUIZ

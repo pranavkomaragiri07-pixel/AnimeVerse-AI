@@ -16,20 +16,20 @@ def generate_stats():
 
 
 # =========================
-# ⚔️ 1v1 BATTLE (CLEAN + UI FRIENDLY)
+# ⚔️ 1v1 BATTLE
 # =========================
 def battle_1v1(a, b):
 
     fa = generate_stats()
     fb = generate_stats()
 
-    category_winners = {}
+    category_winners = {
+        k: a if fa[k] > fb[k] else b
+        for k in fa
+    }
 
-    for stat in fa:
-        category_winners[stat] = a if fa[stat] > fb[stat] else b
-
-    a_score = sum(1 for k in fa if fa[k] > fb[k])
-    b_score = sum(1 for k in fa if fb[k] > fa[k])
+    a_score = sum(fa.values())
+    b_score = sum(fb.values())
 
     winner = a if a_score > b_score else b
 
@@ -38,67 +38,77 @@ def battle_1v1(a, b):
         "fighter_b": {"name": b, "stats": fb},
         "category_winners": category_winners,
         "winner": winner,
-        "story": f"{a} vs {b} was an intense battle. {winner} emerged victorious!"
+        "story": f"{a} vs {b} was an intense battle!"
     }
 
 
 # =========================
-# 👥 2v2 BATTLE
+# 👥 2v2 BATTLE (FIXED)
 # =========================
 def battle_2v2(team_a, team_b):
 
-    team_a_stats = [generate_stats() for _ in team_a]
-    team_b_stats = [generate_stats() for _ in team_b]
+    team_a_stats = [
+        {"name": x, "stats": generate_stats()} for x in team_a
+    ]
 
-    score_a = sum(sum(p.values()) for p in team_a_stats)
-    score_b = sum(sum(p.values()) for p in team_b_stats)
+    team_b_stats = [
+        {"name": x, "stats": generate_stats()} for x in team_b
+    ]
+
+    score_a = sum(sum(p["stats"].values()) for p in team_a_stats)
+    score_b = sum(sum(p["stats"].values()) for p in team_b_stats)
 
     winner = "Team A" if score_a > score_b else "Team B"
 
-    category_winners = {
-        "Attack Power": winner,
-        "Defense": winner,
-        "Strategy": winner,
-        "Stamina": winner,
-        "Weapon Mastery": winner,
-        "teamwork": winner,
-        "Team Synergy": winner
-    }
-
     return {
         "winner": winner,
-        "category_winners": category_winners,
-        "story": f"{team_a} vs {team_b} turned into a chaotic team war. {winner} dominated!"
+        "team_a_stats": team_a_stats,
+        "team_b_stats": team_b_stats,
+        "category_winners": {
+            "Attack Power": winner,
+            "Defense": winner,
+            "Strategy": winner,
+            "Stamina": winner,
+            "Weapon Mastery": winner,
+            "Teamwork": winner,
+            "Combat Skills": winner
+        },
+        "story": f"{team_a} vs {team_b} was a brutal clash!"
     }
 
 
 # =========================
-# ⚔️ 4v4 BATTLE
+# ⚔️ 4v4 BATTLE (FIXED)
 # =========================
 def battle_4v4(team_a, team_b):
 
-    team_a_stats = [generate_stats() for _ in team_a]
-    team_b_stats = [generate_stats() for _ in team_b]
+    team_a_stats = [
+        {"name": x, "stats": generate_stats()} for x in team_a
+    ]
 
-    score_a = sum(sum(p.values()) for p in team_a_stats)
-    score_b = sum(sum(p.values()) for p in team_b_stats)
+    team_b_stats = [
+        {"name": x, "stats": generate_stats()} for x in team_b
+    ]
+
+    score_a = sum(sum(p["stats"].values()) for p in team_a_stats)
+    score_b = sum(sum(p["stats"].values()) for p in team_b_stats)
 
     winner = "Team Alpha" if score_a > score_b else "Team Omega"
 
-    category_winners = {
-        "Power": winner,
-        "Speed": winner,
-        "Battle IQ": winner,
-        "Durability": winner,
-        "Stamina": winner,
-        "Teamwork": winner,
-        "Weapon Mastery": winner
-    }
-
     return {
         "winner": winner,
-        "category_winners": category_winners,
-        "story": f"4v4 battle ended in destruction. {winner} completely overpowered the enemy team!"
+        "team_a_stats": team_a_stats,
+        "team_b_stats": team_b_stats,
+        "category_winners": {
+            "Power": winner,
+            "Speed": winner,
+            "Battle IQ": winner,
+            "Durability": winner,
+            "Stamina": winner,
+            "Weapon Mastery": winner,
+            "Combat Skills": winner
+        },
+        "story": f"4v4 battle ended in destruction!"
     }
 
 
@@ -141,7 +151,7 @@ def run_tournament(fighters):
     return {
         "champion": champion,
         "rounds": rounds,
-        "story": f"{champion} conquered the tournament and became the ultimate champion!"
+        "story": f"{champion} became the champion!"
     }
 
 
@@ -164,12 +174,12 @@ def survival_mode(character):
             score += 1
             rounds.append(f"Round {i}: {character} defeated {enemy}")
         else:
-            rounds.append(f"Round {i}: {character} was defeated by {enemy}")
+            rounds.append(f"Round {i}: {character} lost to {enemy}")
             break
 
     return {
         "character": character,
         "score": score,
         "rounds": rounds,
-        "story": f"{character} survived {len(rounds)} rounds in the survival arena!"
+        "story": f"{character} survived {len(rounds)} rounds!"
     }

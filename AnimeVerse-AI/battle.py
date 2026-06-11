@@ -1,7 +1,7 @@
 import random
 
 # =========================
-# STATS ENGINE
+# STATS ENGINE (UPDATED)
 # =========================
 def generate_stats():
     return {
@@ -10,12 +10,13 @@ def generate_stats():
         "Battle IQ": random.randint(60, 100),
         "Durability": random.randint(60, 100),
         "Stamina": random.randint(60, 100),
-        "Weapon Mastery": random.randint(60, 100)
+        "Weapon Mastery": random.randint(60, 100),
+        "Combat Skills": random.randint(60, 100)  # ✅ ADDED
     }
 
 
 # =========================
-# ⚔️ 1v1 BATTLE (FIXED)
+# ⚔️ 1v1 BATTLE
 # =========================
 def battle_1v1(a, b):
 
@@ -28,24 +29,20 @@ def battle_1v1(a, b):
         "Battle IQ": a if fa["Battle IQ"] > fb["Battle IQ"] else b,
         "Durability": a if fa["Durability"] > fb["Durability"] else b,
         "Stamina": a if fa["Stamina"] > fb["Stamina"] else b,
-        "Weapon Mastery": a if fa["Weapon Mastery"] > fb["Weapon Mastery"] else b
+        "Weapon Mastery": a if fa["Weapon Mastery"] > fb["Weapon Mastery"] else b,
+        "Combat Skills": a if fa["Combat Skills"] > fb["Combat Skills"] else b
     }
 
-    total_a = sum(fa.values())
-    total_b = sum(fb.values())
+    a_score = sum(fa.values())
+    b_score = sum(fb.values())
 
-    winner = a if total_a > total_b else b
-
-    battle_score = abs(total_a - total_b)
-    difficulty = "Hard" if battle_score > 200 else "Medium" if battle_score > 100 else "Easy"
+    winner = a if a_score > b_score else b
 
     return {
         "fighter_a": {"name": a, "stats": fa},
         "fighter_b": {"name": b, "stats": fb},
         "category_winners": category_winners,
         "winner": winner,
-        "battle_score": battle_score,
-        "difficulty": difficulty,
         "story": f"{a} vs {b} ended in an epic battle. {winner} won."
     }
 
@@ -63,14 +60,15 @@ def battle_2v2(team_a, team_b):
     return {
         "winner": winner,
         "category_winners": {
-            "Attack Power": winner,
-            "Defense": winner,
-            "Strategy": winner,
+            "Power": winner,
+            "Speed": winner,
+            "Battle IQ": winner,
+            "Durability": winner,
             "Stamina": winner,
             "Weapon Mastery": winner,
-            "Team Synergy": winner
+            "Combat Skills": winner
         },
-        "story": f"{team_a} vs {team_b} was a brutal team clash. {winner} dominated."
+        "story": f"{team_a} vs {team_b} was a brutal clash. {winner} dominated."
     }
 
 
@@ -92,9 +90,10 @@ def battle_4v4(team_a, team_b):
             "Battle IQ": winner,
             "Durability": winner,
             "Stamina": winner,
-            "Weapon Mastery": winner
+            "Weapon Mastery": winner,
+            "Combat Skills": winner
         },
-        "story": f"4v4 war ended. {winner} completely destroyed the opponent team."
+        "story": f"4v4 battle ended. {winner} crushed the opponent team."
     }
 
 

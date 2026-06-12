@@ -394,7 +394,6 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 lang = st.session_state.lang
 
 st.title(TEXT[lang]["title"])
-st.subheader("AI-Powered Anime Battle Simulator")
 
 with tab1:
     st.header(TEXT[lang]["search"])
@@ -424,15 +423,6 @@ with tab1:
 
 
 with tab2:
-
-    st.title(
-    {
-        "English": "🤖 AI Anime Recommender System",
-        "Hindi": "🤖 AI एनिमे सिस्टम",
-        "Telugu": "🤖 AI అనిమే సిస్టమ్",
-        "Japanese": "🤖 AIアニメシステム"
-    }[lang]
-)
 
     # =========================
     # SESSION STATE INIT

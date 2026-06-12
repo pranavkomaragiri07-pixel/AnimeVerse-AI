@@ -461,25 +461,23 @@ with tab3:
 
     # ================= 2v2 =================
     elif mode == "2v2 Battle":
-        a1 = st.text_input("A1")
-        a2 = st.text_input("A2")
-        b1 = st.text_input("B1")
-        b2 = st.text_input("B2")
+        a1 = st.text_input("Player-1")
+        a2 = st.text_input("Player-2")
+        b1 = st.text_input("Player-3")
+        b2 = st.text_input("Player-4")
         if st.button("Fight") and all([a1, a2, b1, b2]):
             result = battle_2v2([a1, a2], [b1, b2])
             st.success(f"🏆 Winner: {result['winner']}")
             team_a = result["team_a_total"]
             team_b = result["team_b_total"]
             st.markdown("## ⚔️ TEAM STATS COMPARISON")
-            colA, colVS, colB = st.columns([4, 1, 4])
+            colA, colB = st.columns([4, 1, 4])
             with colA:
                 st.markdown("### 🔵 TEAM A")
-            with colVS:
-                st.markdown("### VS")
             with colB:
                 st.markdown("### 🔴 TEAM B")
             for stat in team_a.keys():
-                colA, colVS, colB = st.columns([4, 1, 4])
+                colA, colB = st.columns([4, 1, 4])
                 with colA:
                     st.write(stat)
                     st.progress(team_a[stat] / 100)
@@ -496,8 +494,8 @@ with tab3:
        
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
-        t1 = st.text_area("Team Alpha")
-        t2 = st.text_area("Team Omega")
+        t1 = st.text_area("Phantum Troupe")
+        t2 = st.text_area("Oración Seis")
         if st.button("Battle") and t1 and t2:
             team_a_list = t1.split("\n")
             team_b_list = t2.split("\n")

@@ -1041,20 +1041,26 @@ with tab5:
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-        <div class="overlay">
-            <div class="card">
+<div style="
+    background:#111;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    width:60%;
+    margin:auto;
+    box-shadow:0px 0px 20px red;
+">
 
-                <img src="{CHAR_IMAGES.get(result, '')}" width="200"/>
+    <img src="{img_url}" width="200"/>
 
-                <h1 style="color:white;">🔥 {result}</h1>
+    <h1 style="color:white;">🔥 {result}</h1>
 
-                <p style="color:lightgray; font-size:16px;">
-                    {desc}
-                </p>
+    <p style="color:lightgray;">
+        {desc}
+    </p>
 
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+</div>
+""",    unsafe_allow_html=True)
 
         # CLOSE BUTTON
         if st.button("⬅ Back"):

@@ -218,7 +218,7 @@ with tab1:
                 st.image(anime["images"]["jpg"]["image_url"])   # ✅ THIS IS CORRECT PLACE
                 st.write("⭐ Rating:", anime.get("score"))
                 st.write("🎬 Episodes:", anime.get("episodes"))
-                st.write("📖 Synopsis:", anime.get("synopsis")))
+                st.write("📖 Synopsis:", anime.get("synopsis"))
             else:
                 st.error("No anime found.")
 

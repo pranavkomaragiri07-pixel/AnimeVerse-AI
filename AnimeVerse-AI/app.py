@@ -969,22 +969,10 @@ with tab5:
         t["power_tactical"]
     ])
 
-
     # =========================
-    # CHAR IMAGES (STATIC FALLBACK)
+    # IMAGE MAP
     # =========================
-
-    # =========================
-    # RESULT BUTTON
-    # =========================
-     # =========================
-# RESULT BUTTON
-# =========================
-
-    if st.button(t["result_btn"]):
-            result = get_character_match(q1, q2, q3, q4, q5, q6)
-            desc = explain_character(result)
-            image_map = {
+    image_map = {
         "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
         "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
         "Goku": "https://i.imgur.com/8pQx1ZV.png",
@@ -994,30 +982,31 @@ with tab5:
         "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
         "Saitama": "https://i.imgur.com/6YQw3Lp.png"
     }
-            img_url = image_map.get(result, "https://i.imgur.com/placeholder.png")
-            st.markdown("## 🎴 Anime Personality Result")
-            st.info(desc)
-            st.markdown(f"""
-    <div style="text-align:center;">
 
-        <img src="{img_url}" width="200"/>
-
-        <h2>🔥 {result}</h2>
-
-        <p>{desc}</p>
-
-    </div>
-    """, unsafe_allow_html=True)
-    st.success(f"{t.get('result_text', 'You are')}: {result}")
-
-    
     # =========================
-    # FULL SCREEN POPUP RESULT
+    # RESULT BUTTON
+    # =========================
+    if st.button(t["result_btn"]):
+
+        result = get_character_match(q1, q2, q3, q4, q5, q6)
+        desc = explain_character(result)
+
+        img_url = image_map.get(result, "https://i.imgur.com/placeholder.png")
+
+        # STORE FOR POPUP
+        st.session_state.result = result
+        st.session_state.desc = desc
+        st.session_state.img = img_url
+        st.session_state.show_result = True
+
+    # =========================
+    # FULL SCREEN POPUP
     # =========================
     if st.session_state.get("show_result"):
 
         result = st.session_state.result
         desc = st.session_state.desc
+        img_url = st.session_state.img
 
         st.markdown("""
         <style>
@@ -1056,18 +1045,24 @@ with tab5:
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-<div style="text-align:center;">
+        <div class="overlay">
+            <div class="card">
 
-    <img src="{img_url}" width="200"/>
+                <img src="{img_url}" width="200"/>
 
-    <h2>🔥 {result}</h2>
+                <h2>🔥 {result}</h2>
 
-    <p>{desc}</p>
+                <p style="color:lightgray;">{desc}</p>
 
-</div>
-""", unsafe_allow_html=True)
+                <br>
 
-        # CLOSE BUTTON
-        if st.button("⬅ Back"):
+                <form action="">
+                </form>
+
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if st.button("⬅ Close"):
             st.session_state.show_result = False
             st.rerun()

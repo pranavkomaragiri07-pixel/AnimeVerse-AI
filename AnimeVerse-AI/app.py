@@ -2,6 +2,34 @@ import os
 import streamlit as st
 import requests
 import random
+
+TEXT = {
+    "English": {
+        "chat": "Talk to AI",
+        "send": "Send",
+        "genre": "Choose Genre",
+        "load": "Get Anime List"
+    },
+    "Hindi": {
+        "chat": "AI से बात करें",
+        "send": "भेजें",
+        "genre": "शैली चुनें",
+        "load": "एनिमे देखें"
+    },
+    "Telugu": {
+        "chat": "AI తో మాట్లాడండి",
+        "send": "పంపండి",
+        "genre": "జానర్ ఎంచుకోండి",
+        "load": "అనిమే చూపించు"
+    },
+    "Japanese": {
+        "chat": "AIと話す",
+        "send": "送信",
+        "genre": "ジャンル選択",
+        "load": "アニメを見る"
+    }
+}
+
 def local_ai_predict(team_a, team_b):
     a_score = sum(len(str(x)) for x in team_a)
     b_score = sum(len(str(x)) for x in team_b)
@@ -153,6 +181,16 @@ st.set_page_config(
     page_icon="⚔️",
     layout="wide"
 )
+if "lang" not in st.session_state:
+    st.session_state.lang = "English"
+
+col1, col2 = st.columns([8,2])
+
+with col2:
+    st.session_state.lang = st.selectbox(
+        "🌐 Language",
+        ["English", "Hindi", "Telugu", "Japanese"]
+    )
 st.markdown("""
 <style>
 
@@ -227,8 +265,16 @@ with tab1:
 
 
 with tab2:
+    lang = st.session_state.lang 
 
-    st.title("🤖 AI Anime Recommender System")
+    st.title(
+    {
+        "English": "🤖 AI Anime Recommender System",
+        "Hindi": "🤖 AI एनिमे सिस्टम",
+        "Telugu": "🤖 AI అనిమే సిస్టమ్",
+        "Japanese": "🤖 AIアニメシステム"
+    }[lang]
+)
 
     # =========================
     # SESSION STATE INIT
@@ -279,9 +325,10 @@ with tab2:
     # =========================
     # CHAT INPUT (ALWAYS ACTIVE)
     # =========================
-    user_input = st.text_input("Talk to AI", key="chat_input")
+    lang = st.session_state.lang
+    user_input = st.text_input(TEXT[lang]["chat"], key="chat_input")
 
-    if st.button("Send") and user_input:
+    if st.button(TEXT[lang]["send"]) and user_input:
 
         st.session_state.messages.append(("user", user_input))
         reply = ai_response(user_input)
@@ -307,9 +354,9 @@ with tab2:
     # =========================
     if st.session_state.step == "genre_input":
 
-        genre = st.text_input("Enter Genre (Action, Romance, Fantasy...)")
+        genre = TEXT[lang]["genre"] (Action, Romance, Fantasy...)")
 
-        if st.button("Load Anime") and genre:
+        if st.button(TEXT[lang]["load"]) and genre:
 
             gid = GENRES.get(genre.lower())
 

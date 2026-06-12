@@ -353,8 +353,7 @@ st.subheader({
     "Hindi": "AI आधारित एनीमे बैटल सिस्टम",
     "Telugu": "AI ఆధారిత అనిమే బ్యాటిల్ సిస్టమ్",
     "Japanese": "AIアニメバトルシステム"
-}[lang])
-
+}[st.session_state.lang])
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     {
         "English": "🔍 Anime Search",

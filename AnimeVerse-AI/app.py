@@ -362,11 +362,8 @@ with tab2:
                     st.session_state.step = "details"
                     st.rerun()
 
-        # Pagination
-        per_page = 25
-        total = len(st.session_state.anime_list)
-        start = (st.session_state.page - 1) * per_page
-        end = start + per_page
+        #pagination
+        TOTAL_PAGES = 4
         c1, c2, c3 = st.columns(3)
         with c1:
             if st.session_state.page > 1:
@@ -374,9 +371,9 @@ with tab2:
                     st.session_state.page -= 1
                     st.rerun()
         with c2:
-            st.markdown(f"📄 Page {st.session_state.page} / {max(1, (total // per_page) + 1)}")
+            st.markdown(f"📄 Page {st.session_state.page} / {TOTAL_PAGES}")
         with c3:
-            if end < total:
+            if st.session_state.page < TOTAL_PAGES:
                 if st.button("Next ➡"):
                     st.session_state.page += 1
                     st.rerun()

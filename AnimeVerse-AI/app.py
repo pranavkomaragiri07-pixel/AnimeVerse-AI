@@ -442,18 +442,17 @@ with tab3:
     elif mode == "Survival Arena":
 
         hero = st.text_input("Hero")
-
         if st.button("Start") and hero:
-
             result = survival_mode(hero)
-
             col1, col2, col3 = st.columns([1,2,1])
             with col2:
                 st.markdown("## 🎌 You are")
                 st.success(result["character"])
-                st.image(CHAR_IMAGES.get(result["character"].lower(), "https://i.imgur.com/default.png"),use_container_width=True)
-            st.markdown("### ⭐ Score")
+                char_key = result["character"].lower()
+                st.image(CHAR_IMAGES.get(char_key, "https://i.imgur.com/default.png"),use_container_width=True)
+            st.markdown("## ⭐ Score")
             st.write(result["score"])
+            st.markdown("## 📖 Story")
             st.info(result["story"])
 
 # =========================

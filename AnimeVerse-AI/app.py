@@ -1045,23 +1045,26 @@ with tab5:
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-        <div class="overlay">
-            <div class="card">
+<div style="
+    background:#111;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 30px red;
+    width:60%;
+    margin:auto;
+">
 
-                <img src="{img_url}" width="200"/>
+    <img src="{img_url}" width="200" style="border-radius:15px;" />
 
-                <h2>🔥 {result}</h2>
+    <h2 style="color:white;">🔥 {result}</h2>
 
-                <p style="color:lightgray;">{desc}</p>
+    <p style="color:lightgray;">
+        {desc}
+    </p>
 
-                <br>
-
-                <form action="">
-                </form>
-
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
         if st.button("⬅ Close"):
             st.session_state.show_result = False

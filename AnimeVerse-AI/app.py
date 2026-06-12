@@ -227,85 +227,77 @@ with tab1:
 
 
 with tab2:
+    GENRES = {
+        "Action": 1,
+        "Adventure": 2,
+        "Comedy": 4,
+        "Drama": 8,
+        "Fantasy": 10,
+        "Horror": 14,
+        "Romance": 22,
+        "Sci-Fi": 24
+    }
 
-    st.title("🤖 AI Anime Recommender System")
+    st.title("🤖 AI Anime Chat Assistant")
 
-    if "chat" not in st.session_state:
-        st.session_state.chat = []
+    # memory init
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
 
-    if "anime_list" not in st.session_state:
-        st.session_state.anime_list = []
+    # ---------------- AI BRAIN ----------------
+    def ai_response(msg):
 
-    user_input = st.text_input("Talk to AI")
-
-    def ai_chat(msg):
         msg = msg.lower()
 
         if "hello" in msg or "hi" in msg:
-            return "👋 Hello! Tell me what anime you like (Action, Romance, Fantasy, etc.)"
+            return "👋 Hello! I can recommend anime genres like Action, Romance, Fantasy, Adventure, Comedy, Horror."
 
-        if any(x in msg for x in ["action", "romance", "comedy", "fantasy", "horror", "sci-fi"]):
-            return f"🎯 Got it! Fetching {msg} anime..."
+        if "anime" in msg:
+            return "🎯 Tell me a genre and I will suggest anime + show details!"
 
-        return "Tell me a genre like Action, Romance, Fantasy"
+        if "genre" in msg:
+            return "🔥 Available genres: Action, Adventure, Romance, Comedy, Fantasy, Horror, Sci-Fi, Drama"
 
-    # ================= SEND BUTTON =================
+        # default smart reply
+        return "🤖 I understand you. Try asking: suggest anime, action anime, romance anime, etc."
+
+    # ---------------- CHAT DISPLAY ----------------
+    for role, text in st.session_state.messages:
+        if role == "user":
+            st.markdown(f"🧑 You: {text}")
+        else:
+            st.markdown(f"🤖 AI: {text}")
+
+    # ---------------- INPUT ALWAYS ACTIVE ----------------
+    user_input = st.text_input("Type message", key="chat_input")
+
     if st.button("Send") and user_input:
 
-        reply = ai_chat(user_input)
+        st.session_state.messages.append(("user", user_input))
+        reply = ai_response(user_input)
+        st.session_state.messages.append(("ai", reply))
 
-        st.session_state.chat.append(("You", user_input))
-        st.session_state.chat.append(("AI", reply))
-
-        # ================= AUTO FETCH ANIME =================
-        genre_map = {
-            "action": 1,
-            "romance": 22,
-            "comedy": 4,
-            "fantasy": 10,
-            "horror": 14,
-            "sci-fi": 24
-        }
-
-        selected_genre = None
-        for g in genre_map:
-            if g in user_input.lower():
-                selected_genre = g
-
-        if selected_genre:
-            genre_id = genre_map[selected_genre]
-
-            all_anime = []
-
-            for page in range(1, 5):
-                url = f"https://api.jikan.moe/v4/anime?genres={genre_id}&limit=25&page={page}"
-                res = requests.get(url).json()
-                data = res.get("data", [])
-                all_anime.extend(data)
-
-            st.session_state.anime_list = all_anime
-
-    # ================= CHAT DISPLAY =================
-    for role, msg in st.session_state.chat:
-        if role == "You":
-            st.markdown(f"**🧑 You:** {msg}")
+        st.rerun()
+    st.markdown("## 🎯 Select Genre")
+    genre = st.selectbox("Choose Genre", list(GENRES.keys()))
+    if st.button("Get Anime List"):
+        all_anime = []
+        seen = set()
+        for page in range(1, 5):
+            genre_id = GENRES[genre]   # ✅ THIS IS IMPORTANT LINE
+            url = f"https://api.jikan.moe/v4/anime?genres={genre_id}&limit=25&page={page}"
+            res = requests.get(url).json()
+            for anime in res.get("data", []):
+                if anime["mal_id"] not in seen:
+                    seen.add(anime["mal_id"])
+                    all_anime.append(anime)
+        if all_anime:
+            st.success(f"Showing {len(all_anime)} anime for {genre}")
+            for anime in all_anime:
+                st.image(anime["images"]["jpg"]["image_url"])
+                st.write(anime["title"])
         else:
-            st.markdown(f"**🤖 AI:** {msg}")
-
-    # ================= SHOW ANIME =================
-    if st.session_state.anime_list:
-
-        st.markdown("## 🎬 Recommended Anime")
-
-        cols = st.columns(3)
-
-        for i, anime in enumerate(st.session_state.anime_list[:100]):
-
-            with cols[i % 3]:
-                st.image(anime["images"]["jpg"]["image_url"], use_container_width=True)
-                st.markdown(f"**{anime['title']}**")
-                st.write("⭐", anime.get("score", "N/A"))
-
+            st.error("No anime found")
 # =========================
 # ⚔️ BATTLE SYSTEM (FIXED UI)
 # =========================

@@ -939,6 +939,7 @@ with tab5:
         "Saitama": "https://i.imgur.com/6YQw3Lp.png"
     }
         st.markdown("## 🎴 Anime Personality Result")
+        st.info(desc)
         st.markdown(f"""
     <div style="
         display:flex;

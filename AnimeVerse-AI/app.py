@@ -1,39 +1,10 @@
+#APP.PY
+
 import os
 import streamlit as st
 import requests
 import random
-import base64
-from PIL import Image
-import io
-def generate_ai_image(character_name):
-    # hackathon-safe version (no API needed)
-    prompt_map = {
-        "Naruto Uzumaki": "anime ninja orange glowing chakra",
-        "Monkey D. Luffy": "anime pirate straw hat sea",
-        "Goku": "super saiyan glowing aura lightning",
-        "Gojo Satoru": "white hair blue eyes infinity domain",
-        "Itachi Uchiha": "dark anime crow sharingan red eyes",
-        "Levi Ackerman": "soldier titan slayer blades",
-        "Eren Yeager": "attack titan rage anime",
-        "Saitama": "one punch hero bald cape anime"
-    }
 
-    prompt = prompt_map.get(character_name, "anime character portrait")
-
-    # 👉 TEMP IMAGE (you can replace with API later)
-    return f"https://image.pollinations.ai/prompt/{prompt}"
-def explain_character(result):
-    explanations = {
-        "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
-        "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
-        "Goku": "You love challenges and constantly push your limits.",
-        "Gojo Satoru": "You are confident, powerful, and think differently from others.",
-        "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
-        "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
-        "Eren Yeager": "You are driven by freedom and strong emotions.",
-        "Saitama": "You are simple, strong, and unmatched in power."
-    }
-    return explanations.get(result, "You have a unique anime personality!")
 TEXT = {
     "English": {
         "title": "🏆 AnimeVerse AI",
@@ -485,8 +456,6 @@ st.subheader({
     "Telugu": "AI ఆధారిత అనిమే బ్యాటిల్ సిస్టమ్",
     "Japanese": "AIアニメバトルシステム"
 }[st.session_state.lang])
-
-lang = st.session_state.lang
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     {
         "English": "🔍 Anime Search",
@@ -876,10 +845,30 @@ with tab3:
             st.info(result["story"])
 
 # =========================
+# ✨ QUOTES
+# =========================
+with tab4:
+
+    theme = st.selectbox({
+    "English": "Theme",
+    "Hindi": "विषय",
+    "Telugu": "థీమ్",
+    "Japanese": "テーマ"
+}[lang], ["Motivational", "Friendship", "Success", "Sad", "Funny"])
+
+    if st.button(TEXT[lang]["generate_quote"]):
+        st.success(generate_quote(theme))
+
+# =========================
+# 🎭 QUIZ
+# =========================
 with tab5:
 
-    lang = st.session_state.lang
-    t = TEXT[lang]
+    t = TEXT[st.session_state.lang]
+
+    # =========================
+    # QUIZ QUESTIONS (MULTILINGUAL)
+    # =========================
 
     q1 = st.radio(t["motivation"], [
         t["options_power"],
@@ -924,71 +913,11 @@ with tab5:
     ])
 
     # =========================
-    # RESULT BUTTON
+    # RESULT BUTTON (FIXED KEY ERROR)
     # =========================
 
     if st.button(t["result_btn"]):
 
         result = get_character_match(q1, q2, q3, q4, q5, q6)
-        desc = explain_character(result)
 
-        # Character images (clean version)
-        CHAR_IMAGES = {
-            "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
-            "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
-            "Goku": "https://i.imgur.com/8pQx1ZV.png",
-            "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
-            "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
-            "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
-            "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
-            "Saitama": "https://i.imgur.com/6YQw3Lp.png"
-        }
-
-        image_url = CHAR_IMAGES.get(result, "https://i.imgur.com/default.png")
-
-        # =========================
-        # RESULT UI (CENTERED CARD)
-        # =========================
-
-        st.markdown("## 🎴 Anime Personality Result")
-
-        st.markdown(f"""
-        <div style="
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            margin-top:20px;
-        ">
-
-            <div style="
-                background:#111;
-                padding:30px;
-                border-radius:20px;
-                text-align:center;
-                width:60%;
-                box-shadow:0px 0px 25px red;
-                animation: fadeIn 0.6s ease-in-out;
-            ">
-
-                <img src="{image_url}"
-                     width="220"
-                     style="border-radius:15px; margin-bottom:15px;" />
-
-                <h2 style="color:white;">🔥 {result}</h2>
-
-                <p style="color:lightgray; font-size:16px;">
-                    {desc}
-                </p>
-
-            </div>
-
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.success(f"{t['result_text']}: {result}")
-
-    # =========================
-    # BACK BUTTON
-    # =========================
-    if st.button(t["back"]):
-        st.rerun()
+        st.success(f"{t['result_btn']}: {result}")

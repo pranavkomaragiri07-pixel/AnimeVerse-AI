@@ -972,5 +972,4 @@ with tab5:
 
     </div>
     """, unsafe_allow_html=True)
-
-    st.success(f"{t['result_text']}: {result}")
+         st.success(f"{t['result_text']}: {result}")

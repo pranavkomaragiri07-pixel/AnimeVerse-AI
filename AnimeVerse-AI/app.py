@@ -418,7 +418,7 @@ with tab1:
         except:
             st.error("Failed to fetch anime data.")
 
-
+lang = st.session_state.lang
 with tab2:
 
     # =========================

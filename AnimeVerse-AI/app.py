@@ -875,7 +875,8 @@ with tab3:
             st.markdown("## 📖 Story")
             st.info(result["story"])
 
-# =========================with tab5:
+# =========================
+with tab5:
 
     lang = st.session_state.lang
     t = TEXT[lang]

@@ -920,130 +920,29 @@ with tab4:
 # =========================
 # 🎭 QUIZ
 # =========================
-with tab5:
+if st.session_state.get("show_result"):
 
-    t = TEXT[st.session_state.lang]
+    result = st.session_state.result
+    desc = st.session_state.desc
 
-    # =========================
-    # QUIZ INPUTS
-    # =========================
-    q1 = st.radio(t["motivation"], [
-        t["options_power"],
-        t["options_friendship"],
-        t["options_freedom"],
-        t["options_knowledge"]
-    ])
+    # DARK BACKGROUND EFFECT
+    st.markdown("""
+    <style>
+    .block-container {
+        padding-top: 2rem;
+        text-align: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-    q2 = st.radio(t["fight_style"], [
-        t["style_headon"],
-        t["style_strategic"],
-        t["style_support"],
-        t["style_adapt"]
-    ])
+    st.title("🔥 Anime Personality Result")
 
-    q3 = st.radio(t["trait"], [
-        t["trait_courage"],
-        t["trait_intelligence"],
-        t["trait_loyalty"],
-        t["trait_calmness"]
-    ])
+    st.subheader(f"You are: {result}")
 
-    q4 = st.radio(t["role"], [
-        t["role_leader"],
-        t["role_support"],
-        t["role_lonely"],
-        t["role_strategist"]
-    ])
+    st.write(desc)
 
-    q5 = st.radio(t["weakness"], [
-        t["weak_anger"],
-        t["weak_trust"],
-        t["weak_overconfidence"],
-        t["weak_fear"]
-    ])
+    st.markdown("---")
 
-    q6 = st.radio(t["power_type"], [
-        t["power_physical"],
-        t["power_speed"],
-        t["power_magic"],
-        t["power_tactical"]
-    ])
-
-    # =========================
-    # RESULT BUTTON
-    # =========================
-    if st.button(t["result_btn"]):
-
-        result = get_character_match(q1, q2, q3, q4, q5, q6)
-        desc = explain_character(result)
-
-        # store in session for popup
-        st.session_state.result = result
-        st.session_state.desc = desc
-        st.session_state.show_result = True
-
-    # =========================
-    # FULL SCREEN POPUP (NO IMAGE)
-    # =========================
-    if st.session_state.get("show_result"):
-
-        result = st.session_state.result
-        desc = st.session_state.desc
-
-        st.markdown("""
-        <style>
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.92);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .card {
-            background: #111;
-            padding: 40px;
-            border-radius: 20px;
-            width: 50%;
-            text-align: center;
-            box-shadow: 0 0 40px red;
-            animation: pop 0.5s ease-in-out;
-        }
-
-        @keyframes pop {
-            from {transform: scale(0.5); opacity: 0;}
-            to {transform: scale(1); opacity: 1;}
-        }
-
-        h1, h2, p {
-            color: white;
-        }
-
-        p {
-            color: lightgray;
-            font-size: 16px;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-
-        st.markdown(f"""
-        <div class="overlay">
-            <div class="card">
-
-                <h1>🔥 You are: {result}</h1>
-
-                <p>{desc}</p>
-
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        # BACK BUTTON
-        if st.button("⬅ Back"):
-            st.session_state.show_result = False
-            st.rerun()
+    if st.button("⬅ Back"):
+        st.session_state.show_result = False
+        st.rerun()

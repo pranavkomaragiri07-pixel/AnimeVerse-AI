@@ -1,3 +1,5 @@
+import os
+import openai
 import streamlit as st
 import requests
 import random
@@ -131,6 +133,15 @@ st.set_page_config(
     page_icon="⚔️",
     layout="wide"
 )
+st.sidebar.title("⚙️ AI Settings")
+
+api_key = st.sidebar.text_input("Enter OpenAI Key (BYOK)", type="password")
+
+use_local_ai = st.sidebar.toggle("Use Local AI Mode")
+
+if api_key:
+    os.environ["OPENAI_API_KEY"] = api_key
+    openai.api_key = api_key
 
 # =========================
 # HEADER
@@ -141,8 +152,27 @@ st.subheader("AI-Powered Anime Battle Simulator")
 # =========================
 # TABS
 # =========================
-tab1, tab3, tab4, tab5 = st.tabs([
+def ai_analyze_battle(a, b):
+
+    if use_local_ai:
+        return f"🧠 Local AI: {a} vs {b} is a balanced fight. Strategy decides winner."
+
+    if not api_key:
+        return "⚠️ Please enter API key in sidebar."
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are an anime battle analyst."},
+            {"role": "user", "content": f"Predict winner between {a} and {b}"}
+        ]
+    )
+
+    return response["choices"][0]["message"]["content"]
+    
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🔍 Anime Search",
+    "🤖 AI Anime Recommender",
     "⚔️ Battle Simulator",
     "✨ Quote Generator",
     "🎭 Personality Quiz"
@@ -177,6 +207,74 @@ with tab1:
 
         except:
             st.error("Failed to fetch anime data.")
+
+
+with tab2:
+
+    st.title("🤖 AI Anime Recommender System")
+
+    st.write("Say hi 👋 or ask anything like 'suggest anime'")
+
+    if "chat" not in st.session_state:
+        st.session_state.chat = []
+
+    user_input = st.text_input("Talk to AI")
+
+    # AI simple response logic (local AI first)
+    def ai_chat(msg):
+
+        msg = msg.lower()
+
+        if "hi" in msg or "hello" in msg:
+            return "Hello! 👋 I can help you find anime. Ask for genre suggestions!"
+
+        if "genre" in msg or "suggest" in msg:
+            return "Choose a genre: Action, Romance, Comedy, Horror, Fantasy, Sci-Fi"
+
+        return "Tell me a genre and I will recommend 50–100 anime for you!"
+
+    if st.button("Send") and user_input:
+
+        reply = ai_chat(user_input)
+
+        st.session_state.chat.append(("You", user_input))
+        st.session_state.chat.append(("AI", reply))
+
+    # SHOW CHAT
+    for role, msg in st.session_state.chat:
+        if role == "You":
+            st.markdown(f"**🧑 You:** {msg}")
+        else:
+            st.markdown(f"**🤖 AI:** {msg}")
+    
+    st.markdown("## 🎯 Select Genre")
+
+    genre = st.selectbox("Choose Genre", ["Action", "Romance", "Comedy", "Horror", "Fantasy", "Sci-Fi", "Adventure"])
+
+    if st.button("Get Anime List"):
+        all_anime = []
+        seen_ids = set()
+        for page in range(1, 5):
+            url = f"https://api.jikan.moe/v4/anime?genres={genre.lower()}&limit=25&page={page}"
+            res = requests.get(url).json()
+            data = res.get("data", [])
+            for anime in data:
+                anime_id = anime.get("mal_id")
+                if anime_id not in seen_ids:
+                    seen_ids.add(anime_id)
+                    all_anime.append(anime)
+        if all_anime:
+            st.success(f"🔥 Showing {len(all_anime)} Anime for {genre}")
+            cols = st.columns(3)
+            for i, anime in enumerate(all_anime):
+                with cols[i % 3]:
+                    st.image(anime["images"]["jpg"]["image_url"], use_container_width=True)
+                    st.markdown(f"### {anime['title']}")
+                    st.write("⭐ Rating:", anime.get("score", "N/A"))
+                    st.write(anime.get("synopsis", "No synopsis")[:120] + "...")
+                    st.markdown("---")
+        else:
+            st.error("No anime found for this genre")
 
 # =========================
 # ⚔️ BATTLE SYSTEM (FIXED UI)
@@ -238,6 +336,9 @@ with tab3:
 
             st.success(f"🔥 FINAL WINNER: {final}")
             st.info(result["story"])
+            st.markdown("## 🤖 AI ANALYSIS")
+            if st.button("Predict with AI"):
+                st.info(ai_analyze_battle(a, b))
 
     # ---------------- 2v2 ----------------
     elif mode == "2v2 Battle":
@@ -271,6 +372,8 @@ with tab3:
             for k, v in result["category_winners"].items():
                 st.write(f"{k} → 🥇 {v}")
             st.info(result["story"])
+            if st.button("AI Team Analysis"):
+                st.info(ai_analyze_battle(f"{a1}, {a2}",f"{b1}, {b2}"))
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
         t1 = st.text_area("Phantum Troupe")
@@ -301,6 +404,8 @@ with tab3:
             for k, v in result["category_winners"].items():
                 st.write(f"{k} → 🥇 {v}")
             st.info(result["story"])
+            if st.button("AI War Analysis"):
+                st.info(ai_analyze_battle("Phantum Troupe","Oración Seis "))
     # ---------------- TOURNAMENT ----------------
     elif mode == "Tournament Arc":
 

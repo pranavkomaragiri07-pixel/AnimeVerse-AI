@@ -993,14 +993,13 @@ with tab5:
 
         img_url = image_map.get(result, "https://i.imgur.com/placeholder.png")
 
-        # STORE FOR POPUP
         st.session_state.result = result
         st.session_state.desc = desc
         st.session_state.img = img_url
         st.session_state.show_result = True
 
     # =========================
-    # FULL SCREEN POPUP
+    # FULL SCREEN RESULT POPUP
     # =========================
     if st.session_state.get("show_result"):
 
@@ -1045,26 +1044,20 @@ with tab5:
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-<div style="
-    background:#111;
-    padding:25px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 0 30px red;
-    width:60%;
-    margin:auto;
-">
+        <div class="overlay">
+            <div class="card">
 
-    <img src="{img_url}" width="200" style="border-radius:15px;" />
+                <img src="{img_url}" width="220"/>
 
-    <h2 style="color:white;">🔥 {result}</h2>
+                <h2 style="color:white;">🔥 {result}</h2>
 
-    <p style="color:lightgray;">
-        {desc}
-    </p>
+                <p style="color:lightgray;">
+                    {desc}
+                </p>
 
-</div>
-""", unsafe_allow_html=True)
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
         if st.button("⬅ Close"):
             st.session_state.show_result = False

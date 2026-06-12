@@ -474,10 +474,12 @@ with tab3:
             colA, colB = st.columns([4, 1, 4])
             with colA:
                 st.markdown("### 🔵 TEAM A")
+            with colVS:
+                st.markdown("### VS")
             with colB:
                 st.markdown("### 🔴 TEAM B")
             for stat in team_a.keys():
-                colA, colB = st.columns([4, 1, 4])
+                colA, colVS, colB = st.columns([4, 1, 4])
                 with colA:
                     st.write(stat)
                     st.progress(team_a[stat] / 100)

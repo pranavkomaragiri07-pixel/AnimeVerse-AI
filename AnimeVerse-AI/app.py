@@ -925,25 +925,50 @@ with tab5:
     # =========================
     # RESULT BUTTON (FIXED + SAFE)
     # =========================
-
     if st.button(t["result_btn"]):
         result = get_character_match(q1, q2, q3, q4, q5, q6)
+        desc = explain_character(result)
+        CHAR_IMAGES = {
+        "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
+        "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
+        "Goku": "https://i.imgur.com/8pQx1ZV.png",
+        "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
+        "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
+        "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
+        "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
+        "Saitama": "https://i.imgur.com/6YQw3Lp.png"
+    }
         st.markdown("## 🎴 Anime Personality Result")
         st.markdown(f"""
     <div style="
-        background-color:#111;
-        padding:20px;
-        border-radius:15px;
-        text-align:center;
-        color:white;
-        box-shadow:0px 0px 15px #ff4b4b;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+        margin-top:20px;
     ">
 
-    <h2>🔥 {result}</h2>
+        <div style="
+            background:#111;
+            padding:25px;
+            border-radius:15px;
+            text-align:center;
+            width:60%;
+            box-shadow:0px 0px 20px red;
+        ">
 
-    <p style="font-size:16px; margin-top:10px;">
-        {explain_character(result)}
-    </p>
+            <img src="{CHAR_IMAGES.get(result)}"
+                 width="200"
+                 style="border-radius:15px; margin-bottom:15px;" />
+
+            <h2 style="color:white;">🔥 {result}</h2>
+
+            <p style="color:lightgray; font-size:16px;">
+                {desc}
+            </p>
+
+        </div>
 
     </div>
     """, unsafe_allow_html=True)
+    st.success(f"{t['result_btn']}: {result}")

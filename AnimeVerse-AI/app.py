@@ -3,23 +3,20 @@ import streamlit as st
 import requests
 import random
 import time
-from diffusers import StableDiffusionPipeline
 import torch
 
-@st.cache_resource
-def load_model():
-    model_id = "runwayml/stable-diffusion-v1-5"
-    pipe = StableDiffusionPipeline.from_pretrained(model_id)
-    pipe.to("cpu")  # change to "cuda" if GPU
-    return pipe
-
-pipe = load_model()
-
+import requests
 
 def generate_ai_image(prompt):
-    image = pipe(prompt).images[0]
+    API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
+    headers = {"Authorization": "Bearer YOUR_HF_TOKEN"}
+
+    response = requests.post(API_URL, headers=headers, json={"inputs": prompt})
+
     image_path = "result.png"
-    image.save(image_path)
+    with open(image_path, "wb") as f:
+        f.write(response.content)
+
     return image_path
 
 st.markdown("""

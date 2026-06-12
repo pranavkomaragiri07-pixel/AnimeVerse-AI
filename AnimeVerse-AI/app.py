@@ -465,6 +465,8 @@ st.subheader({
     "Telugu": "AI ఆధారిత అనిమే బ్యాటిల్ సిస్టమ్",
     "Japanese": "AIアニメバトルシステム"
 }[st.session_state.lang])
+
+st.session_state.lang = lang
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     {
         "English": "🔍 Anime Search",
@@ -874,11 +876,8 @@ with tab4:
 
 with tab5:
 
-    t = TEXT[st.session_state.lang]
-
-    # =========================
-    # QUIZ QUESTIONS (MULTILINGUAL)
-    # =========================
+    lang = st.session_state.lang
+    t = TEXT[lang]
 
     q1 = st.radio(t["motivation"], [
         t["options_power"],
@@ -922,54 +921,50 @@ with tab5:
         t["power_tactical"]
     ])
 
-    # =========================
-    # RESULT BUTTON (FIXED + SAFE)
-    # =========================
     if st.button(t["result_btn"]):
+
         result = get_character_match(q1, q2, q3, q4, q5, q6)
         desc = explain_character(result)
+
         CHAR_IMAGES = {
-        "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
-        "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
-        "Goku": "https://i.imgur.com/8pQx1ZV.png",
-        "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
-        "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
-        "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
-        "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
-        "Saitama": "https://i.imgur.com/6YQw3Lp.png"
-    }
+            "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
+            "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
+            "Goku": "https://i.imgur.com/8pQx1ZV.png",
+            "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
+            "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
+            "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
+            "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
+            "Saitama": "https://i.imgur.com/6YQw3Lp.png"
+        }
+
         st.markdown("## 🎴 Anime Personality Result")
         st.info(desc)
+
         st.markdown(f"""
-    <div style="
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        flex-direction:column;
-        margin-top:20px;
-    ">
+        <div class="result-box">
+            <div style="
+                background:#111;
+                padding:25px;
+                border-radius:15px;
+                text-align:center;
+                width:60%;
+                box-shadow:0px 0px 20px red;
+            ">
 
-        <div style="
-            background:#111;
-            padding:25px;
-            border-radius:15px;
-            text-align:center;
-            width:60%;
-            box-shadow:0px 0px 20px red;
-        ">
+                <img src="{CHAR_IMAGES.get(result, 'https://i.imgur.com/default.png')}"
+                     width="200"/>
 
-            <img src="{CHAR_IMAGES.get(result)}"
-                 width="200"
-                 style="border-radius:15px; margin-bottom:15px;" />
+                <h2 style="color:white;">🔥 {result}</h2>
 
-            <h2 style="color:white;">🔥 {result}</h2>
+                <p style="color:lightgray; font-size:16px;">
+                    {desc}
+                </p>
 
-            <p style="color:lightgray; font-size:16px;">
-                {desc}
-            </p>
-
+            </div>
         </div>
+        """, unsafe_allow_html=True)
 
-    </div>
-    """, unsafe_allow_html=True)
         st.success(f"{t['result_text']}: {result}")
+
+    if st.button(t["back"]):
+        st.rerun()

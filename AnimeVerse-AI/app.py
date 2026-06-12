@@ -972,7 +972,16 @@ with tab5:
     # =========================
     # CHAR IMAGES (STATIC FALLBACK)
     # =========================
-    image_map = {
+
+    # =========================
+    # RESULT BUTTON
+    # =========================
+    if st.button(t["result_btn"]):
+
+        result = get_character_match(q1, q2, q3, q4, q5, q6)
+        desc = explain_character(result)
+
+         image_map = {
     "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
     "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
     "Goku": "https://i.imgur.com/8pQx1ZV.png",
@@ -983,14 +992,13 @@ with tab5:
     "Saitama": "https://i.imgur.com/6YQw3Lp.png"
 }
         img_url = image_map.get(result, "https://i.imgur.com/placeholder.png")
-
-    # =========================
-    # RESULT BUTTON
-    # =========================
-    if st.button(t["result_btn"]):
-
-        result = get_character_match(q1, q2, q3, q4, q5, q6)
-        desc = explain_character(result)
+        st.markdown(f"""
+    <div style="text-align:center;">
+        <img src="{img_url}" width="200"/>
+        <h2>🔥 {result}</h2>
+        <p>{desc}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
         # store in session (IMPORTANT for popup)
         st.session_state.result = result

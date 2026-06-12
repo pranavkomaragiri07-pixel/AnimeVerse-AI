@@ -2,7 +2,18 @@ import os
 import streamlit as st
 import requests
 import random
-
+def explain_character(result):
+    explanations = {
+        "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
+        "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
+        "Goku": "You love challenges and constantly push your limits.",
+        "Gojo Satoru": "You are confident, powerful, and think differently from others.",
+        "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
+        "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
+        "Eren Yeager": "You are driven by freedom and strong emotions.",
+        "Saitama": "You are simple, strong, and unmatched in power."
+    }
+    return explanations.get(result, "You have a unique anime personality!")
 TEXT = {
     "English": {
         "title": "🏆 AnimeVerse AI",
@@ -331,18 +342,6 @@ def generate_quote(theme):
 # PERSONA MATCH (UNCHANGED LOGIC)
 # =========================
 def get_character_match(q1, q2, q3, q4, q5, q6):
-    def explain_character(result):
-        explanations = {
-        "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
-        "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
-        "Goku": "You love challenges and constantly push your limits.",
-        "Gojo Satoru": "You are confident, powerful, and think differently from others.",
-        "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
-        "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
-        "Eren Yeager": "You are driven by freedom and strong emotions.",
-        "Saitama": "You are simple, strong, and unmatched in power."
-    }
-    return explanations.get(result, "You have a unique anime personality!")
 
     score = {
         "Naruto Uzumaki": 0,
@@ -928,12 +927,23 @@ with tab5:
     # =========================
 
     if st.button(t["result_btn"]):
-
         result = get_character_match(q1, q2, q3, q4, q5, q6)
+        st.markdown("## 🎴 Anime Personality Result")
+        st.markdown(f"""
+    <div style="
+        background-color:#111;
+        padding:20px;
+        border-radius:15px;
+        text-align:center;
+        color:white;
+        box-shadow:0px 0px 15px #ff4b4b;
+    ">
 
-        # 🧠 explanation card
-        st.markdown("### 🎴 Your Anime Personality")
-        st.info(explain_character(result))
+    <h2>🔥 {result}</h2>
 
-        # 🏆 final result
-        st.success(f"{t['result_btn']}: {result}")
+    <p style="font-size:16px; margin-top:10px;">
+        {explain_character(result)}
+    </p>
+
+    </div>
+    """, unsafe_allow_html=True)

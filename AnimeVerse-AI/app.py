@@ -40,6 +40,31 @@ TEXT = {
         "options_friendship": "Friendship",
         "options_freedom": "Freedom",
         "options_knowledge": "Knowledge",
+
+        "style_headon": "Head on",
+"style_strategic": "Strategic",
+"style_support": "Support friends",
+"style_adapt": "Adapt",
+
+"trait_courage": "Courage",
+"trait_intelligence": "Intelligence",
+"trait_loyalty": "Loyalty",
+"trait_calmness": "Calmness",
+
+"role_leader": "Leader",
+"role_support": "Support",
+"role_lonely": "Lone wolf",
+"role_strategist": "Strategist",
+
+"weak_anger": "Anger",
+"weak_trust": "Trust issues",
+"weak_overconfidence": "Overconfidence",
+"weak_fear": "Fear",
+
+"power_physical": "Physical strength",
+"power_speed": "Speed",
+"power_magic": "Magic/Skills",
+"power_tactical": "Tactical mind",
         
         "back": "Back",
         "result_text": "You are:",
@@ -80,6 +105,31 @@ TEXT = {
         "options_freedom": "स्वतंत्रता",
         "options_knowledge": "ज्ञान",
 
+        "style_headon": "सीधा हमला",
+"style_strategic": "रणनीतिक",
+"style_support": "साथियों का समर्थन",
+"style_adapt": "अनुकूलन",
+
+"trait_courage": "साहस",
+"trait_intelligence": "बुद्धिमत्ता",
+"trait_loyalty": "वफादारी",
+"trait_calmness": "शांति",
+
+"role_leader": "नेता",
+"role_support": "सहायक",
+"role_lonely": "अकेला",
+"role_strategist": "रणनीतिकार",
+
+"weak_anger": "गुस्सा",
+"weak_trust": "भरोसे की समस्या",
+"weak_overconfidence": "अतिआत्मविश्वास",
+"weak_fear": "डर",
+
+"power_physical": "शारीरिक शक्ति",
+"power_speed": "गति",
+"power_magic": "जादू/कौशल",
+"power_tactical": "रणनीति",
+
         "back": "पीछे",
         "result_text": "आप हैं:",
     },
@@ -119,6 +169,31 @@ TEXT = {
         "options_freedom": "స్వేచ్ఛ",
         "options_knowledge": "జ్ఞానం",
 
+        "style_headon": "నేరుగా పోరాటం",
+"style_strategic": "వ్యూహాత్మక",
+"style_support": "మిత్రులకు మద్దతు",
+"style_adapt": "అనుగుణం",
+
+"trait_courage": "ధైర్యం",
+"trait_intelligence": "మేధస్సు",
+"trait_loyalty": "నిబద్ధత",
+"trait_calmness": "శాంతం",
+
+"role_leader": "నాయకుడు",
+"role_support": "మద్దతు",
+"role_lonely": "ఒంటరి",
+"role_strategist": "వ్యూహకర్త",
+
+"weak_anger": "కోపం",
+"weak_trust": "నమ్మకం సమస్యలు",
+"weak_overconfidence": "అతివిశ్వాసం",
+"weak_fear": "భయం",
+
+"power_physical": "శారీరక శక్తి",
+"power_speed": "వేగం",
+"power_magic": "మాయ/నైపుణ్యం",
+"power_tactical": "వ్యూహం",
+
         "back": "వెనుక",
         "result_text": "మీరు:",
     },
@@ -157,6 +232,31 @@ TEXT = {
         "options_friendship": "友情",
         "options_freedom": "自由",
         "options_knowledge": "知識",
+
+        "style_headon": "正面攻撃",
+"style_strategic": "戦略的",
+"style_support": "仲間をサポート",
+"style_adapt": "適応",
+
+"trait_courage": "勇気",
+"trait_intelligence": "知性",
+"trait_loyalty": "忠誠",
+"trait_calmness": "冷静",
+
+"role_leader": "リーダー",
+"role_support": "サポート",
+"role_lonely": "一匹狼",
+"role_strategist": "戦略家",
+
+"weak_anger": "怒り",
+"weak_trust": "不信感",
+"weak_overconfidence": "過信",
+"weak_fear": "恐怖",
+
+"power_physical": "身体能力",
+"power_speed": "スピード",
+"power_magic": "魔法/スキル",
+"power_tactical": "戦術思考",
 
         "back": "戻る",
         "result_text": "あなたは:",
@@ -763,7 +863,7 @@ with tab4:
 # =========================
 with tab5:
 
-    t = TEXT[lang]
+    t = TEXT[st.session_state.lang]
 
     q1 = st.radio(t["motivation"], [
         t["options_power"],
@@ -773,27 +873,40 @@ with tab5:
     ])
 
     q2 = st.radio(t["fight_style"], [
-        t["Head on"], t["Strategic"], t["Support friends"], t["Adapt"]
+        t["style_headon"],
+        t["style_strategic"],
+        t["style_support"],
+        t["style_adapt"]
     ])
 
     q3 = st.radio(t["trait"], [
-        "Courage", "Intelligence", "Loyalty", "Calmness"
+        t["trait_courage"],
+        t["trait_intelligence"],
+        t["trait_loyalty"],
+        t["trait_calmness"]
     ])
 
     q4 = st.radio(t["role"], [
-        "Leader", "Support", "Lone wolf", "Strategist"
+        t["role_leader"],
+        t["role_support"],
+        t["role_lonely"],
+        t["role_strategist"]
     ])
 
     q5 = st.radio(t["weakness"], [
-        "Anger", "Trust issues", "Overconfidence", "Fear"
+        t["weak_anger"],
+        t["weak_trust"],
+        t["weak_overconfidence"],
+        t["weak_fear"]
     ])
 
     q6 = st.radio(t["power_type"], [
-        "Physical strength", "Speed", "Magic/Skills", "Tactical mind"
+        t["power_physical"],
+        t["power_speed"],
+        t["power_magic"],
+        t["power_tactical"]
     ])
 
-    if st.button(t["result_btn"]):
-
+    if st.button(t["result"]):
         result = get_character_match(q1, q2, q3, q4, q5, q6)
-
-        st.success(t["result_text"] + " " + result)
+        st.success(t["result"] + " " + result)

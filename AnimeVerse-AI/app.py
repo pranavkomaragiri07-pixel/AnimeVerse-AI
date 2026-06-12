@@ -360,35 +360,35 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "Hindi": "🔍 एनीमे खोज",
         "Telugu": "🔍 అనిమే సెర్చ్",
         "Japanese": "🔍 アニメ検索"
-    }[lang],
+    }[st.session_state.lang],
 
     {
         "English": "🤖 AI Anime Recommender",
         "Hindi": "🤖 AI एनिमे सुझाव",
         "Telugu": "🤖 AI అనిమే సిఫార్సు",
         "Japanese": "🤖 AIアニメ推薦"
-    }[lang],
+    }[st.session_state.lang],
 
     {
         "English": "⚔️ Battle Simulator",
         "Hindi": "⚔️ युद्ध सिमुलेटर",
         "Telugu": "⚔️ బ్యాటిల్ సిమ్యులేటర్",
         "Japanese": "⚔️ バトルシミュレーター"
-    }[lang],
+    }[st.session_state.lang],
 
     {
         "English": "✨ Quote Generator",
         "Hindi": "✨ उद्धरण जनरेटर",
         "Telugu": "✨ కోట్ జనరేటర్",
         "Japanese": "✨ 名言ジェネレーター"
-    }[lang],
+    }[st.session_state.lang],
 
     {
         "English": "🎭 Personality Quiz",
         "Hindi": "🎭 व्यक्तित्व प्रश्नोत्तरी",
         "Telugu": "🎭 వ్యక్తిత్వ క్విజ్",
         "Japanese": "🎭 性格診断"
-    }[lang]
+    }[st.session_state.lang]
 ])
 
 lang = st.session_state.lang

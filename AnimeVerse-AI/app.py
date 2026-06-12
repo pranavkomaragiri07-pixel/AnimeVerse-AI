@@ -773,7 +773,7 @@ with tab5:
     ])
 
     q2 = st.radio(t["fight_style"], [
-        "Head on", "Strategic", "Support friends", "Adapt"
+        t["Head on"], t["Strategic"], t["Support friends"], t["Adapt"]
     ])
 
     q3 = st.radio(t["trait"], [

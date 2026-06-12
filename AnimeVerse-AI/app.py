@@ -865,6 +865,10 @@ with tab5:
 
     t = TEXT[st.session_state.lang]
 
+    # =========================
+    # QUIZ QUESTIONS (MULTILINGUAL)
+    # =========================
+
     q1 = st.radio(t["motivation"], [
         t["options_power"],
         t["options_friendship"],
@@ -907,6 +911,12 @@ with tab5:
         t["power_tactical"]
     ])
 
-    if st.button(t["result"]):
+    # =========================
+    # RESULT BUTTON (FIXED KEY ERROR)
+    # =========================
+
+    if st.button(t["result_btn"]):
+
         result = get_character_match(q1, q2, q3, q4, q5, q6)
-        st.success(t["result"] + " " + result)
+
+        st.success(f"{t['result_btn']}: {result}")

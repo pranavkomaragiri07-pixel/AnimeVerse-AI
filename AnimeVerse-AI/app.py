@@ -970,20 +970,6 @@ with tab5:
     ])
 
     # =========================
-    # IMAGE MAP
-    # =========================
-    image_map = {
-        "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
-        "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
-        "Goku": "https://i.imgur.com/8pQx1ZV.png",
-        "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
-        "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
-        "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
-        "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
-        "Saitama": "https://i.imgur.com/6YQw3Lp.png"
-    }
-
-    # =========================
     # RESULT BUTTON
     # =========================
     if st.button(t["result_btn"]):
@@ -991,21 +977,18 @@ with tab5:
         result = get_character_match(q1, q2, q3, q4, q5, q6)
         desc = explain_character(result)
 
-        img_url = image_map.get(result, "https://i.imgur.com/placeholder.png")
-
+        # store in session for popup
         st.session_state.result = result
         st.session_state.desc = desc
-        st.session_state.img = img_url
         st.session_state.show_result = True
 
     # =========================
-    # FULL SCREEN RESULT POPUP
+    # FULL SCREEN POPUP (NO IMAGE)
     # =========================
     if st.session_state.get("show_result"):
 
         result = st.session_state.result
         desc = st.session_state.desc
-        img_url = st.session_state.img
 
         st.markdown("""
         <style>
@@ -1024,7 +1007,7 @@ with tab5:
 
         .card {
             background: #111;
-            padding: 30px;
+            padding: 40px;
             border-radius: 20px;
             width: 50%;
             text-align: center;
@@ -1037,8 +1020,13 @@ with tab5:
             to {transform: scale(1); opacity: 1;}
         }
 
-        img {
-            border-radius: 15px;
+        h1, h2, p {
+            color: white;
+        }
+
+        p {
+            color: lightgray;
+            font-size: 16px;
         }
         </style>
         """, unsafe_allow_html=True)
@@ -1047,18 +1035,15 @@ with tab5:
         <div class="overlay">
             <div class="card">
 
-                <img src="{img_url}" width="220"/>
+                <h1>🔥 You are: {result}</h1>
 
-                <h2 style="color:white;">🔥 {result}</h2>
-
-                <p style="color:lightgray;">
-                    {desc}
-                </p>
+                <p>{desc}</p>
 
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-        if st.button("⬅ Close"):
+        # BACK BUTTON
+        if st.button("⬅ Back"):
             st.session_state.show_result = False
             st.rerun()

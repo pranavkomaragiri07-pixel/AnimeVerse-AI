@@ -370,7 +370,7 @@ with tab3:
             if st.button("Predict with AI"):
                 st.info(ai_analyze_battle(a, b))
 
-    # ---------------- 2v2 ----------------
+    # ================= 2v2 =================
     elif mode == "2v2 Battle":
         a1 = st.text_input("A1")
         a2 = st.text_input("A2")
@@ -384,27 +384,27 @@ with tab3:
             st.markdown("## ⚔️ TEAM STATS COMPARISON")
             colA, colVS, colB = st.columns([4, 1, 4])
             with colA:
-                st.markdown("### 🔵 TEAM A TOTAL STATS")
+                st.markdown("### 🔵 TEAM A")
+            with colVS:
+                st.markdown("### VS")
             with colB:
-                st.markdown("### 🔴 TEAM B TOTAL STATS")
+                st.markdown("### 🔴 TEAM B")
             for stat in team_a.keys():
                 colA, colVS, colB = st.columns([4, 1, 4])
                 with colA:
                     st.write(stat)
                     st.progress(team_a[stat] / 100)
-                with colVS:
-                    st.write("VS")
                 with colB:
                     st.write(stat)
                     st.progress(team_b[stat] / 100)
-                st.markdown("## 🏅 Category Winners")
-                for k, v in result["category_winners"].items():
-                    st.write(f"🏅 {k} → {v}")
-                st.markdown("## 📖 Story")
-                st.info(result["story"])
-                st.markdown("## 🤖 AI Analysis")
-                st.success(local_ai_predict([a1, a2], [b1, b2]))
-      
+            st.markdown("## 🏅 Category Winners")
+            for k, v in result["category_winners"].items():
+                st.write(f"🏅 {k} → {v}")
+            st.markdown("## 📖 Story")
+            st.info(result["story"])
+            st.markdown("## 🤖 AI Analysis")
+            st.success(local_ai_predict([a1, a2], [b1, b2]))
+       
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
         t1 = st.text_area("Team Alpha")
@@ -427,8 +427,6 @@ with tab3:
                 with colA:
                     st.write(stat)
                     st.progress(team_a[stat] / 100)
-                with colVS:
-                    st.write("VS")
                 with colB:
                     st.write(stat)
                     st.progress(team_b[stat] / 100)

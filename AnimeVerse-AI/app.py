@@ -466,7 +466,7 @@ st.subheader({
     "Japanese": "AIアニメバトルシステム"
 }[st.session_state.lang])
 
-st.session_state.lang = lang
+lang = st.session_state.lang
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     {
         "English": "🔍 Anime Search",

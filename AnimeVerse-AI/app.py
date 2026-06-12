@@ -1,5 +1,4 @@
 import os
-import openai
 import streamlit as st
 import requests
 import random
@@ -133,15 +132,11 @@ st.set_page_config(
     page_icon="⚔️",
     layout="wide"
 )
-st.sidebar.title("⚙️ AI Settings")
+st.sidebar.title("⚙️ AI SETTINGS")
 
-api_key = st.sidebar.text_input("Enter OpenAI Key (BYOK)", type="password")
+api_key = st.sidebar.text_input("🔑 Enter API Key (optional)", type="password")
 
-use_local_ai = st.sidebar.toggle("Use Local AI Mode")
-
-if api_key:
-    os.environ["OPENAI_API_KEY"] = api_key
-    openai.api_key = api_key
+use_local_ai = st.sidebar.toggle("🧠 Use Local AI Mode", value=True)
 
 # =========================
 # HEADER
@@ -155,28 +150,33 @@ st.subheader("AI-Powered Anime Battle Simulator")
 def ai_analyze_battle(a, b):
 
     if use_local_ai:
-        return f"🧠 Local AI: {a} vs {b} is a balanced fight. Strategy decides winner."
+        return f"🧠 Local AI Prediction: {a} vs {b} → Balanced fight, strategy decides winner."
 
     if not api_key:
-        return "⚠️ Please enter API key in sidebar."
+        return "⚠️ No API key provided. Enable Local AI mode."
 
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
+    # SAFE fallback (no openai module needed)
+    import requests
+
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    data = {
+        "model": "gpt-4o-mini",
+        "messages": [
             {"role": "system", "content": "You are an anime battle analyst."},
             {"role": "user", "content": f"Predict winner between {a} and {b}"}
         ]
+    }
+
+    response = requests.post(
+        "https://api.openai.com/v1/chat/completions",
+        json=data,
+        headers=headers
     )
 
-    return response["choices"][0]["message"]["content"]
-    
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🔍 Anime Search",
-    "🤖 AI Anime Recommender",
-    "⚔️ Battle Simulator",
-    "✨ Quote Generator",
-    "🎭 Personality Quiz"
-])
+    return response.json()["choices"][0]["message"]["content"]
 
 # =========================
 # 🔍 ANIME SEARCH (FIXED SAFE)

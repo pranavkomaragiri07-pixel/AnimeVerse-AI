@@ -1040,27 +1040,8 @@ with tab5:
         </style>
         """, unsafe_allow_html=True)
 
-        st.markdown(f"""
-<div style="
-    background:#111;
-    padding:25px;
-    border-radius:15px;
-    text-align:center;
-    width:60%;
-    margin:auto;
-    box-shadow:0px 0px 20px red;
-">
-
-    <img src="{img_url}" width="200"/>
-
-    <h1 style="color:white;">🔥 {result}</h1>
-
-    <p style="color:lightgray;">
-        {desc}
-    </p>
-
-</div>
-""",    unsafe_allow_html=True)
+        sst.markdown(f"""<div style="text-align:center;"><img src="{img_url}" width="200"/><h2>🔥 {result}</h2><p>{desc}</p></div>""", 
+        unsafe_allow_html=True)
 
         # CLOSE BUTTON
         if st.button("⬅ Back"):

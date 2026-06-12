@@ -2,34 +2,6 @@ import os
 import streamlit as st
 import requests
 import random
-
-TEXT = {
-    "English": {
-        "chat": "Talk to AI",
-        "send": "Send",
-        "genre": "Choose Genre",
-        "load": "Get Anime List"
-    },
-    "Hindi": {
-        "chat": "AI से बात करें",
-        "send": "भेजें",
-        "genre": "शैली चुनें",
-        "load": "एनिमे देखें"
-    },
-    "Telugu": {
-        "chat": "AI తో మాట్లాడండి",
-        "send": "పంపండి",
-        "genre": "జానర్ ఎంచుకోండి",
-        "load": "అనిమే చూపించు"
-    },
-    "Japanese": {
-        "chat": "AIと話す",
-        "send": "送信",
-        "genre": "ジャンル選択",
-        "load": "アニメを見る"
-    }
-}
-
 def local_ai_predict(team_a, team_b):
     a_score = sum(len(str(x)) for x in team_a)
     b_score = sum(len(str(x)) for x in team_b)
@@ -181,16 +153,6 @@ st.set_page_config(
     page_icon="⚔️",
     layout="wide"
 )
-if "lang" not in st.session_state:
-    st.session_state.lang = "English"
-
-col1, col2 = st.columns([8,2])
-
-with col2:
-    st.session_state.lang = st.selectbox(
-        "🌐 Language",
-        ["English", "Hindi", "Telugu", "Japanese"]
-    )
 st.markdown("""
 <style>
 
@@ -265,16 +227,8 @@ with tab1:
 
 
 with tab2:
-    lang = st.session_state.lang 
 
-    st.title(
-    {
-        "English": "🤖 AI Anime Recommender System",
-        "Hindi": "🤖 AI एनिमे सिस्टम",
-        "Telugu": "🤖 AI అనిమే సిస్టమ్",
-        "Japanese": "🤖 AIアニメシステム"
-    }[lang]
-)
+    st.title("🤖 AI Anime Recommender System")
 
     # =========================
     # SESSION STATE INIT
@@ -325,10 +279,9 @@ with tab2:
     # =========================
     # CHAT INPUT (ALWAYS ACTIVE)
     # =========================
-    lang = st.session_state.lang
-    user_input = st.text_input(TEXT[lang]["chat"], key="chat_input")
+    user_input = st.text_input("Talk to AI", key="chat_input")
 
-    if st.button(TEXT[lang]["send"]) and user_input:
+    if st.button("Send") and user_input:
 
         st.session_state.messages.append(("user", user_input))
         reply = ai_response(user_input)
@@ -354,9 +307,9 @@ with tab2:
     # =========================
     if st.session_state.step == "genre_input":
 
-        genre = st.text_input(TEXT[lang]["genre"] + " (Action, Romance, Fantasy...)")
+        genre = st.text_input("Enter Genre (Action, Romance, Fantasy...)")
 
-        if st.button(TEXT[lang]["load"]) and genre:
+        if st.button("Load Anime") and genre:
 
             gid = GENRES.get(genre.lower())
 
@@ -409,8 +362,11 @@ with tab2:
                     st.session_state.step = "details"
                     st.rerun()
 
-        #pagination
-        TOTAL_PAGES = 4
+        # Pagination
+        per_page = 25
+        total = len(st.session_state.anime_list)
+        start = (st.session_state.page - 1) * per_page
+        end = start + per_page
         c1, c2, c3 = st.columns(3)
         with c1:
             if st.session_state.page > 1:
@@ -418,9 +374,9 @@ with tab2:
                     st.session_state.page -= 1
                     st.rerun()
         with c2:
-            st.markdown(f"📄 Page {st.session_state.page} / {TOTAL_PAGES}")
+            st.markdown(f"📄 Page {st.session_state.page} / {max(1, (total // per_page) + 1)}")
         with c3:
-            if st.session_state.page < TOTAL_PAGES:
+            if end < total:
                 if st.button("Next ➡"):
                     st.session_state.page += 1
                     st.rerun()
@@ -508,10 +464,10 @@ with tab3:
 
     # ================= 2v2 =================
     elif mode == "2v2 Battle":
-        a1 = st.text_input("Player-1")
-        a2 = st.text_input("Player-2")
-        b1 = st.text_input("Player-3")
-        b2 = st.text_input("Player-4")
+        a1 = st.text_input("A1")
+        a2 = st.text_input("A2")
+        b1 = st.text_input("B1")
+        b2 = st.text_input("B2")
         if st.button("Fight") and all([a1, a2, b1, b2]):
             result = battle_2v2([a1, a2], [b1, b2])
             st.success(f"🏆 Winner: {result['winner']}")
@@ -543,8 +499,8 @@ with tab3:
        
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
-        t1 = st.text_area("Phantum Troupe")
-        t2 = st.text_area("Oración Seis")
+        t1 = st.text_area("Team Alpha")
+        t2 = st.text_area("Team Omega")
         if st.button("Battle") and t1 and t2:
             team_a_list = t1.split("\n")
             team_b_list = t2.split("\n")

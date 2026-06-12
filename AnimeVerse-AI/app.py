@@ -1040,7 +1040,7 @@ with tab5:
         </style>
         """, unsafe_allow_html=True)
 
-        sst.markdown(f"""<div style="text-align:center;"><img src="{img_url}" width="200"/><h2>🔥 {result}</h2><p>{desc}</p></div>""", 
+        st.markdown(f"""<div style="text-align:center;"><img src="{img_url}" width="200"/><h2>🔥 {result}</h2><p>{desc}</p></div>""", 
         unsafe_allow_html=True)
 
         # CLOSE BUTTON

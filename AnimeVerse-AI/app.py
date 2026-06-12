@@ -347,7 +347,7 @@ img {
 # =========================
 # HEADER
 # =========================
-
+st.title(TEXT[lang]["title"])
 st.subheader({
     "English": "AI-Powered Anime Battle Simulator",
     "Hindi": "AI आधारित एनीमे बैटल सिस्टम",
@@ -392,9 +392,6 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 ])
 
 lang = st.session_state.lang
-
-st.title(TEXT[lang]["title"])
-
 with tab1:
     st.header(TEXT[lang]["search"])
     name = st.text_input(TEXT[lang]["enter"])

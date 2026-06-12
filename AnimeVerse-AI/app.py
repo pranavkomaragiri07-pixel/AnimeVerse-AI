@@ -1,67 +1,9 @@
+#APP.PY
+
 import os
 import streamlit as st
 import requests
 import random
-import time
-import requests
-def explain_character(result):
-        explanations = {
-        "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
-        "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
-        "Goku": "You love challenges and constantly push your limits.",
-        "Gojo Satoru": "You are confident, powerful, and think differently from others.",
-        "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
-        "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
-        "Eren Yeager": "You are driven by freedom and strong emotions.",
-        "Saitama": "You are simple, strong, and unmatched in power."
-    }
-        return explanations.get(result, "You have a unique anime personality!")
-
-def generate_ai_image(prompt):
-    API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
-    headers = {"Authorization": "Bearer YOUR_HF_TOKEN"}
-
-    response = requests.post(API_URL, headers=headers, json={"inputs": prompt})
-
-    image_path = "result.png"
-    with open(image_path, "wb") as f:
-        f.write(response.content)
-
-    return image_path
-
-st.markdown("""
-<style>
-
-@keyframes popIn {
-    from {transform: scale(0.3); opacity: 0;}
-    to {transform: scale(1); opacity: 1;}
-}
-
-.fullscreen-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.92);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-.result-card {
-    background: #111;
-    padding: 30px;
-    border-radius: 20px;
-    width: 50%;
-    text-align: center;
-    box-shadow: 0 0 40px red;
-    animation: popIn 0.5s ease;
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 TEXT = {
     "English": {
@@ -920,29 +862,62 @@ with tab4:
 # =========================
 # 🎭 QUIZ
 # =========================
-if st.session_state.get("show_result"):
+with tab5:
 
-    result = st.session_state.result
-    desc = st.session_state.desc
+    t = TEXT[st.session_state.lang]
 
-    # DARK BACKGROUND EFFECT
-    st.markdown("""
-    <style>
-    .block-container {
-        padding-top: 2rem;
-        text-align: center;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    # =========================
+    # QUIZ QUESTIONS (MULTILINGUAL)
+    # =========================
 
-    st.title("🔥 Anime Personality Result")
+    q1 = st.radio(t["motivation"], [
+        t["options_power"],
+        t["options_friendship"],
+        t["options_freedom"],
+        t["options_knowledge"]
+    ])
 
-    st.subheader(f"You are: {result}")
+    q2 = st.radio(t["fight_style"], [
+        t["style_headon"],
+        t["style_strategic"],
+        t["style_support"],
+        t["style_adapt"]
+    ])
 
-    st.write(desc)
+    q3 = st.radio(t["trait"], [
+        t["trait_courage"],
+        t["trait_intelligence"],
+        t["trait_loyalty"],
+        t["trait_calmness"]
+    ])
 
-    st.markdown("---")
+    q4 = st.radio(t["role"], [
+        t["role_leader"],
+        t["role_support"],
+        t["role_lonely"],
+        t["role_strategist"]
+    ])
 
-    if st.button("⬅ Back"):
-        st.session_state.show_result = False
-        st.rerun()
+    q5 = st.radio(t["weakness"], [
+        t["weak_anger"],
+        t["weak_trust"],
+        t["weak_overconfidence"],
+        t["weak_fear"]
+    ])
+
+    q6 = st.radio(t["power_type"], [
+        t["power_physical"],
+        t["power_speed"],
+        t["power_magic"],
+        t["power_tactical"]
+    ])
+
+    # =========================
+    # RESULT BUTTON (FIXED KEY ERROR)
+    # =========================
+
+    if st.button(t["result_btn"]):
+
+        result = get_character_match(q1, q2, q3, q4, q5, q6)
+
+        st.success(f"{t['result_btn']}: {result}")

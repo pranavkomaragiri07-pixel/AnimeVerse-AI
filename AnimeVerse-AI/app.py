@@ -347,7 +347,7 @@ img {
 # =========================
 # HEADER
 # =========================
-st.title(TEXT[lang]["title"])
+st.title(TEXT[st.session_state.lang]["title"])
 st.subheader({
     "English": "AI-Powered Anime Battle Simulator",
     "Hindi": "AI आधारित एनीमे बैटल सिस्टम",

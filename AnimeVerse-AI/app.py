@@ -969,6 +969,7 @@ with tab5:
         t["power_tactical"]
     ])
 
+
     # =========================
     # CHAR IMAGES (STATIC FALLBACK)
     # =========================
@@ -976,35 +977,40 @@ with tab5:
     # =========================
     # RESULT BUTTON
     # =========================
+     # =========================
+# RESULT BUTTON
+# =========================
+
     if st.button(t["result_btn"]):
-
-        result = get_character_match(q1, q2, q3, q4, q5, q6)
-        desc = explain_character(result)
-
-         image_map = {
-    "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
-    "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
-    "Goku": "https://i.imgur.com/8pQx1ZV.png",
-    "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
-    "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
-    "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
-    "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
-    "Saitama": "https://i.imgur.com/6YQw3Lp.png"
-}
-        img_url = image_map.get(result, "https://i.imgur.com/placeholder.png")
-        st.markdown(f"""
+            result = get_character_match(q1, q2, q3, q4, q5, q6)
+            desc = explain_character(result)
+            image_map = {
+        "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
+        "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
+        "Goku": "https://i.imgur.com/8pQx1ZV.png",
+        "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
+        "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
+        "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
+        "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
+        "Saitama": "https://i.imgur.com/6YQw3Lp.png"
+    }
+            img_url = image_map.get(result, "https://i.imgur.com/placeholder.png")
+            st.markdown("## 🎴 Anime Personality Result")
+            st.info(desc)
+            st.markdown(f"""
     <div style="text-align:center;">
+
         <img src="{img_url}" width="200"/>
+
         <h2>🔥 {result}</h2>
+
         <p>{desc}</p>
+
     </div>
     """, unsafe_allow_html=True)
+    st.success(f"{t['result_text']}: {result}")
 
-        # store in session (IMPORTANT for popup)
-        st.session_state.result = result
-        st.session_state.desc = desc
-        st.session_state.show_result = True
-
+    
     # =========================
     # FULL SCREEN POPUP RESULT
     # =========================

@@ -925,7 +925,7 @@ with tab5:
     # =========================
     # RESULT BUTTON (FIXED + SAFE)
     # =========================
-    if st.button(t["result"]):
+    if st.button(t["result_text"]):
         result = get_character_match(q1, q2, q3, q4, q5, q6)
         desc = explain_character(result)
         CHAR_IMAGES = {
@@ -972,4 +972,4 @@ with tab5:
     </div>
     """, unsafe_allow_html=True)
 
-    st.success(f"{t['result']}: {result}")
+    st.success(f"{t['result_text']}: {result}")

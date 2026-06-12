@@ -2,6 +2,26 @@ import os
 import streamlit as st
 import requests
 import random
+import base64
+from PIL import Image
+import io
+def generate_ai_image(character_name):
+    # hackathon-safe version (no API needed)
+    prompt_map = {
+        "Naruto Uzumaki": "anime ninja orange glowing chakra",
+        "Monkey D. Luffy": "anime pirate straw hat sea",
+        "Goku": "super saiyan glowing aura lightning",
+        "Gojo Satoru": "white hair blue eyes infinity domain",
+        "Itachi Uchiha": "dark anime crow sharingan red eyes",
+        "Levi Ackerman": "soldier titan slayer blades",
+        "Eren Yeager": "attack titan rage anime",
+        "Saitama": "one punch hero bald cape anime"
+    }
+
+    prompt = prompt_map.get(character_name, "anime character portrait")
+
+    # 👉 TEMP IMAGE (you can replace with API later)
+    return f"https://image.pollinations.ai/prompt/{prompt}"
 def explain_character(result):
     explanations = {
         "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
@@ -855,26 +875,7 @@ with tab3:
             st.markdown("## 📖 Story")
             st.info(result["story"])
 
-# =========================
-# ✨ QUOTES
-# =========================
-with tab4:
-
-    theme = st.selectbox({
-    "English": "Theme",
-    "Hindi": "विषय",
-    "Telugu": "థీమ్",
-    "Japanese": "テーマ"
-}[lang], ["Motivational", "Friendship", "Success", "Sad", "Funny"])
-
-    if st.button(TEXT[lang]["generate_quote"]):
-        st.success(generate_quote(theme))
-
-# =========================
-# 🎭 QUIZ
-# =========================
-
-with tab5:
+# =========================with tab5:
 
     lang = st.session_state.lang
     t = TEXT[lang]
@@ -921,11 +922,16 @@ with tab5:
         t["power_tactical"]
     ])
 
+    # =========================
+    # RESULT BUTTON
+    # =========================
+
     if st.button(t["result_btn"]):
 
         result = get_character_match(q1, q2, q3, q4, q5, q6)
         desc = explain_character(result)
 
+        # Character images (clean version)
         CHAR_IMAGES = {
             "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
             "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
@@ -937,22 +943,35 @@ with tab5:
             "Saitama": "https://i.imgur.com/6YQw3Lp.png"
         }
 
+        image_url = CHAR_IMAGES.get(result, "https://i.imgur.com/default.png")
+
+        # =========================
+        # RESULT UI (CENTERED CARD)
+        # =========================
+
         st.markdown("## 🎴 Anime Personality Result")
-        st.info(desc)
 
         st.markdown(f"""
-        <div class="result-box">
+        <div style="
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            margin-top:20px;
+        ">
+
             <div style="
                 background:#111;
-                padding:25px;
-                border-radius:15px;
+                padding:30px;
+                border-radius:20px;
                 text-align:center;
                 width:60%;
-                box-shadow:0px 0px 20px red;
+                box-shadow:0px 0px 25px red;
+                animation: fadeIn 0.6s ease-in-out;
             ">
 
-                <img src="{CHAR_IMAGES.get(result, 'https://i.imgur.com/default.png')}"
-                     width="200"/>
+                <img src="{image_url}"
+                     width="220"
+                     style="border-radius:15px; margin-bottom:15px;" />
 
                 <h2 style="color:white;">🔥 {result}</h2>
 
@@ -961,10 +980,14 @@ with tab5:
                 </p>
 
             </div>
+
         </div>
         """, unsafe_allow_html=True)
 
         st.success(f"{t['result_text']}: {result}")
 
+    # =========================
+    # BACK BUTTON
+    # =========================
     if st.button(t["back"]):
         st.rerun()

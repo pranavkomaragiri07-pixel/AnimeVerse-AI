@@ -230,109 +230,155 @@ with tab2:
 
     st.title("🤖 AI Anime Recommender System")
 
-    GENRES = {
-        "Action": 1,
-        "Adventure": 2,
-        "Comedy": 4,
-        "Drama": 8,
-        "Fantasy": 10,
-        "Horror": 14,
-        "Romance": 22,
-        "Sci-Fi": 24
-    }
+    # =========================
+    # SESSION STATE INIT
+    # =========================
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
 
-    # session state
-    if "selected_genre" not in st.session_state:
-        st.session_state.selected_genre = None
+    if "step" not in st.session_state:
+        st.session_state.step = "chat"
 
-    if "selected_anime" not in st.session_state:
-        st.session_state.selected_anime = None
+    if "genre" not in st.session_state:
+        st.session_state.genre = None
+
+    if "anime_list" not in st.session_state:
+        st.session_state.anime_list = []
 
     if "page" not in st.session_state:
         st.session_state.page = 1
 
-    # ================= AI CHAT =================
-    user_input = st.text_input("Talk to AI")
+    if "selected_anime" not in st.session_state:
+        st.session_state.selected_anime = None
+
+    # =========================
+    # AI BRAIN
+    # =========================
+    def ai_response(msg):
+
+        msg = msg.lower()
+
+        if "hello" in msg or "hi" in msg:
+            return "👋 Hello! Say 'genre' and I will suggest anime categories."
+
+        if "genre" in msg:
+            st.session_state.step = "genre_input"
+            return "🎯 Choose a genre: Action, Adventure, Comedy, Drama, Fantasy, Horror, Romance, Sci-Fi"
+
+        return "🤖 I can help! Try saying 'genre' or 'suggest anime'"
+
+    # =========================
+    # CHAT DISPLAY
+    # =========================
+    for role, text in st.session_state.messages:
+        if role == "user":
+            st.markdown(f"🧑 You: {text}")
+        else:
+            st.markdown(f"🤖 AI: {text}")
+
+    # =========================
+    # CHAT INPUT (ALWAYS ACTIVE)
+    # =========================
+    user_input = st.text_input("Talk to AI", key="chat_input")
 
     if st.button("Send") and user_input:
 
-        msg = user_input.lower()
+        st.session_state.messages.append(("user", user_input))
+        reply = ai_response(user_input)
+        st.session_state.messages.append(("ai", reply))
+        st.rerun()
 
-        if "action" in msg:
-            st.session_state.selected_genre = "Action"
-        elif "romance" in msg:
-            st.session_state.selected_genre = "Romance"
-        elif "fantasy" in msg:
-            st.session_state.selected_genre = "Fantasy"
-        else:
-            st.session_state.selected_genre = None
+    # =========================
+    # GENRE MAP
+    # =========================
+    GENRES = {
+        "action": 1,
+        "adventure": 2,
+        "comedy": 4,
+        "drama": 8,
+        "fantasy": 10,
+        "horror": 14,
+        "romance": 22,
+        "sci-fi": 24
+    }
 
-        st.session_state.last_msg = msg
+    # =========================
+    # GENRE INPUT BAR (DYNAMIC)
+    # =========================
+    if st.session_state.step == "genre_input":
 
-    # ================= GENRE BUTTONS (NO DROPDOWN) =================
-    st.markdown("## 🎯 Choose Genre")
+        genre = st.text_input("Enter Genre (Action, Romance, Fantasy...)")
 
-    cols = st.columns(4)
+        if st.button("Load Anime") and genre:
 
-    for i, g in enumerate(GENRES.keys()):
-        with cols[i % 4]:
-            if st.button(g):
-                st.session_state.selected_genre = g
+            gid = GENRES.get(genre.lower())
+
+            if not gid:
+                st.error("Invalid genre")
+            else:
+
+                all_anime = []
+                seen = set()
+
+                # 100 anime (4 pages × 25)
+                for page in range(1, 5):
+
+                    url = f"https://api.jikan.moe/v4/anime?genres={gid}&limit=25&page={page}"
+                    res = requests.get(url).json()
+
+                    for a in res.get("data", []):
+                        if a["mal_id"] not in seen:
+                            seen.add(a["mal_id"])
+                            all_anime.append(a)
+
+                st.session_state.anime_list = all_anime
+                st.session_state.step = "show_anime"
                 st.session_state.page = 1
+                st.rerun()
 
-    # ================= FETCH ANIME =================
-    if st.session_state.selected_genre:
+    # =========================
+    # SHOW ANIME GRID (PAGINATION)
+    # =========================
+    if st.session_state.step == "show_anime":
 
-        genre_id = GENRES[st.session_state.selected_genre]
-
-        all_anime = []
-        seen = set()
-
-        for page in range(1, 5):  # 100 anime (25 x 4)
-            url = f"https://api.jikan.moe/v4/anime?genres={genre_id}&limit=25&page={page}"
-            res = requests.get(url).json()
-
-            for anime in res.get("data", []):
-                if anime["mal_id"] not in seen:
-                    seen.add(anime["mal_id"])
-                    all_anime.append(anime)
-
-        # ================= PAGINATION =================
         per_page = 25
         start = (st.session_state.page - 1) * per_page
         end = start + per_page
-        page_data = all_anime[start:end]
 
-        st.success(f"🔥 Showing {len(all_anime)} anime - Page {st.session_state.page}")
+        page_data = st.session_state.anime_list[start:end]
 
-        # ================= ANIME GRID =================
+        st.markdown("## 📺 Anime List")
+
         cols = st.columns(5)
 
         for i, anime in enumerate(page_data):
 
             with cols[i % 5]:
 
-                img = anime["images"]["jpg"]["image_url"]
-
-                st.image(img, width=160)   # FIXED SIZE
+                st.image(anime["images"]["jpg"]["image_url"], width=150)
 
                 if st.button(anime["title"], key=anime["mal_id"]):
-
                     st.session_state.selected_anime = anime
+                    st.session_state.step = "details"
+                    st.rerun()
 
-        # ================= PAGE BUTTONS =================
+        # Pagination
         c1, c2, c3 = st.columns(3)
 
         with c1:
             if st.button("⬅ Prev") and st.session_state.page > 1:
                 st.session_state.page -= 1
+                st.rerun()
 
         with c3:
-            if st.button("Next ➡") and end < len(all_anime):
+            if st.button("Next ➡"):
                 st.session_state.page += 1
+                st.rerun()
 
-    # ================= ANIME DETAILS =================
-    if st.session_state.selected_anime:
+    # =========================
+    # ANIME DETAILS PAGE
+    # =========================
+    if st.session_state.step == "details":
 
         a = st.session_state.selected_anime
 
@@ -345,7 +391,8 @@ with tab2:
         st.write("📖 Synopsis:", a.get("synopsis"))
 
         if st.button("⬅ Back"):
-            st.session_state.selected_anime = None
+            st.session_state.step = "show_anime"
+            st.rerun()
 # =========================
 # ⚔️ BATTLE SYSTEM (FIXED UI)
 # =========================

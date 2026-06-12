@@ -471,7 +471,7 @@ with tab3:
             team_a = result["team_a_total"]
             team_b = result["team_b_total"]
             st.markdown("## ⚔️ TEAM STATS COMPARISON")
-            colA, colB = st.columns([4, 1, 4])
+            colA, colVS, colB = st.columns([4, 1, 4])
             with colA:
                 st.markdown("### 🔵 TEAM A")
             with colVS:

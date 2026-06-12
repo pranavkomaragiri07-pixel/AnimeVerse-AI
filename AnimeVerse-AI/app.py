@@ -1,9 +1,60 @@
-#APP.PY
-
 import os
 import streamlit as st
 import requests
 import random
+import time
+from diffusers import StableDiffusionPipeline
+import torch
+
+@st.cache_resource
+def load_model():
+    model_id = "runwayml/stable-diffusion-v1-5"
+    pipe = StableDiffusionPipeline.from_pretrained(model_id)
+    pipe.to("cpu")  # change to "cuda" if GPU
+    return pipe
+
+pipe = load_model()
+
+
+def generate_ai_image(prompt):
+    image = pipe(prompt).images[0]
+    image_path = "result.png"
+    image.save(image_path)
+    return image_path
+
+st.markdown("""
+<style>
+
+@keyframes popIn {
+    from {transform: scale(0.3); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+}
+
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.92);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.result-card {
+    background: #111;
+    padding: 30px;
+    border-radius: 20px;
+    width: 50%;
+    text-align: center;
+    box-shadow: 0 0 40px red;
+    animation: popIn 0.5s ease;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 TEXT = {
     "English": {
@@ -867,9 +918,8 @@ with tab5:
     t = TEXT[st.session_state.lang]
 
     # =========================
-    # QUIZ QUESTIONS (MULTILINGUAL)
+    # QUIZ INPUTS
     # =========================
-
     q1 = st.radio(t["motivation"], [
         t["options_power"],
         t["options_friendship"],
@@ -913,11 +963,93 @@ with tab5:
     ])
 
     # =========================
-    # RESULT BUTTON (FIXED KEY ERROR)
+    # CHAR IMAGES (STATIC FALLBACK)
     # =========================
+    CHAR_IMAGES = {
+        "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
+        "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
+        "Goku": "https://i.imgur.com/8pQx1ZV.png",
+        "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
+        "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
+        "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
+        "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
+        "Saitama": "https://i.imgur.com/6YQw3Lp.png"
+    }
 
+    # =========================
+    # RESULT BUTTON
+    # =========================
     if st.button(t["result_btn"]):
 
         result = get_character_match(q1, q2, q3, q4, q5, q6)
+        desc = explain_character(result)
 
-        st.success(f"{t['result_btn']}: {result}")
+        # store in session (IMPORTANT for popup)
+        st.session_state.result = result
+        st.session_state.desc = desc
+        st.session_state.show_result = True
+
+    # =========================
+    # FULL SCREEN POPUP RESULT
+    # =========================
+    if st.session_state.get("show_result"):
+
+        result = st.session_state.result
+        desc = st.session_state.desc
+
+        st.markdown("""
+        <style>
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .card {
+            background: #111;
+            padding: 30px;
+            border-radius: 20px;
+            width: 50%;
+            text-align: center;
+            box-shadow: 0 0 40px red;
+            animation: pop 0.5s ease-in-out;
+        }
+
+        @keyframes pop {
+            from {transform: scale(0.5); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+
+        img {
+            border-radius: 15px;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        st.markdown(f"""
+        <div class="overlay">
+            <div class="card">
+
+                <img src="{CHAR_IMAGES.get(result, '')}" width="200"/>
+
+                <h1 style="color:white;">🔥 {result}</h1>
+
+                <p style="color:lightgray; font-size:16px;">
+                    {desc}
+                </p>
+
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # CLOSE BUTTON
+        if st.button("⬅ Back"):
+            st.session_state.show_result = False
+            st.rerun()

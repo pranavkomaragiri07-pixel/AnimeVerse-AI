@@ -3,7 +3,6 @@ import streamlit as st
 import requests
 import random
 import time
-import torch
 
 import requests
 

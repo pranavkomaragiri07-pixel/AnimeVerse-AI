@@ -4,6 +4,18 @@ import requests
 import random
 import time
 import requests
+def explain_character(result):
+        explanations = {
+        "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
+        "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
+        "Goku": "You love challenges and constantly push your limits.",
+        "Gojo Satoru": "You are confident, powerful, and think differently from others.",
+        "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
+        "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
+        "Eren Yeager": "You are driven by freedom and strong emotions.",
+        "Saitama": "You are simple, strong, and unmatched in power."
+    }
+        return explanations.get(result, "You have a unique anime personality!")
 
 def generate_ai_image(prompt):
     API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
@@ -379,18 +391,6 @@ def generate_quote(theme):
 # PERSONA MATCH (UNCHANGED LOGIC)
 # =========================
 def get_character_match(q1, q2, q3, q4, q5, q6):
-    def explain_character(result):
-        explanations = {
-        "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
-        "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
-        "Goku": "You love challenges and constantly push your limits.",
-        "Gojo Satoru": "You are confident, powerful, and think differently from others.",
-        "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
-        "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
-        "Eren Yeager": "You are driven by freedom and strong emotions.",
-        "Saitama": "You are simple, strong, and unmatched in power."
-    }
-        return explanations.get(result, "You have a unique anime personality!")
 
     score = {
         "Naruto Uzumaki": 0,

@@ -191,13 +191,13 @@ img {
 # =========================
 st.title("🏆 AnimeVerse AI")
 st.subheader("AI-Powered Anime Battle Simulator")
-
-# =========================
-# TABS
-# ========================
-# =========================
-# 🔍 ANIME SEARCH (FIXED SAFE)
-# =========================
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    "🔍 Anime Search",
+    "🤖 AI Anime Recommender",
+    "⚔️ Battle Simulator",
+    "✨ Quote Generator",
+    "🎭 Personality Quiz"
+])
 with tab1:
 
     st.header("Search Anime")

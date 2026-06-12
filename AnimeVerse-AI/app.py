@@ -750,7 +750,6 @@ with tab3:
 
             st.success(f"🔥 FINAL WINNER: {final}")
             st.info(result["story"])
-            st.markdown("## 🤖 AI ANALYSIS")
     # ================= 2v2 =================
     elif mode == "2v2 Battle":
         a1 = st.text_input("Player-1")

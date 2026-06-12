@@ -2,6 +2,167 @@ import os
 import streamlit as st
 import requests
 import random
+
+TEXT = {
+    "English": {
+        "title": "🏆 AnimeVerse AI",
+        "chat" : "Type message",
+        "chat_hi": "👋 Hello! How can I help you?",
+        "chat_genre": "🎯 Tell me a genre like Action, Romance, Fantasy",
+        "chat_default": "🤖 I understand you. Ask about anime!",
+
+        "search": "Search Anime",
+        "enter": "Enter anime name",
+        "send": "Send",
+        "genre": "Choose Genre",
+        "load": "Get Anime List",
+
+        "rating": "⭐ Rating",
+        "episodes": "🎬 Episodes",
+        "synopsis": "📖 Synopsis",
+
+        "start_battle": "Start Battle",
+        "generate_quote": "Generate Quote",
+        "result_btn": "Result",
+        "next": "Next",
+        "prev": "Previous",
+
+        # QUIZ LABELS
+        "motivation": "Motivation",
+        "fight_style": "Fight Style",
+        "trait": "Trait",
+        "role": "Role",
+        "weakness": "Weakness",
+        "power_type": "Power Type",
+
+        # OPTIONS
+        "options_power": "Power",
+        "options_friendship": "Friendship",
+        "options_freedom": "Freedom",
+        "options_knowledge": "Knowledge",
+        
+        "back": "Back",
+        "result_text": "You are:",
+    },
+
+    "Hindi": {
+        "title": "🏆 एनीमे वर्स AI",
+        "chat": "संदेश लिखें",
+        "chat_hi": "👋 नमस्ते! मैं आपकी कैसे मदद कर सकता हूँ?",
+        "chat_genre": "🎯 मुझे कोई genre बताइए",
+        "chat_default": "🤖 मैं समझ गया!",
+
+        "search": "एनीमे खोजें",
+        "enter": "एनीमे नाम दर्ज करें",
+        "send": "भेजें",
+        "genre": "शैली चुनें",
+        "load": "एनीमे दिखाएं",
+
+        "rating": "⭐ रेटिंग",
+        "episodes": "🎬 एपिसोड",
+        "synopsis": "📖 कहानी",
+
+        "start_battle": "युद्ध शुरू करें",
+        "generate_quote": "उद्धरण बनाएं",
+        "result_btn": "परिणाम",
+        "next": "अगला",
+        "prev": "पिछला",
+
+        "motivation": "प्रेरणा",
+        "fight_style": "लड़ाई शैली",
+        "trait": "गुण",
+        "role": "भूमिका",
+        "weakness": "कमजोरी",
+        "power_type": "शक्ति प्रकार",
+
+        "options_power": "शक्ति",
+        "options_friendship": "मित्रता",
+        "options_freedom": "स्वतंत्रता",
+        "options_knowledge": "ज्ञान",
+
+        "back": "पीछे",
+        "result_text": "आप हैं:",
+    },
+
+    "Telugu": {
+        "title": "🏆 అనిమే వర్స్ AI",
+        "chat": "సందేశం టైప్ చేయండి",
+        "chat_hi": "👋 హలో! నేను ఎలా సహాయం చేయగలను?",
+        "chat_genre": "🎯 జానర్ చెప్పండి",
+        "chat_default": "🤖 నేను అర్థం చేసుకున్నాను!",
+
+        "search": "అనిమే వెతకండి",
+        "enter": "అనిమే పేరు నమోదు చేయండి",
+        "send": "పంపండి",
+        "genre": "జానర్ ఎంచుకోండి",
+        "load": "అనిమే చూపించు",
+
+        "rating": "⭐ రేటింగ్",
+        "episodes": "🎬 ఎపిసోడ్‌లు",
+        "synopsis": "📖 కథ",
+
+        "start_battle": "యుద్ధం ప్రారంభించు",
+        "generate_quote": "కోట్ సృష్టించు",
+        "result_btn": "ఫలితం",
+        "next": "తరువాత",
+        "prev": "మునుపటి",
+
+        "motivation": "ప్రేరణ",
+        "fight_style": "పోరాట శైలి",
+        "trait": "లక్షణం",
+        "role": "పాత్ర",
+        "weakness": "బలహీనత",
+        "power_type": "శక్తి రకం",
+
+        "options_power": "శక్తి",
+        "options_friendship": "స్నేహం",
+        "options_freedom": "స్వేచ్ఛ",
+        "options_knowledge": "జ్ఞానం",
+
+        "back": "వెనుక",
+        "result_text": "మీరు:",
+    },
+
+    "Japanese": {
+        "title": "🏆 アニメバースAI",
+        "chat": "メッセージ入力",
+        "chat_hi": "👋 こんにちは！",
+        "chat_genre": "🎯 ジャンルを教えてください",
+        "chat_default": "🤖 理解しました！",
+
+        "search": "検索",
+        "enter": "アニメ名入力",
+        "send": "送信",
+        "genre": "ジャンル選択",
+        "load": "表示",
+
+        "rating": "⭐ 評価",
+        "episodes": "🎬 話数",
+        "synopsis": "📖 あらすじ",
+
+        "start_battle": "バトル開始",
+        "generate_quote": "名言生成",
+        "result_btn": "結果",
+        "next": "次へ",
+        "prev": "前へ",
+
+        "motivation": "動機",
+        "fight_style": "戦闘スタイル",
+        "trait": "特性",
+        "role": "役割",
+        "weakness": "弱点",
+        "power_type": "能力タイプ",
+
+        "options_power": "力",
+        "options_friendship": "友情",
+        "options_freedom": "自由",
+        "options_knowledge": "知識",
+
+        "back": "戻る",
+        "result_text": "あなたは:",
+    }
+}
+
 def local_ai_predict(team_a, team_b):
     a_score = sum(len(str(x)) for x in team_a)
     b_score = sum(len(str(x)) for x in team_b)
@@ -134,25 +295,22 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
 
     return max(score, key=score.get)
 
-# =========================
-# APP CONFIG
-# =========================
-def local_ai_predict(team_a, team_b):
-    a_score = sum(len(str(x)) for x in team_a)
-    b_score = sum(len(str(x)) for x in team_b)
-
-    if a_score > b_score:
-        return "Team A has better synergy and control."
-    elif b_score > a_score:
-        return "Team B has stronger coordination and power."
-    else:
-        return "Both teams are evenly matched."
         
 st.set_page_config(
     page_title="AnimeVerse AI",
     page_icon="⚔️",
     layout="wide"
 )
+if "lang" not in st.session_state:
+    st.session_state.lang = "English"
+
+col1, col2 = st.columns([8,2])
+
+with col2:
+    st.session_state.lang = st.selectbox(
+        "🌐 Language",
+        ["English", "Hindi", "Telugu", "Japanese"]
+    )
 st.markdown("""
 <style>
 
@@ -189,21 +347,61 @@ img {
 # =========================
 # HEADER
 # =========================
-st.title("🏆 AnimeVerse AI")
-st.subheader("AI-Powered Anime Battle Simulator")
+
+st.subheader({
+    "English": "AI-Powered Anime Battle Simulator",
+    "Hindi": "AI आधारित एनीमे बैटल सिस्टम",
+    "Telugu": "AI ఆధారిత అనిమే బ్యాటిల్ సిస్టమ్",
+    "Japanese": "AIアニメバトルシステム"
+}[lang])
+
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🔍 Anime Search",
-    "🤖 AI Anime Recommender",
-    "⚔️ Battle Simulator",
-    "✨ Quote Generator",
-    "🎭 Personality Quiz"
+    {
+        "English": "🔍 Anime Search",
+        "Hindi": "🔍 एनीमे खोज",
+        "Telugu": "🔍 అనిమే సెర్చ్",
+        "Japanese": "🔍 アニメ検索"
+    }[lang],
+
+    {
+        "English": "🤖 AI Anime Recommender",
+        "Hindi": "🤖 AI एनिमे सुझाव",
+        "Telugu": "🤖 AI అనిమే సిఫార్సు",
+        "Japanese": "🤖 AIアニメ推薦"
+    }[lang],
+
+    {
+        "English": "⚔️ Battle Simulator",
+        "Hindi": "⚔️ युद्ध सिमुलेटर",
+        "Telugu": "⚔️ బ్యాటిల్ సిమ్యులేటర్",
+        "Japanese": "⚔️ バトルシミュレーター"
+    }[lang],
+
+    {
+        "English": "✨ Quote Generator",
+        "Hindi": "✨ उद्धरण जनरेटर",
+        "Telugu": "✨ కోట్ జనరేటర్",
+        "Japanese": "✨ 名言ジェネレーター"
+    }[lang],
+
+    {
+        "English": "🎭 Personality Quiz",
+        "Hindi": "🎭 व्यक्तित्व प्रश्नोत्तरी",
+        "Telugu": "🎭 వ్యక్తిత్వ క్విజ్",
+        "Japanese": "🎭 性格診断"
+    }[lang]
 ])
+
+lang = st.session_state.lang
+
+st.title(TEXT[lang]["title"])
+st.subheader("AI-Powered Anime Battle Simulator")
+
 with tab1:
+    st.header(TEXT[lang]["search"])
+    name = st.text_input(TEXT[lang]["enter"])
 
-    st.header("Search Anime")
-    name = st.text_input("Enter anime name")
-
-    if st.button("Search") and name:
+    if st.button(TEXT[lang]["search"]) and name:
 
         url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
 
@@ -216,11 +414,11 @@ with tab1:
 
                 st.success(anime["title"])
                 st.image(anime["images"]["jpg"]["image_url"])   # ✅ THIS IS CORRECT PLACE
-                st.write("⭐ Rating:", anime.get("score"))
-                st.write("🎬 Episodes:", anime.get("episodes"))
-                st.write("📖 Synopsis:", anime.get("synopsis"))
+                st.write(TEXT[lang]["rating"], anime.get("score", "N/A"))
+                st.write(TEXT[lang]["episodes"], anime.get("episodes", "N/A"))
+                st.write(TEXT[lang]["synopsis"], anime.get("synopsis", "N/A"))
             else:
-                st.error("No anime found.")
+                st.error({"English": "No anime found", "Hindi": "कोई एनीमे नहीं मिला", "Telugu": "ఏ అనిమే కనబడలేదు", "Japanese": "アニメが見つかりません"}[lang])
 
         except:
             st.error("Failed to fetch anime data.")
@@ -228,7 +426,14 @@ with tab1:
 
 with tab2:
 
-    st.title("🤖 AI Anime Recommender System")
+    st.title(
+    {
+        "English": "🤖 AI Anime Recommender System",
+        "Hindi": "🤖 AI एनिमे सिस्टम",
+        "Telugu": "🤖 AI అనిమే సిస్టమ్",
+        "Japanese": "🤖 AIアニメシステム"
+    }[lang]
+)
 
     # =========================
     # SESSION STATE INIT
@@ -259,13 +464,13 @@ with tab2:
         msg = msg.lower()
 
         if "hello" in msg or "hi" in msg:
-            return "👋 Hello! Say 'genre' and I will suggest anime categories."
+            return TEXT[lang]["chat_hi"]
 
         if "genre" in msg:
             st.session_state.step = "genre_input"
-            return "🎯 Choose a genre: Action, Adventure, Comedy, Drama, Fantasy, Horror, Romance, Sci-Fi"
+            return TEXT[lang]["chat_genre"]
 
-        return "🤖 I can help! Try saying 'genre' or 'suggest anime'"
+        return TEXT[lang]["chat_default"]
 
     # =========================
     # CHAT DISPLAY
@@ -279,9 +484,9 @@ with tab2:
     # =========================
     # CHAT INPUT (ALWAYS ACTIVE)
     # =========================
-    user_input = st.text_input("Talk to AI", key="chat_input")
+    user_input = st.text_input(TEXT[lang]["chat"], placeholder=TEXT[lang]["chat"], key="chat_input")
 
-    if st.button("Send") and user_input:
+    if st.button(TEXT[lang]["send"]) and user_input:
 
         st.session_state.messages.append(("user", user_input))
         reply = ai_response(user_input)
@@ -307,14 +512,14 @@ with tab2:
     # =========================
     if st.session_state.step == "genre_input":
 
-        genre = st.text_input("Enter Genre (Action, Romance, Fantasy...)")
+        genre = st.text_input(TEXT[lang]["genre"] + " (Action, Romance, Fantasy...)")
 
-        if st.button("Load Anime") and genre:
+        if st.button(TEXT[lang]["load"]) and genre:
 
             gid = GENRES.get(genre.lower())
 
             if not gid:
-                st.error("Invalid genre")
+                st.error({"English": "Invalid genre", "Hindi": "अमान्य जॉनर", "Telugu": "చెల్లని జానర్", "Japanese": "無効なジャンル"}[lang])
             else:
 
                 all_anime = []
@@ -362,22 +567,19 @@ with tab2:
                     st.session_state.step = "details"
                     st.rerun()
 
-        # Pagination
-        per_page = 25
-        total = len(st.session_state.anime_list)
-        start = (st.session_state.page - 1) * per_page
-        end = start + per_page
+        #pagination
+        TOTAL_PAGES = 4
         c1, c2, c3 = st.columns(3)
         with c1:
             if st.session_state.page > 1:
-                if st.button("⬅ Prev"):
+                if st.button(TEXT[lang]["prev"]):
                     st.session_state.page -= 1
                     st.rerun()
         with c2:
-            st.markdown(f"📄 Page {st.session_state.page} / {max(1, (total // per_page) + 1)}")
+            st.markdown(f"📄 Page {st.session_state.page} / {TOTAL_PAGES}")
         with c3:
-            if end < total:
-                if st.button("Next ➡"):
+            if st.session_state.page < TOTAL_PAGES:
+                if st.button(TEXT[lang]["next"]):
                     st.session_state.page += 1
                     st.rerun()
     # =========================
@@ -387,7 +589,7 @@ with tab2:
 
         a = st.session_state.selected_anime
 
-        st.markdown("## 🎬 Anime Details")
+        st.markdown({"English": "## 🎬 Anime Details", "Hindi": "## 🎬 एनीमे विवरण", "Telugu": "## 🎬 అనిమే వివరాలు", "Japanese": "## 🎬 アニメ詳細"}[lang])
 
         st.image(a["images"]["jpg"]["image_url"], width=250)
 
@@ -395,7 +597,7 @@ with tab2:
         st.write("🎬 Episodes:", a.get("episodes"))
         st.write("📖 Synopsis:", a.get("synopsis"))
 
-        if st.button("⬅ Back"):
+        if st.button(TEXT[lang]["back"]):
             st.session_state.step = "show_anime"
             st.rerun()
 # =========================
@@ -403,8 +605,12 @@ with tab2:
 # =========================
 with tab3:
 
-    mode = st.selectbox(
-        "Select Mode",
+    mode = st.selectbox({
+    "English": "Select Mode",
+    "Hindi": "मोड चुनें",
+    "Telugu": "మోడ్ ఎంచుకోండి",
+    "Japanese": "モード選択"
+}[lang],
         ["1v1 Battle", "2v2 Battle", "4v4 Battle", "Tournament Arc", "Survival Arena"]
     )
 
@@ -414,7 +620,7 @@ with tab3:
         a = st.text_input("Character A")
         b = st.text_input("Character B")
 
-        if st.button("Start Battle") and a and b:
+        if st.button(TEXT[lang]["start_battle"]) and a and b:
 
             result = battle_1v1(a, b)
 
@@ -459,16 +665,13 @@ with tab3:
             st.success(f"🔥 FINAL WINNER: {final}")
             st.info(result["story"])
             st.markdown("## 🤖 AI ANALYSIS")
-            if st.button("Predict with AI"):
-                st.info(ai_analyze_battle(a, b))
-
     # ================= 2v2 =================
     elif mode == "2v2 Battle":
-        a1 = st.text_input("A1")
-        a2 = st.text_input("A2")
-        b1 = st.text_input("B1")
-        b2 = st.text_input("B2")
-        if st.button("Fight") and all([a1, a2, b1, b2]):
+        a1 = st.text_input("Player-1")
+        a2 = st.text_input("Player-2")
+        b1 = st.text_input("Player-3")
+        b2 = st.text_input("Player-4")
+        if st.button(TEXT[lang]["start_battle"]) and all([a1, a2, b1, b2]):
             result = battle_2v2([a1, a2], [b1, b2])
             st.success(f"🏆 Winner: {result['winner']}")
             team_a = result["team_a_total"]
@@ -494,14 +697,12 @@ with tab3:
                 st.write(f"🏅 {k} → {v}")
             st.markdown("## 📖 Story")
             st.info(result["story"])
-            st.markdown("## 🤖 AI Analysis")
-            st.success(local_ai_predict([a1, a2], [b1, b2]))
        
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
-        t1 = st.text_area("Team Alpha")
-        t2 = st.text_area("Team Omega")
-        if st.button("Battle") and t1 and t2:
+        t1 = st.text_area("Phantum Troupe")
+        t2 = st.text_area("Oración Seis")
+        if st.button(TEXT[lang]["start_battle"]) and t1 and t2:
             team_a_list = t1.split("\n")
             team_b_list = t2.split("\n")
             result = battle_4v4(team_a_list, team_b_list)
@@ -527,14 +728,12 @@ with tab3:
                 st.write(f"🏅 {k} → {v}")
             st.markdown("## 📖 Story")
             st.info(result["story"])
-            st.markdown("## 🤖 AI Analysis")
-            st.success(local_ai_predict(team_a_list, team_b_list))
     # ---------------- TOURNAMENT ----------------
     elif mode == "Tournament Arc":
 
         fighters = st.text_area("Enter fighters")
 
-        if st.button("Run") and fighters:
+        if st.button(TEXT[lang]["start_battle"]) and fighters:
 
             result = run_tournament(fighters.split("\n"))
 
@@ -545,14 +744,14 @@ with tab3:
     elif mode == "Survival Arena":
 
         hero = st.text_input("Hero")
-        if st.button("Start") and hero:
+        if st.button(TEXT[lang]["start_battle"]) and hero:
             result = survival_mode(hero)
             col1, col2, col3 = st.columns([1,2,1])
             with col2:
                 st.markdown("## 🎌 You are")
                 st.success(result["character"])
                 char_key = result["character"].lower()
-                st.image(CHAR_IMAGES.get(char_key, "https://i.imgur.com/default.png"),use_container_width=True)
+                st.image(CHAR_IMAGES.get(char_key, "https://i.imgur.com/default.png") if isinstance(CHAR_IMAGES, dict) else "https://i.imgur.com/default.png")
             st.markdown("## ⭐ Score")
             st.write(result["score"])
             st.markdown("## 📖 Story")
@@ -563,9 +762,14 @@ with tab3:
 # =========================
 with tab4:
 
-    theme = st.selectbox("Theme", ["Motivational", "Friendship", "Success", "Sad", "Funny"])
+    theme = st.selectbox({
+    "English": "Theme",
+    "Hindi": "विषय",
+    "Telugu": "థీమ్",
+    "Japanese": "テーマ"
+}[lang], ["Motivational", "Friendship", "Success", "Sad", "Funny"])
 
-    if st.button("Generate Quote"):
+    if st.button(TEXT[lang]["generate_quote"]):
         st.success(generate_quote(theme))
 
 # =========================
@@ -573,13 +777,37 @@ with tab4:
 # =========================
 with tab5:
 
-    q1 = st.radio("Motivation", ["Power", "Friendship", "Freedom", "Knowledge"])
-    q2 = st.radio("Fight Style", ["Head on", "Strategic", "Support friends", "Adapt"])
-    q3 = st.radio("Trait", ["Courage", "Intelligence", "Loyalty", "Calmness"])
-    q4 = st.radio("Role", ["Leader", "Support", "Lone wolf", "Strategist"])
-    q5 = st.radio("Weakness", ["Anger", "Trust issues", "Overconfidence", "Fear"])
-    q6 = st.radio("Power Type", ["Physical strength", "Speed", "Magic/Skills", "Tactical mind"])
+    t = TEXT[lang]
 
-    if st.button("Result"):
+    q1 = st.radio(t["motivation"], [
+        t["options_power"],
+        t["options_friendship"],
+        t["options_freedom"],
+        t["options_knowledge"]
+    ])
+
+    q2 = st.radio(t["fight_style"], [
+        "Head on", "Strategic", "Support friends", "Adapt"
+    ])
+
+    q3 = st.radio(t["trait"], [
+        "Courage", "Intelligence", "Loyalty", "Calmness"
+    ])
+
+    q4 = st.radio(t["role"], [
+        "Leader", "Support", "Lone wolf", "Strategist"
+    ])
+
+    q5 = st.radio(t["weakness"], [
+        "Anger", "Trust issues", "Overconfidence", "Fear"
+    ])
+
+    q6 = st.radio(t["power_type"], [
+        "Physical strength", "Speed", "Magic/Skills", "Tactical mind"
+    ])
+
+    if st.button(t["result_btn"]):
+
         result = get_character_match(q1, q2, q3, q4, q5, q6)
-        st.success("🎌 You are: " + result)
+
+        st.success(t["result_text"] + " " + result)

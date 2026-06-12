@@ -2,6 +2,16 @@ import os
 import streamlit as st
 import requests
 import random
+def local_ai_predict(team_a, team_b):
+    a_score = sum(len(str(x)) for x in team_a)
+    b_score = sum(len(str(x)) for x in team_b)
+
+    if a_score > b_score:
+        return "Team A has better synergy and control."
+    elif b_score > a_score:
+        return "Team B has stronger coordination and power."
+    else:
+        return "Both teams are evenly matched."
 
 # =========================
 # IMPORT BACKEND
@@ -127,16 +137,54 @@ def get_character_match(q1, q2, q3, q4, q5, q6):
 # =========================
 # APP CONFIG
 # =========================
+def local_ai_predict(team_a, team_b):
+    a_score = sum(len(str(x)) for x in team_a)
+    b_score = sum(len(str(x)) for x in team_b)
+
+    if a_score > b_score:
+        return "Team A has better synergy and control."
+    elif b_score > a_score:
+        return "Team B has stronger coordination and power."
+    else:
+        return "Both teams are evenly matched."
+        
 st.set_page_config(
     page_title="AnimeVerse AI",
     page_icon="⚔️",
     layout="wide"
 )
-st.sidebar.title("⚙️ AI SETTINGS")
+st.markdown("""
+<style>
 
-api_key = st.sidebar.text_input("🔑 Enter API Key (optional)", type="password")
+/* FULL PAGE CENTER FIX */
+[data-testid="stAppViewContainer"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-use_local_ai = st.sidebar.toggle("🧠 Use Local AI Mode", value=True)
+/* CENTER MAIN CONTENT */
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* RESULT CARD CENTER FIX */
+div.stSuccess {
+    display: flex;
+    justify-content: center;
+}
+
+/* IMAGE CENTER FIX */
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # =========================
 # HEADER
@@ -146,38 +194,7 @@ st.subheader("AI-Powered Anime Battle Simulator")
 
 # =========================
 # TABS
-# =========================
-def ai_analyze_battle(a, b):
-
-    if use_local_ai:
-        return f"🧠 Local AI Prediction: {a} vs {b} → Balanced fight, strategy decides winner."
-
-    if not api_key:
-        return "⚠️ No API key provided. Enable Local AI mode."
-
-    # SAFE fallback (no openai module needed)
-    import requests
-
-    headers = {
-        "Authorization": f"Bearer {api_key}"
-    }
-
-    data = {
-        "model": "gpt-4o-mini",
-        "messages": [
-            {"role": "system", "content": "You are an anime battle analyst."},
-            {"role": "user", "content": f"Predict winner between {a} and {b}"}
-        ]
-    }
-
-    response = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        json=data,
-        headers=headers
-    )
-
-    return response.json()["choices"][0]["message"]["content"]
-
+# ========================
 # =========================
 # 🔍 ANIME SEARCH (FIXED SAFE)
 # =========================
@@ -342,70 +359,73 @@ with tab3:
 
     # ---------------- 2v2 ----------------
     elif mode == "2v2 Battle":
-        a1 = st.text_input("Player-1")
-        a2 = st.text_input("Player-2")
-        b1 = st.text_input("Player-3")
-        b2 = st.text_input("Player-4")
+        a1 = st.text_input("A1")
+        a2 = st.text_input("A2")
+        b1 = st.text_input("B1")
+        b2 = st.text_input("B2")
         if st.button("Fight") and all([a1, a2, b1, b2]):
             result = battle_2v2([a1, a2], [b1, b2])
-            st.success("🏆 Winner: " + result["winner"])
+            st.success(f"🏆 Winner: {result['winner']}")
             team_a = result["team_a_total"]
             team_b = result["team_b_total"]
             st.markdown("## ⚔️ TEAM STATS COMPARISON")
-            col1, col2, col3 = st.columns([4, 1, 4])
-            with col1:
+            colA, colVS, colB = st.columns([4, 1, 4])
+            with colA:
                 st.markdown("### 🔵 TEAM A TOTAL STATS")
-            with col3:
+            with colB:
                 st.markdown("### 🔴 TEAM B TOTAL STATS")
             for stat in team_a.keys():
-                col1, col2, col3 = st.columns([4, 1, 4])
-                with col1:
+                colA, colVS, colB = st.columns([4, 1, 4])
+                with colA:
                     st.write(stat)
                     st.progress(team_a[stat] / 100)
-                with col2:
+                with colVS:
                     st.write("VS")
-                with col3:
+                with colB:
                     st.write(stat)
                     st.progress(team_b[stat] / 100)
-            
-            st.markdown("## 🏅 Category Winners")
-            for k, v in result["category_winners"].items():
-                st.write(f"{k} → 🥇 {v}")
-            st.info(result["story"])
-            if st.button("AI Team Analysis"):
-                st.info(ai_analyze_battle(f"{a1}, {a2}",f"{b1}, {b2}"))
+                st.markdown("## 🏅 Category Winners")
+                for k, v in result["category_winners"].items():
+                    st.write(f"🏅 {k} → {v}")
+                st.markdown("## 📖 Story")
+                st.info(result["story"])
+                st.markdown("## 🤖 AI Analysis")
+                st.success(local_ai_predict([a1, a2], [b1, b2]))
+      
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
-        t1 = st.text_area("Phantum Troupe")
-        t2 = st.text_area("Oración Seis")
+        t1 = st.text_area("Team Alpha")
+        t2 = st.text_area("Team Omega")
         if st.button("Battle") and t1 and t2:
-            result = battle_4v4(t1.split("\n"), t2.split("\n"))
-            st.success("🏆 Winner: " + result["winner"])
+            team_a_list = t1.split("\n")
+            team_b_list = t2.split("\n")
+            result = battle_4v4(team_a_list, team_b_list)
+            st.success(f"🏆 Winner: {result['winner']}")
             team_a = result["team_a_total"]
             team_b = result["team_b_total"]
             st.markdown("## ⚔️ TEAM STATS COMPARISON")
-            col1, col2, col3 = st.columns([4, 1, 4])
-            with col1:
-                st.markdown("### 🔵 Phantum Troupe TOTAL STATS")
-            with col3:
-                st.markdown("### 🔴 Oración Seis TOTAL STATS")
+            colA, colVS, colB = st.columns([4, 1, 4])
+            with colA:
+                st.markdown("### 🔵 TEAM A TOTAL STATS")
+            with colB:
+                st.markdown("### 🔴 TEAM B TOTAL STATS")
             for stat in team_a.keys():
-                col1, col2, col3 = st.columns([4, 1, 4])
-                with col1:
+                colA, colVS, colB = st.columns([4, 1, 4])
+                with colA:
                     st.write(stat)
                     st.progress(team_a[stat] / 100)
-                with col2:
+                with colVS:
                     st.write("VS")
-                with col3:
+                with colB:
                     st.write(stat)
                     st.progress(team_b[stat] / 100)
-          
             st.markdown("## 🏅 Category Winners")
             for k, v in result["category_winners"].items():
-                st.write(f"{k} → 🥇 {v}")
+                st.write(f"🏅 {k} → {v}")
+            st.markdown("## 📖 Story")
             st.info(result["story"])
-            if st.button("AI War Analysis"):
-                st.info(ai_analyze_battle("Phantum Troupe","Oración Seis "))
+            st.markdown("## 🤖 AI Analysis")
+            st.success(local_ai_predict(team_a_list, team_b_list))
     # ---------------- TOURNAMENT ----------------
     elif mode == "Tournament Arc":
 
@@ -427,8 +447,13 @@ with tab3:
 
             result = survival_mode(hero)
 
-            st.success(result["character"])
-            st.write("⭐ Score:", result["score"])
+            col1, col2, col3 = st.columns([1,2,1])
+            with col2:
+                st.markdown("## 🎌 You are")
+                st.success(result["character"])
+                st.image(CHAR_IMAGES.get(result["character"].lower(), "https://i.imgur.com/default.png"),use_container_width=True)
+            st.markdown("### ⭐ Score")
+            st.write(result["score"])
             st.info(result["story"])
 
 # =========================

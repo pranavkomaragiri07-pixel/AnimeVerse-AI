@@ -354,7 +354,7 @@ with tab2:
     # =========================
     if st.session_state.step == "genre_input":
 
-        genre = TEXT[lang]["genre"] (Action, Romance, Fantasy...)
+        genre = st.text_input(TEXT[lang]["genre"] + " (Action, Romance, Fantasy...)")
 
         if st.button(TEXT[lang]["load"]) and genre:
 

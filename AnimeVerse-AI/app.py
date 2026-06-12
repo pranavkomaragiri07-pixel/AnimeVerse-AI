@@ -332,7 +332,7 @@ def generate_quote(theme):
 # =========================
 def get_character_match(q1, q2, q3, q4, q5, q6):
     def explain_character(result):
-    explanations = {
+        explanations = {
         "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
         "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
         "Goku": "You love challenges and constantly push your limits.",

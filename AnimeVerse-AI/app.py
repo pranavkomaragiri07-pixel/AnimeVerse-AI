@@ -972,16 +972,17 @@ with tab5:
     # =========================
     # CHAR IMAGES (STATIC FALLBACK)
     # =========================
-    CHAR_IMAGES = {
-        "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
-        "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
-        "Goku": "https://i.imgur.com/8pQx1ZV.png",
-        "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
-        "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
-        "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
-        "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
-        "Saitama": "https://i.imgur.com/6YQw3Lp.png"
-    }
+    image_map = {
+    "Naruto Uzumaki": "https://i.imgur.com/4M7IWwP.png",
+    "Monkey D. Luffy": "https://i.imgur.com/3ZQ3ZQ9.png",
+    "Goku": "https://i.imgur.com/8pQx1ZV.png",
+    "Gojo Satoru": "https://i.imgur.com/1bX5QH6.png",
+    "Itachi Uchiha": "https://i.imgur.com/7yUve6S.png",
+    "Levi Ackerman": "https://i.imgur.com/2Y4Qk5v.png",
+    "Eren Yeager": "https://i.imgur.com/9ZQpX2k.png",
+    "Saitama": "https://i.imgur.com/6YQw3Lp.png"
+}
+        img_url = image_map.get(result, "https://i.imgur.com/placeholder.png")
 
     # =========================
     # RESULT BUTTON
@@ -1040,8 +1041,17 @@ with tab5:
         </style>
         """, unsafe_allow_html=True)
 
-        st.markdown(f"""<div style="text-align:center;"><img src="{img_url}" width="200"/><h2>🔥 {result}</h2><p>{desc}</p></div>""", 
-        unsafe_allow_html=True)
+        st.markdown(f"""
+<div style="text-align:center;">
+
+    <img src="{img_url}" width="200"/>
+
+    <h2>🔥 {result}</h2>
+
+    <p>{desc}</p>
+
+</div>
+""", unsafe_allow_html=True)
 
         # CLOSE BUTTON
         if st.button("⬅ Back"):

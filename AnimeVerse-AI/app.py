@@ -227,6 +227,8 @@ with tab1:
 
 
 with tab2:
+    if "selected_anime" not in st.session_state:
+        st.session_state.selected_anime = None
 
     st.title("🤖 AI Anime Recommender System")
 
@@ -286,12 +288,22 @@ with tab2:
             for i, anime in enumerate(all_anime):
                 with cols[i % 3]:
                     st.image(anime["images"]["jpg"]["image_url"], use_container_width=True)
-                    st.markdown(f"### {anime['title']}")
+                    if st.button(anime["title"]):
+                        st.session_state.selected_anime = anime
                     st.write("⭐ Rating:", anime.get("score", "N/A"))
                     st.write(anime.get("synopsis", "No synopsis")[:120] + "...")
                     st.markdown("---")
         else:
             st.error("No anime found for this genre")
+        if st.session_state.selected_anime:
+            anime = st.session_state.selected_anime
+            st.markdown("## 🎬 Anime Details")
+            st.image(anime["images"]["jpg"]["image_url"])
+            st.write("⭐ Score:", anime.get("score"))
+            st.write("📺 Episodes:", anime.get("episodes"))
+            st.write("📖 Synopsis:", anime.get("synopsis"))
+            if st.button("⬅ Back"):
+                st.session_state.selected_anime = None
 
 # =========================
 # ⚔️ BATTLE SYSTEM (FIXED UI)

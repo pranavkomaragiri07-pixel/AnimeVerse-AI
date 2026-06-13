@@ -912,9 +912,6 @@ with tab4:
 # 🎭 QUIZ
 # =========================
 with tab5:
-
-    lang = st.session_state.lang
-    desc = explain_character(result, lang)
     # =========================
     # QUIZ QUESTIONS (MULTILINGUAL)
     # =========================

@@ -870,17 +870,14 @@ with tab4:
 
     if st.button(TEXT[lang]["generate_quote"]):
         st.success(generate_quote(theme))
-
 # =========================
-# 🎭 QUIZ
+# 🎭 QUIZ TAB
 # =========================
 with tab5:
 
     t = TEXT[st.session_state.lang]
 
-    # =========================
-    # QUIZ QUESTIONS
-    # =========================
+    st.subheader("🎭 Anime Personality Quiz")
 
     q1 = st.radio(
         t["motivation"],
@@ -948,30 +945,32 @@ with tab5:
         }[x]
     )
 
-    # =========================
-    # RESULT
-    # =========================
-
-    if st.button(t["result_btn"]):
+    if st.button(t["result_btn"], key="quiz_result"):
 
         result = get_character_match(
             q1, q2, q3, q4, q5, q6
+        )
+
+        description = explain_character(
+            result,
+            st.session_state.lang
         )
 
         st.markdown("## 🎴 Anime Personality Result")
 
         st.markdown(f"""
         <div style="
-            background-color:#111;
-            padding:20px;
-            border-radius:15px;
+            background:#111;
+            padding:30px;
+            border-radius:20px;
             text-align:center;
             color:white;
-            box-shadow:0px 0px 15px #ff4b4b;
+            box-shadow:0 0 25px #ff4b6e;
+            margin-top:20px;
         ">
-            <h2>🔥 {result}</h2>
-            <p style="font-size:16px; margin-top:10px;">
-                {explain_character(result, st.session_state.lang)}
+            <h1>🔥 {result}</h1>
+            <p style="font-size:20px;">
+                {description}
             </p>
         </div>
         """, unsafe_allow_html=True)

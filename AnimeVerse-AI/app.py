@@ -996,21 +996,21 @@ with tab5:
     st.session_state.lang
 )
 
-    st.markdown("## 🎴 Anime Personality Result")
-    st.markdown(f"""
-<div style="
-    background:#111;
-    padding:30px;
-    border-radius:20px;
-    text-align:center;
-    color:white;
-    box-shadow:0 0 25px #ff4b6e;
-    margin-top:20px;
-">
-    <h1>🔥 {result}</h1>
-    <p style="font-size:20px;">
-        {description}
-    </p>
-</div>
-""", unsafe_allow_html=True)
+        st.markdown("## 🎴 Anime Personality Result")
 
+        st.markdown(f"""
+        <div style="
+            background:#111;
+            padding:30px;
+            border-radius:20px;
+            text-align:center;
+            color:white;
+            box-shadow:0 0 25px #ff4b6e;
+            margin-top:20px;
+        ">
+            <h1>🔥 {result}</h1>
+            <p style="font-size:20px;">
+                {description}
+            </p>
+        </div>
+        """, unsafe_allow_html=True)

@@ -991,7 +991,10 @@ with tab5:
             q1, q2, q3, q4, q5, q6
         )
 
-        description = explain_character(result)
+        description = explain_character(
+    result,
+    st.session_state.lang
+)
 
         st.markdown("## 🎴 Anime Personality Result")
 

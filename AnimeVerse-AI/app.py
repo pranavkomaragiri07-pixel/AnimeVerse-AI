@@ -5,7 +5,7 @@ import streamlit as st
 import requests
 import random
 desc = explain_character(result, st.session_state.lang)
-     explanations = {
+explanations = {
         "English": {
             "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
             "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
@@ -50,8 +50,7 @@ desc = explain_character(result, st.session_state.lang)
             "Saitama": "シンプルで圧倒的な強さを持っています。"
         }
     }
-
-    return explanations[lang].get(result, "Unique personality")
+return explanations[lang].get(result, "Unique personality")
 
 TEXT = {
     "English": {

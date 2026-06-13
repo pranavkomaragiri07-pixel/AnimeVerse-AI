@@ -912,6 +912,8 @@ with tab4:
 # 🎭 QUIZ
 # =========================
 with tab5:
+    lang = st.session_state.lang
+    t = TEXT[lang]
     # =========================
     # QUIZ QUESTIONS (MULTILINGUAL)
     # =========================
@@ -961,6 +963,19 @@ with tab5:
     # =========================
     # RESULT BUTTON (FIXED KEY ERROR)
     # =========================
+    if st.button(t["result_btn"]):
+        result = get_character_match(q1, q2, q3, q4, q5, q6)
+        lang = st.session_state.lang
+        desc = explain_character(result, lang)
+        st.session_state.result = result
+        st.session_state.desc = desc
+        st.session_state.show_result = True
+    if st.session_state.get("show_result"):
+        st.success(f"🔥 You are: {st.session_state.result}")
+        st.info(st.session_state.desc)
+        if st.button("⬅ Back"):
+            st.session_state.show_result = False
+            st.rerun()
 
     if st.button(t["result_btn"]):
         result = get_character_match(q1, q2, q3, q4, q5, q6)

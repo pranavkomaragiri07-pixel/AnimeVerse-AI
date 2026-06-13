@@ -4,18 +4,58 @@ import os
 import streamlit as st
 import requests
 import random
-def explain_character(result):
+def explain_character(result, lang="English"):
+
     explanations = {
-        "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
-        "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
-        "Goku": "You love challenges and constantly push your limits.",
-        "Gojo Satoru": "You are confident, powerful, and think differently from others.",
-        "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
-        "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
-        "Eren Yeager": "You are driven by freedom and strong emotions.",
-        "Saitama": "You are simple, strong, and unmatched in power."
+        "English": {
+            "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
+            "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
+            "Goku": "You love challenges and constantly push your limits.",
+            "Gojo Satoru": "You are confident, powerful, and think differently from others.",
+            "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
+            "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
+            "Eren Yeager": "You are driven by freedom and strong emotions.",
+            "Saitama": "You are simple, strong, and unmatched in power."
+        },
+
+        "Hindi": {
+            "Naruto Uzumaki": "आप ऊर्जावान हैं, कभी हार नहीं मानते और अपने दोस्तों पर विश्वास करते हैं।",
+            "Monkey D. Luffy": "आप स्वतंत्रता को महत्व देते हैं और अपने दोस्तों की रक्षा करते हैं।",
+            "Goku": "आप चुनौतियों को पसंद करते हैं और अपनी सीमाओं को आगे बढ़ाते हैं।",
+            "Gojo Satoru": "आप आत्मविश्वासी और शक्तिशाली हैं।",
+            "Itachi Uchiha": "आप शांत, बुद्धिमान और त्यागी हैं।",
+            "Levi Ackerman": "आप अनुशासित और रणनीतिक हैं।",
+            "Eren Yeager": "आप स्वतंत्रता के लिए प्रेरित हैं।",
+            "Saitama": "आप सरल लेकिन बेहद शक्तिशाली हैं।"
+        },
+
+        "Telugu": {
+            "Naruto Uzumaki": "మీరు ఉత్సాహంగా ఉంటారు, ఎప్పుడూ లొంగిపోరు మరియు మీ స్నేహితులను నమ్ముతారు.",
+            "Monkey D. Luffy": "మీరు స్వేచ్ఛను ప్రేమిస్తారు మరియు మీ స్నేహితులను కాపాడుతారు.",
+            "Goku": "మీరు సవాళ్లను ఇష్టపడతారు మరియు మీ పరిమితులను దాటడానికి ప్రయత్నిస్తారు.",
+            "Gojo Satoru": "మీరు ఆత్మవిశ్వాసంతో మరియు శక్తివంతంగా ఉంటారు.",
+            "Itachi Uchiha": "మీరు ప్రశాంతంగా మరియు తెలివిగా ఉంటారు.",
+            "Levi Ackerman": "మీరు క్రమశిక్షణతో మరియు వ్యూహాత్మకంగా ఉంటారు.",
+            "Eren Yeager": "మీరు స్వేచ్ఛ కోసం పోరాడతారు.",
+            "Saitama": "మీరు సాదాసీదాగా కనిపించినా అత్యంత శక్తివంతులు."
+        },
+
+        "Japanese": {
+            "Naruto Uzumaki": "あなたは元気で、決して諦めず、仲間を信じます。",
+            "Monkey D. Luffy": "あなたは自由を大切にし、仲間を守ります。",
+            "Goku": "あなたは挑戦が大好きで、常に限界を超えようとします。",
+            "Gojo Satoru": "あなたは自信に満ちていて強力です。",
+            "Itachi Uchiha": "あなたは冷静で知的です。",
+            "Levi Ackerman": "あなたは規律正しく戦略的です。",
+            "Eren Yeager": "あなたは自由を求めています。",
+            "Saitama": "あなたはシンプルですが最強です。"
+        }
     }
-    return explanations.get(result, "You have a unique anime personality!")
+
+    return explanations.get(lang, explanations["English"]).get(
+        result,
+        "You have a unique anime personality!"
+    )
 
 TEXT = {
     "English": {

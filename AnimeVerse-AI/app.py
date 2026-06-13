@@ -799,8 +799,8 @@ with tab3:
        
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
-        t1 = st.text_area("Phantum Troupe")
-        t2 = st.text_area("Oración Seis")
+        t1 = st.text_area("Team Alpha")
+        t2 = st.text_area("Team Omega")
         if st.button(TEXT[lang]["start_battle"]) and t1 and t2:
             team_a_list = t1.split("\n")
             team_b_list = t2.split("\n")

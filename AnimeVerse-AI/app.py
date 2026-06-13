@@ -998,19 +998,22 @@ with tab5:
 
         st.markdown("## 🎴 Anime Personality Result")
 
-        st.markdown(f"""
-        <div style="
-            background:#111;
-            padding:30px;
-            border-radius:20px;
-            text-align:center;
-            color:white;
-            box-shadow:0 0 25px #ff4b6e;
-            margin-top:20px;
-        ">
-            <h1>🔥 {result}</h1>
-            <p style="font-size:20px;">
-                {description}
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+image_path = character_images.get(result, "")
+
+st.markdown(f"""
+<div style="
+    background:#111;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    color:white;
+    box-shadow:0 0 25px #ff4b6e;
+    margin-top:20px;
+">
+    <img src="{image_path}" width="220" style="border-radius:15px;margin-bottom:15px;">
+    <h1>🔥 {result}</h1>
+    <p style="font-size:20px;">
+        {description}
+    </p>
+</div>
+""", unsafe_allow_html=True)

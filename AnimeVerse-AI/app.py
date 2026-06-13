@@ -1013,5 +1013,4 @@ with tab5:
     </p>
 </div>
 """, unsafe_allow_html=True)
-</div>
-""", unsafe_allow_html=True)
+

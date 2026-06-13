@@ -859,93 +859,83 @@ with tab3:
 # =========================
 # ✨ QUOTES
 # =========================
-with tab4:
-
-    theme = st.selectbox({
-    "English": "Theme",
-    "Hindi": "विषय",
-    "Telugu": "థీమ్",
-    "Japanese": "テーマ"
-}[lang], ["Motivational", "Friendship", "Success", "Sad", "Funny"])
-
-    if st.button(TEXT[lang]["generate_quote"]):
-        st.success(generate_quote(theme))
-
-# =========================
-# 🎭 QUIZ
-# =========================
 with tab5:
 
     t = TEXT[st.session_state.lang]
 
     # =========================
-    # QUIZ QUESTIONS (MULTILINGUAL)
+    # FIXED QUIZ INPUT (BACKEND KEYS ONLY)
     # =========================
 
     q1 = st.radio(t["motivation"], [
-        t["options_power"],
-        t["options_friendship"],
-        t["options_freedom"],
-        t["options_knowledge"]
+        "power",
+        "friendship",
+        "freedom",
+        "knowledge"
     ])
 
     q2 = st.radio(t["fight_style"], [
-        t["style_headon"],
-        t["style_strategic"],
-        t["style_support"],
-        t["style_adapt"]
+        "headon",
+        "strategic",
+        "support",
+        "adapt"
     ])
 
     q3 = st.radio(t["trait"], [
-        t["trait_courage"],
-        t["trait_intelligence"],
-        t["trait_loyalty"],
-        t["trait_calmness"]
+        "courage",
+        "intelligence",
+        "loyalty",
+        "calmness"
     ])
 
     q4 = st.radio(t["role"], [
-        t["role_leader"],
-        t["role_support"],
-        t["role_lonely"],
-        t["role_strategist"]
+        "leader",
+        "support",
+        "loner",
+        "strategist"
     ])
 
     q5 = st.radio(t["weakness"], [
-        t["weak_anger"],
-        t["weak_trust"],
-        t["weak_overconfidence"],
-        t["weak_fear"]
+        "anger",
+        "trust",
+        "overconfidence",
+        "fear"
     ])
 
     q6 = st.radio(t["power_type"], [
-        t["power_physical"],
-        t["power_speed"],
-        t["power_magic"],
-        t["power_tactical"]
+        "physical",
+        "speed",
+        "magic",
+        "tactical"
     ])
 
     # =========================
-    # RESULT BUTTON (FIXED KEY ERROR)
+    # RESULT BUTTON
     # =========================
 
     if st.button(t["result_btn"]):
+
         result = get_character_match(q1, q2, q3, q4, q5, q6)
+        desc = explain_character(result)
+
+        # SAVE IN SESSION (for back button later if needed)
+        st.session_state.result = result
+        st.session_state.desc = desc
+        st.session_state.show_result = True
+
+    # =========================
+    # RESULT DISPLAY (NO HTML, SIMPLE STREAMLIT UI)
+    # =========================
+
+    if st.session_state.get("show_result"):
+
         st.markdown("## 🎴 Anime Personality Result")
-        st.markdown(f"""
-    <div style="
-        background-color:#111;
-        padding:20px;
-        border-radius:15px;
-        text-align:center;
-        color:white;
-        box-shadow:0px 0px 15px #ff4b4b;
-    ">
 
-    <h2>🔥 {result}</h2>
+        st.success(f"🔥 You are: {st.session_state.result}")
 
-    <p style="font-size:16px; margin-top:10px;">
-        {explain_character(result)}
-    </p>
+        st.info(st.session_state.desc)
 
-    </div>
-    """, unsafe_allow_html=True)
+        # BACK BUTTON
+        if st.button("⬅ Back"):
+            st.session_state.show_result = False
+            st.rerun()

@@ -863,79 +863,37 @@ with tab5:
 
     t = TEXT[st.session_state.lang]
 
-    # =========================
-    # FIXED QUIZ INPUT (BACKEND KEYS ONLY)
-    # =========================
+    # INPUTS (FIXED KEYS ONLY)
+    q1 = st.radio(t["motivation"], ["power","friendship","freedom","knowledge"])
 
-    q1 = st.radio(t["motivation"], [
-        "power",
-        "friendship",
-        "freedom",
-        "knowledge"
-    ])
+    q2 = st.radio(t["fight_style"], ["headon","strategic","support","adapt"])
 
-    q2 = st.radio(t["fight_style"], [
-        "headon",
-        "strategic",
-        "support",
-        "adapt"
-    ])
+    q3 = st.radio(t["trait"], ["courage","intelligence","loyalty","calmness"])
 
-    q3 = st.radio(t["trait"], [
-        "courage",
-        "intelligence",
-        "loyalty",
-        "calmness"
-    ])
+    q4 = st.radio(t["role"], ["leader","support","loner","strategist"])
 
-    q4 = st.radio(t["role"], [
-        "leader",
-        "support",
-        "loner",
-        "strategist"
-    ])
+    q5 = st.radio(t["weakness"], ["anger","trust","overconfidence","fear"])
 
-    q5 = st.radio(t["weakness"], [
-        "anger",
-        "trust",
-        "overconfidence",
-        "fear"
-    ])
+    q6 = st.radio(t["power_type"], ["physical","speed","magic","tactical"])
 
-    q6 = st.radio(t["power_type"], [
-        "physical",
-        "speed",
-        "magic",
-        "tactical"
-    ])
-
-    # =========================
-    # RESULT BUTTON
-    # =========================
-
+    # BUTTON
     if st.button(t["result_btn"]):
 
-        result = get_character_match(q1, q2, q3, q4, q5, q6)
+        result = get_character_match(q1,q2,q3,q4,q5,q6)
         desc = explain_character(result)
 
-        # SAVE IN SESSION (for back button later if needed)
         st.session_state.result = result
         st.session_state.desc = desc
         st.session_state.show_result = True
 
-    # =========================
-    # RESULT DISPLAY (NO HTML, SIMPLE STREAMLIT UI)
-    # =========================
-
-    if st.session_state.get("show_result"):
+    # POPUP (MUST BE INSIDE TAB)
+    if st.session_state.show_result:
 
         st.markdown("## 🎴 Anime Personality Result")
 
         st.success(f"🔥 You are: {st.session_state.result}")
-
         st.info(st.session_state.desc)
 
-        # BACK BUTTON
         if st.button("⬅ Back"):
             st.session_state.show_result = False
             st.rerun()

@@ -913,7 +913,7 @@ with tab4:
 # =========================
 with tab5:
 
-    
+    t = TEXT[st.session_state.lang]
 
     # =========================
     # QUIZ QUESTIONS (MULTILINGUAL)

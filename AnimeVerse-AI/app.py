@@ -4,7 +4,7 @@ import os
 import streamlit as st
 import requests
 import random
-def explain_character(result, lang="English"):
+desc = explain_character(result, st.session_state.lang):
 
     explanations = {
         "English": {

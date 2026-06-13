@@ -996,9 +996,8 @@ with tab5:
     st.session_state.lang
 )
 
-       st.markdown("## 🎴 Anime Personality Result")
-
-st.markdown(f"""
+    st.markdown("## 🎴 Anime Personality Result")
+    st.markdown(f"""
 <div style="
     background:#111;
     padding:30px;

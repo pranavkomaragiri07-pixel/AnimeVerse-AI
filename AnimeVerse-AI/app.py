@@ -913,10 +913,10 @@ with tab4:
 # =========================
 with tab5:
 
-    t = TEXT[st.session_state.lang]
+    desc = explain_character(result, st.session_state.lang)
 
     # =========================
-    # QUIZ QUESTIONS
+    # QUIZ QUESTIONS (MULTILINGUAL)
     # =========================
 
     q1 = st.radio(t["motivation"], [
@@ -962,34 +962,27 @@ with tab5:
     ])
 
     # =========================
-    # RESULT BUTTON
+    # RESULT BUTTON (FIXED KEY ERROR)
     # =========================
 
     if st.button(t["result_btn"]):
-
         result = get_character_match(q1, q2, q3, q4, q5, q6)
-        desc = explain_character(result)
-
-        st.session_state.result = result
-        st.session_state.desc = desc
-        st.session_state.show_popup = True
-
-    # =========================
-    # FULL SCREEN POPUP (STREAMLIT SAFE)
-    # =========================
-
-    if st.session_state.get("show_popup"):
-
-        st.markdown("---")
-
         st.markdown("## 🎴 Anime Personality Result")
+        st.markdown(f"""
+    <div style="
+        background-color:#111;
+        padding:20px;
+        border-radius:15px;
+        text-align:center;
+        color:white;
+        box-shadow:0px 0px 15px #ff4b4b;
+    ">
 
-        st.success(f"🔥 You are: {st.session_state.result}")
+    <h2>🔥 {result}</h2>
 
-        st.info(st.session_state.desc)
+    <p style="font-size:16px; margin-top:10px;">
+        {explain_character(result)}
+    </p>
 
-        st.markdown("---")
-
-        if st.button("⬅ Back"):
-            st.session_state.show_popup = False
-            st.rerun()
+    </div>
+    """, unsafe_allow_html=True)

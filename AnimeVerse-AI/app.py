@@ -4,55 +4,18 @@ import os
 import streamlit as st
 import requests
 import random
-def explain_character(result, lang):
-
+def explain_character(result):
     explanations = {
-        "English": {
-            "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
-            "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
-            "Goku": "You love challenges and constantly push your limits.",
-            "Gojo Satoru": "You are confident, powerful, and think differently from others.",
-            "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
-            "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
-            "Eren Yeager": "You are driven by freedom and strong emotions.",
-            "Saitama": "You are simple, strong, and unmatched in power."
-        },
-
-        "Hindi": {
-            "Naruto Uzumaki": "आप ऊर्जावान हैं और कभी हार नहीं मानते।",
-            "Monkey D. Luffy": "आप स्वतंत्रता को महत्व देते हैं।",
-            "Goku": "आप चुनौतियों से प्यार करते हैं।",
-            "Gojo Satoru": "आप आत्मविश्वासी और शक्तिशाली हैं।",
-            "Itachi Uchiha": "आप शांत और बुद्धिमान हैं।",
-            "Levi Ackerman": "आप अनुशासित और रणनीतिक हैं।",
-            "Eren Yeager": "आप स्वतंत्रता से प्रेरित हैं।",
-            "Saitama": "आप सरल लेकिन शक्तिशाली हैं।"
-        },
-
-        "Telugu": {
-            "Naruto Uzumaki": "మీరు ఉత్సాహంగా ఉంటారు మరియు ఎప్పుడూ లొంగరు.",
-            "Monkey D. Luffy": "మీరు స్వేచ్ఛను విలువ చేస్తారు.",
-            "Goku": "మీరు సవాళ్లను ఇష్టపడతారు.",
-            "Gojo Satoru": "మీరు ఆత్మవిశ్వాసంతో ఉంటారు.",
-            "Itachi Uchiha": "మీరు ప్రశాంతంగా ఉంటారు.",
-            "Levi Ackerman": "మీరు వ్యూహాత్మకంగా ఉంటారు.",
-            "Eren Yeager": "మీరు స్వేచ్ఛతో నడుస్తారు.",
-            "Saitama": "మీరు అత్యంత శక్తివంతమైన వ్యక్తి."
-        },
-
-        "Japanese": {
-            "Naruto Uzumaki": "あなたはエネルギッシュで諦めません。",
-            "Monkey D. Luffy": "自由を大切にします。",
-            "Goku": "挑戦を楽しみます。",
-            "Gojo Satoru": "自信があります。",
-            "Itachi Uchiha": "冷静で知的です。",
-            "Levi Ackerman": "戦略的です。",
-            "Eren Yeager": "自由に突き動かされます。",
-            "Saitama": "圧倒的に強いです。"
-        }
+        "Naruto Uzumaki": "You are energetic, never give up, and believe in your friends.",
+        "Monkey D. Luffy": "You value freedom and protect your friends at any cost.",
+        "Goku": "You love challenges and constantly push your limits.",
+        "Gojo Satoru": "You are confident, powerful, and think differently from others.",
+        "Itachi Uchiha": "You are calm, intelligent, and sacrifice for others.",
+        "Levi Ackerman": "You are disciplined, strong, and highly strategic.",
+        "Eren Yeager": "You are driven by freedom and strong emotions.",
+        "Saitama": "You are simple, strong, and unmatched in power."
     }
-
-    return explanations[lang].get(result, "Unique personality")
+    return explanations.get(result, "You have a unique anime personality!")
 
 TEXT = {
     "English": {
@@ -836,8 +799,8 @@ with tab3:
        
     # ---------------- 4v4 ----------------
     elif mode == "4v4 Battle":
-        t1 = st.text_area("Team Alpha")
-        t2 = st.text_area("Team Omega")
+        t1 = st.text_area("Phantum Troupe")
+        t2 = st.text_area("Oración Seis")
         if st.button(TEXT[lang]["start_battle"]) and t1 and t2:
             team_a_list = t1.split("\n")
             team_b_list = t2.split("\n")
@@ -912,8 +875,9 @@ with tab4:
 # 🎭 QUIZ
 # =========================
 with tab5:
-    lang = st.session_state.lang
-    t = TEXT[lang]
+
+    t = TEXT[st.session_state.lang]
+
     # =========================
     # QUIZ QUESTIONS (MULTILINGUAL)
     # =========================
@@ -963,24 +927,9 @@ with tab5:
     # =========================
     # RESULT BUTTON (FIXED KEY ERROR)
     # =========================
-    if st.button(t["result_btn"]):
-        result = get_character_match(q1, q2, q3, q4, q5, q6)
-        lang = st.session_state.lang
-        desc = explain_character(result, lang)
-        st.session_state.result = result
-        st.session_state.desc = desc
-        st.session_state.show_result = True
-    if st.session_state.get("show_result"):
-        st.success(f"🔥 You are: {st.session_state.result}")
-        st.info(st.session_state.desc)
-        if st.button("⬅ Back"):
-            st.session_state.show_result = False
-            st.rerun()
 
     if st.button(t["result_btn"]):
         result = get_character_match(q1, q2, q3, q4, q5, q6)
-        lang = st.session_state.lang
-        desc = explain_character(result, lang)
         st.markdown("## 🎴 Anime Personality Result")
         st.markdown(f"""
     <div style="

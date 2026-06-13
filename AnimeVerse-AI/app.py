@@ -879,73 +879,99 @@ with tab5:
     t = TEXT[st.session_state.lang]
 
     # =========================
-    # QUIZ QUESTIONS (MULTILINGUAL)
+    # QUIZ QUESTIONS
     # =========================
 
-    q1 = st.radio(t["motivation"], [
-        t["options_power"],
-        t["options_friendship"],
-        t["options_freedom"],
-        t["options_knowledge"]
-    ])
+    q1 = st.radio(
+        t["motivation"],
+        ["power", "friendship", "freedom", "knowledge"],
+        format_func=lambda x: {
+            "power": t["options_power"],
+            "friendship": t["options_friendship"],
+            "freedom": t["options_freedom"],
+            "knowledge": t["options_knowledge"]
+        }[x]
+    )
 
-    q2 = st.radio(t["fight_style"], [
-        t["style_headon"],
-        t["style_strategic"],
-        t["style_support"],
-        t["style_adapt"]
-    ])
+    q2 = st.radio(
+        t["fight_style"],
+        ["headon", "strategic", "support", "adapt"],
+        format_func=lambda x: {
+            "headon": t["style_headon"],
+            "strategic": t["style_strategic"],
+            "support": t["style_support"],
+            "adapt": t["style_adapt"]
+        }[x]
+    )
 
-    q3 = st.radio(t["trait"], [
-        t["trait_courage"],
-        t["trait_intelligence"],
-        t["trait_loyalty"],
-        t["trait_calmness"]
-    ])
+    q3 = st.radio(
+        t["trait"],
+        ["courage", "intelligence", "loyalty", "calmness"],
+        format_func=lambda x: {
+            "courage": t["trait_courage"],
+            "intelligence": t["trait_intelligence"],
+            "loyalty": t["trait_loyalty"],
+            "calmness": t["trait_calmness"]
+        }[x]
+    )
 
-    q4 = st.radio(t["role"], [
-        t["role_leader"],
-        t["role_support"],
-        t["role_lonely"],
-        t["role_strategist"]
-    ])
+    q4 = st.radio(
+        t["role"],
+        ["leader", "support", "lonely", "strategist"],
+        format_func=lambda x: {
+            "leader": t["role_leader"],
+            "support": t["role_support"],
+            "lonely": t["role_lonely"],
+            "strategist": t["role_strategist"]
+        }[x]
+    )
 
-    q5 = st.radio(t["weakness"], [
-        t["weak_anger"],
-        t["weak_trust"],
-        t["weak_overconfidence"],
-        t["weak_fear"]
-    ])
+    q5 = st.radio(
+        t["weakness"],
+        ["anger", "trust", "overconfidence", "fear"],
+        format_func=lambda x: {
+            "anger": t["weak_anger"],
+            "trust": t["weak_trust"],
+            "overconfidence": t["weak_overconfidence"],
+            "fear": t["weak_fear"]
+        }[x]
+    )
 
-    q6 = st.radio(t["power_type"], [
-        t["power_physical"],
-        t["power_speed"],
-        t["power_magic"],
-        t["power_tactical"]
-    ])
+    q6 = st.radio(
+        t["power_type"],
+        ["physical", "speed", "magic", "tactical"],
+        format_func=lambda x: {
+            "physical": t["power_physical"],
+            "speed": t["power_speed"],
+            "magic": t["power_magic"],
+            "tactical": t["power_tactical"]
+        }[x]
+    )
 
     # =========================
-    # RESULT BUTTON (FIXED KEY ERROR)
+    # RESULT
     # =========================
 
     if st.button(t["result_btn"]):
-        result = get_character_match(q1, q2, q3, q4, q5, q6)
+
+        result = get_character_match(
+            q1, q2, q3, q4, q5, q6
+        )
+
         st.markdown("## 🎴 Anime Personality Result")
+
         st.markdown(f"""
-    <div style="
-        background-color:#111;
-        padding:20px;
-        border-radius:15px;
-        text-align:center;
-        color:white;
-        box-shadow:0px 0px 15px #ff4b4b;
-    ">
-
-    <h2>🔥 {result}</h2>
-
-    <p style="font-size:16px; margin-top:10px;">
-        {explain_character(result)}
-    </p>
-
-    </div>
-    """, unsafe_allow_html=True)
+        <div style="
+            background-color:#111;
+            padding:20px;
+            border-radius:15px;
+            text-align:center;
+            color:white;
+            box-shadow:0px 0px 15px #ff4b4b;
+        ">
+            <h2>🔥 {result}</h2>
+            <p style="font-size:16px; margin-top:10px;">
+                {explain_character(result, st.session_state.lang)}
+            </p>
+        </div>
+        """, unsafe_allow_html=True)

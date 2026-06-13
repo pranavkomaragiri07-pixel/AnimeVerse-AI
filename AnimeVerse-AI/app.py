@@ -4,7 +4,7 @@ import os
 import streamlit as st
 import requests
 import random
-def explain_character(result, st.session_state.lang):
+def explain_character(result, lang):
 
     explanations = {
         "English": {
@@ -913,8 +913,8 @@ with tab4:
 # =========================
 with tab5:
 
-    t = TEXT[st.session_state.lang]
-
+    lang = st.session_state.lang
+    desc = explain_character(result, lang)
     # =========================
     # QUIZ QUESTIONS (MULTILINGUAL)
     # =========================

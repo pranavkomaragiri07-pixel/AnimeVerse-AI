@@ -859,41 +859,93 @@ with tab3:
 # =========================
 # ✨ QUOTES
 # =========================
+with tab4:
+
+    theme = st.selectbox({
+    "English": "Theme",
+    "Hindi": "विषय",
+    "Telugu": "థీమ్",
+    "Japanese": "テーマ"
+}[lang], ["Motivational", "Friendship", "Success", "Sad", "Funny"])
+
+    if st.button(TEXT[lang]["generate_quote"]):
+        st.success(generate_quote(theme))
+
+# =========================
+# 🎭 QUIZ
+# =========================
 with tab5:
 
     t = TEXT[st.session_state.lang]
 
-    # INPUTS (FIXED KEYS ONLY)
-    q1 = st.radio(t["motivation"], ["power","friendship","freedom","knowledge"])
+    # =========================
+    # QUIZ QUESTIONS (MULTILINGUAL)
+    # =========================
 
-    q2 = st.radio(t["fight_style"], ["headon","strategic","support","adapt"])
+    q1 = st.radio(t["motivation"], [
+        t["options_power"],
+        t["options_friendship"],
+        t["options_freedom"],
+        t["options_knowledge"]
+    ])
 
-    q3 = st.radio(t["trait"], ["courage","intelligence","loyalty","calmness"])
+    q2 = st.radio(t["fight_style"], [
+        t["style_headon"],
+        t["style_strategic"],
+        t["style_support"],
+        t["style_adapt"]
+    ])
 
-    q4 = st.radio(t["role"], ["leader","support","loner","strategist"])
+    q3 = st.radio(t["trait"], [
+        t["trait_courage"],
+        t["trait_intelligence"],
+        t["trait_loyalty"],
+        t["trait_calmness"]
+    ])
 
-    q5 = st.radio(t["weakness"], ["anger","trust","overconfidence","fear"])
+    q4 = st.radio(t["role"], [
+        t["role_leader"],
+        t["role_support"],
+        t["role_lonely"],
+        t["role_strategist"]
+    ])
 
-    q6 = st.radio(t["power_type"], ["physical","speed","magic","tactical"])
+    q5 = st.radio(t["weakness"], [
+        t["weak_anger"],
+        t["weak_trust"],
+        t["weak_overconfidence"],
+        t["weak_fear"]
+    ])
 
-    # BUTTON
+    q6 = st.radio(t["power_type"], [
+        t["power_physical"],
+        t["power_speed"],
+        t["power_magic"],
+        t["power_tactical"]
+    ])
+
+    # =========================
+    # RESULT BUTTON (FIXED KEY ERROR)
+    # =========================
+
     if st.button(t["result_btn"]):
-
-        result = get_character_match(q1,q2,q3,q4,q5,q6)
-        desc = explain_character(result)
-
-        st.session_state.result = result
-        st.session_state.desc = desc
-        st.session_state.show_result = True
-
-    # POPUP (MUST BE INSIDE TAB)
-    if st.session_state.show_result:
-
+        result = get_character_match(q1, q2, q3, q4, q5, q6)
         st.markdown("## 🎴 Anime Personality Result")
+        st.markdown(f"""
+    <div style="
+        background-color:#111;
+        padding:20px;
+        border-radius:15px;
+        text-align:center;
+        color:white;
+        box-shadow:0px 0px 15px #ff4b4b;
+    ">
 
-        st.success(f"🔥 You are: {st.session_state.result}")
-        st.info(st.session_state.desc)
+    <h2>🔥 {result}</h2>
 
-        if st.button("⬅ Back"):
-            st.session_state.show_result = False
-            st.rerun()
+    <p style="font-size:16px; margin-top:10px;">
+        {explain_character(result)}
+    </p>
+
+    </div>
+    """, unsafe_allow_html=True)

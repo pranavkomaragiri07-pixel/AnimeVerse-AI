@@ -1,9 +1,10 @@
 #APP.PY
-import time
+
 import os
 import streamlit as st
 import requests
 import random
+import time
 def explain_character(result, lang="English"):
 
     explanations = {

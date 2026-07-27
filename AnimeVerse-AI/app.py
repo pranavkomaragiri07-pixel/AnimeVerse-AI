@@ -546,31 +546,133 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 ])
 
 lang = st.session_state.lang
+
 with tab1:
+
     st.header(TEXT[lang]["search"])
-    name = st.text_input(TEXT[lang]["enter"])
 
-    if st.button(TEXT[lang]["search"]) and name:
+    name = st.text_input(
+        TEXT[lang]["enter"]
+    )
 
-        url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
+
+    if st.button(
+        TEXT[lang]["search"],
+        key="search_anime"
+    ) and name:
+
 
         try:
-            res = requests.get(url).json()
-            data = res.get("data", [])
 
-            if data:
-                anime = data[0]
+            url = "https://api.jikan.moe/v4/anime"
 
-                st.success(anime["title"])
-                st.image(anime["images"]["jpg"]["image_url"])   # ✅ THIS IS CORRECT PLACE
-                st.write(TEXT[lang]["rating"], anime.get("score", "N/A"))
-                st.write(TEXT[lang]["episodes"], anime.get("episodes", "N/A"))
-                st.write(TEXT[lang]["synopsis"], anime.get("synopsis", "N/A"))
+            params = {
+                "q": name,
+                "limit": 1
+            }
+
+
+            response = requests.get(
+                url,
+                params=params,
+                timeout=15
+            )
+
+
+            if response.status_code == 200:
+
+                result = response.json()
+
+                data = result.get(
+                    "data",
+                    []
+                )
+
+
+                if data:
+
+                    anime = data[0]
+
+
+                    st.success(
+                        anime.get("title")
+                    )
+
+
+                    image = anime["images"]["jpg"].get(
+                        "large_image_url"
+                    )
+
+
+                    if image:
+                        st.image(
+                            image,
+                            width=300
+                        )
+
+
+                    st.write(
+                        "⭐ Rating:",
+                        anime.get("score", "N/A")
+                    )
+
+
+                    st.write(
+                        "🎬 Episodes:",
+                        anime.get("episodes", "N/A")
+                    )
+
+
+                    genres = [
+                        g["name"]
+                        for g in anime.get(
+                            "genres",
+                            []
+                        )
+                    ]
+
+
+                    st.write(
+                        "🎭 Genres:",
+                        ", ".join(genres)
+                    )
+
+
+                    st.write(
+                        "📖 Synopsis:",
+                        anime.get(
+                            "synopsis",
+                            "No synopsis available"
+                        )
+                    )
+
+
+                else:
+
+                    st.error(
+                        "No anime found"
+                    )
+
+
+            elif response.status_code == 429:
+
+                st.warning(
+                    "API limit reached. Wait few seconds and try again."
+                )
+
+
             else:
-                st.error({"English": "No anime found", "Hindi": "कोई एनीमे नहीं मिला", "Telugu": "ఏ అనిమే కనబడలేదు", "Japanese": "アニメが見つかりません"}[lang])
 
-        except:
-            st.error("Failed to fetch anime data.")
+                st.error(
+                    f"API Error: {response.status_code}"
+                )
+
+
+        except Exception as e:
+
+            st.error(
+                f"Error: {e}"
+            )
 
 lang = st.session_state.lang
 with tab2:

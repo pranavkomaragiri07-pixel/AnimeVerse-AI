@@ -677,7 +677,6 @@ with tab1:
 lang = st.session_state.lang
 
 with tab2:
-with tab2:
 
     # =========================
     # SESSION STATE INIT

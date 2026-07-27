@@ -547,6 +547,10 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 
 lang = st.session_state.lang
 
+# =========================
+# 🔍 ANIME SEARCH
+# =========================
+
 with tab1:
 
     st.header(TEXT[lang]["search"])
@@ -555,32 +559,29 @@ with tab1:
         TEXT[lang]["enter"]
     )
 
-
     if st.button(
         TEXT[lang]["search"],
         key="search_anime"
     ) and name:
 
-
         try:
 
             url = "https://api.jikan.moe/v4/anime"
 
-           params = {
-    "q": name.strip(),
-    "limit": 1,
-    "sfw": True
-}
+            params = {
+                "q": name.strip(),
+                "limit": 1,
+                "sfw": True
+            }
 
-
-          response = requests.get(
-    url,
-    params=params,
-    headers={
-        "User-Agent": "AnimeVerse-AI"
-    },
-    timeout=30
-)
+            response = requests.get(
+                url,
+                params=params,
+                headers={
+                    "User-Agent": "AnimeVerse-AI"
+                },
+                timeout=30
+            )
 
 
             if response.status_code == 200:
@@ -596,7 +597,6 @@ with tab1:
                 if data:
 
                     anime = data[0]
-
 
                     st.success(
                         anime.get("title")
@@ -661,26 +661,22 @@ with tab1:
             elif response.status_code == 429:
 
                 st.warning(
-                    "API limit reached. Wait few seconds and try again."
+                    "Too many requests. Wait a few seconds."
+                )
+
+
+            elif response.status_code == 504:
+
+                st.warning(
+                    "Jikan API timeout. Try again."
                 )
 
 
             else:
 
-    if response.status_code == 504:
-        st.warning(
-            "Jikan API is slow right now. Please click Search again."
-        )
-
-    elif response.status_code == 429:
-        st.warning(
-            "Too many requests. Wait 10 seconds."
-        )
-
-    else:
-        st.error(
-            f"API Error: {response.status_code}"
-        )
+                st.error(
+                    f"API Error: {response.status_code}"
+                )
 
 
         except Exception as e:
@@ -688,8 +684,6 @@ with tab1:
             st.error(
                 f"Error: {e}"
             )
-
-lang = st.session_state.lang
 with tab2:
 
     # =========================

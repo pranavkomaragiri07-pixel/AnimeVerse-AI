@@ -565,104 +565,52 @@ with tab1:
         key="search_anime"
     ) and name:
 
-        try:
+                try:
 
-            url = "https://api.jikan.moe/v4/anime"
-
-            params = {
-                "q": name,
-                "limit": 1
-            }
-
-            time.sleep(1)
+            url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
 
             response = requests.get(
                 url,
-                params=params,
                 headers={
-                    "User-Agent": "AnimeVerse-AI"
+                    "User-Agent": "Mozilla/5.0"
                 },
-                timeout=15
+                timeout=60
             )
-
 
             if response.status_code == 200:
 
-                result = response.json()
-
-                data = result.get("data", [])
-
+                data = response.json().get("data", [])
 
                 if data:
 
                     anime = data[0]
 
-                    st.success(
-                        anime.get("title")
+                    st.success(anime["title"])
+
+                    st.image(
+                        anime["images"]["jpg"]["large_image_url"],
+                        width=300
                     )
-
-
-                    image = anime.get(
-                        "images",
-                        {}
-                    ).get(
-                        "jpg",
-                        {}
-                    ).get(
-                        "large_image_url"
-                    )
-
-
-                    if image:
-                        st.image(
-                            image,
-                            width=300
-                        )
-
 
                     st.write(
                         "⭐ Rating:",
-                        anime.get(
-                            "score",
-                            "N/A"
-                        )
+                        anime.get("score", "N/A")
                     )
-
 
                     st.write(
                         "🎬 Episodes:",
-                        anime.get(
-                            "episodes",
-                            "N/A"
-                        )
+                        anime.get("episodes", "N/A")
                     )
-
 
                     st.write(
                         "📖 Synopsis:",
-                        anime.get(
-                            "synopsis",
-                            "No synopsis available"
-                        )
+                        anime.get("synopsis", "No synopsis")
                     )
-
 
                 else:
-
-                    st.error(
-                        "No anime found"
-                    )
-
-
-            elif response.status_code == 429:
-
-                st.warning(
-                    "API limit reached. Wait few seconds and try again."
-                )
-
+                    st.error("No anime found")
 
             else:
-
                 st.error(
                     f"API Error: {response.status_code}"
                 )
@@ -671,7 +619,7 @@ with tab1:
         except requests.exceptions.Timeout:
 
             st.warning(
-                "Jikan API timeout. Try again."
+                "Jikan server timeout. Try again after some time."
             )
 
 
@@ -680,13 +628,6 @@ with tab1:
             st.error(
                 f"Error: {e}"
             )
-
-
-# =========================
-# NEXT TAB
-# =========================
-
-lang = st.session_state.lang
 
 with tab2:
 

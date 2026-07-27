@@ -574,16 +574,15 @@ with tab1:
                 "limit": 1
             }
 
-            time.sleep(2)
+            time.sleep(1)
 
-            response = requests.get(
-                url,
-                params=params,
-                headers={
-                    "User-Agent": "Mozilla/5.0 AnimeVerse-AI"
-                },
-                timeout=30
-            )
+response = requests.get(
+    f"https://api.jikan.moe/v4/anime?q={name}&limit=1",
+    headers={
+        "User-Agent": "AnimeVerse-AI"
+    },
+    timeout=10
+)
 
             if response.status_code == 200:
 

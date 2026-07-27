@@ -1401,14 +1401,12 @@ with tab2:
     # =========================
     # SESSION STATE INIT
     # =========================
+
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
     if "step" not in st.session_state:
         st.session_state.step = "chat"
-
-    if "genre" not in st.session_state:
-        st.session_state.genre = None
 
     if "anime_list" not in st.session_state:
         st.session_state.anime_list = []
@@ -1419,9 +1417,11 @@ with tab2:
     if "selected_anime" not in st.session_state:
         st.session_state.selected_anime = None
 
+
     # =========================
-    # AI BRAIN
+    # AI CHAT
     # =========================
+
     def ai_response(msg):
 
         msg = msg.lower()
@@ -1435,164 +1435,350 @@ with tab2:
 
         return TEXT[lang]["chat_default"]
 
+
     # =========================
     # CHAT DISPLAY
     # =========================
+
     for role, text in st.session_state.messages:
+
         if role == "user":
             st.markdown(f"🧑 You: {text}")
+
         else:
             st.markdown(f"🤖 AI: {text}")
 
-    # =========================
-    # CHAT INPUT (ALWAYS ACTIVE)
-    # =========================
-    user_input = st.text_input(TEXT[lang]["chat"], placeholder=TEXT[lang]["chat"], key="chat_input")
 
-    if st.button(TEXT[lang]["send"]) and user_input:
-
-        st.session_state.messages.append(("user", user_input))
-        reply = ai_response(user_input)
-        st.session_state.messages.append(("ai", reply))
-        st.rerun()
-
-    # =========================
-    # GENRE MAP
-    # =========================
-    GENRES = {
-        "action": 1,
-        "adventure": 2,
-        "comedy": 4,
-        "drama": 8,
-        "fantasy": 10,
-        "horror": 14,
-        "romance": 22,
-        "sci-fi": 24
-    }
-
-    # =========================
-    # GENRE INPUT BAR (DYNAMIC)
-    # =========================
-    if st.session_state.step == "genre_input":
-
-        genre = st.text_input(TEXT[lang]["genre"] + " (Action, Romance, Fantasy...)")
-
-        if st.button(TEXT[lang]["load"]) and genre:
-
-    query = """
-    query ($genre: String) {
-        Page(page: 1, perPage: 25) {
-            media(
-                genre: $genre,
-                type: ANIME,
-                sort: POPULARITY_DESC
-            ) {
-                id
-                title {
-                    romaji
-                    english
-                }
-                coverImage {
-                    large
-                }
-                averageScore
-                episodes
-                description
-            }
-        }
-    }
-    """
-
-    variables = {
-        "genre": genre.capitalize()
-    }
-
-    response = requests.post(
-        "https://graphql.anilist.co",
-        json={
-            "query": query,
-            "variables": variables
-        },
-        timeout=20
+    user_input = st.text_input(
+        TEXT[lang]["chat"],
+        placeholder=TEXT[lang]["chat"],
+        key="chat_input"
     )
 
 
-    if response.status_code == 200:
+    if st.button(TEXT[lang]["send"]) and user_input:
 
-        result = response.json()
+        st.session_state.messages.append(
+            ("user", user_input)
+        )
 
-        all_anime = result["data"]["Page"]["media"]
+        reply = ai_response(user_input)
 
-        st.session_state.anime_list = all_anime
-        st.session_state.step = "show_anime"
-        st.session_state.page = 1
+        st.session_state.messages.append(
+            ("ai", reply)
+        )
 
         st.rerun()
 
-    else:
 
-        st.error(
-            f"AniList Error: {response.status_code}"
+
+    # =========================
+    # GENRE SEARCH
+    # =========================
+
+    if st.session_state.step == "genre_input":
+
+        genre = st.text_input(
+            TEXT[lang]["genre"] +
+            " (Action, Romance, Fantasy...)"
         )
 
+
+        if st.button(TEXT[lang]["load"]) and genre:
+
+
+            query = """
+
+            query ($genre: String, $page: Int) {
+
+                Page(
+                    page: $page,
+                    perPage: 25
+                ) {
+
+                    media(
+                        genre: $genre,
+                        type: ANIME,
+                        sort: POPULARITY_DESC
+                    ) {
+
+                        id
+
+                        title {
+                            romaji
+                            english
+                        }
+
+                        coverImage {
+                            large
+                        }
+
+                        averageScore
+
+                        episodes
+
+                        description
+
+                    }
+                }
+            }
+
+            """
+
+
+            variables = {
+
+                "genre": genre.capitalize(),
+
+                "page": st.session_state.page
+
+            }
+
+
+            try:
+
+                response = requests.post(
+
+                    "https://graphql.anilist.co",
+
+                    json={
+
+                        "query": query,
+
+                        "variables": variables
+
+                    },
+
+                    timeout=20
+
+                )
+
+
+                if response.status_code == 200:
+
+
+                    result = response.json()
+
+
+                    all_anime = (
+                        result
+                        ["data"]
+                        ["Page"]
+                        ["media"]
+                    )
+
+
+                    if all_anime:
+
+
+                        st.session_state.anime_list = all_anime
+
+                        st.session_state.step = "show_anime"
+
+                        st.rerun()
+
+
+                    else:
+
+                        st.error(
+                            "No anime found"
+                        )
+
+
+                else:
+
+                    st.error(
+                        f"AniList Error: {response.status_code}"
+                    )
+
+
+            except Exception as e:
+
+                st.error(
+                    f"Error: {e}"
+                )
+
+
+
     # =========================
-    # SHOW ANIME GRID (PAGINATION)
+    # SHOW ANIME GRID
     # =========================
+
     if st.session_state.step == "show_anime":
 
-        per_page = 25
-        start = (st.session_state.page - 1) * per_page
-        end = start + per_page
 
-        page_data = st.session_state.anime_list[start:end]
+        st.markdown(
+            "## 📺 Anime List"
+        )
 
-        st.markdown("## 📺 Anime List")
 
         cols = st.columns(5)
 
-        for i, anime in enumerate(page_data):
+
+        for i, anime in enumerate(
+            st.session_state.anime_list
+        ):
+
 
             with cols[i % 5]:
 
-                st.image(anime["coverImage"]["large"],width=150)
-                title = anime["title"]["english"] or anime["title"]["romaji"]
-                if st.button(title, key=anime["id"]):
+
+                st.image(
+
+                    anime["coverImage"]["large"],
+
+                    width=150
+
+                )
+
+
+                title = (
+
+                    anime["title"]["english"]
+
+                    or
+
+                    anime["title"]["romaji"]
+
+                )
+
+
+                if st.button(
+
+                    title,
+
+                    key=anime["id"]
+
+                ):
+
+
                     st.session_state.selected_anime = anime
+
                     st.session_state.step = "details"
+
                     st.rerun()
 
-        #pagination
-        TOTAL_PAGES = 4
+
+
+        # PAGINATION
+
         c1, c2, c3 = st.columns(3)
+
+
         with c1:
+
             if st.session_state.page > 1:
-                if st.button(TEXT[lang]["prev"]):
+
+                if st.button(
+                    TEXT[lang]["prev"]
+                ):
+
                     st.session_state.page -= 1
+
+                    st.session_state.step = "genre_input"
+
                     st.rerun()
+
+
+
         with c2:
-            st.markdown(f"📄 Page {st.session_state.page} / {TOTAL_PAGES}")
+
+            st.write(
+                f"📄 Page {st.session_state.page}"
+            )
+
+
+
         with c3:
-            if st.session_state.page < TOTAL_PAGES:
-                if st.button(TEXT[lang]["next"]):
-                    st.session_state.page += 1
-                    st.rerun()
+
+            if st.button(
+                TEXT[lang]["next"]
+            ):
+
+                st.session_state.page += 1
+
+                st.session_state.step = "genre_input"
+
+                st.rerun()
+
+
+
     # =========================
-    # ANIME DETAILS PAGE
+    # ANIME DETAILS
     # =========================
+
+
     if st.session_state.step == "details":
+
 
         a = st.session_state.selected_anime
 
-        st.markdown({"English": "## 🎬 Anime Details", "Hindi": "## 🎬 एनीमे विवरण", "Telugu": "## 🎬 అనిమే వివరాలు", "Japanese": "## 🎬 アニメ詳細"}[lang])
 
-        st.image(a["images"]["jpg"]["image_url"], width=250)
+        title = (
 
-        st.write("⭐ Score:", a.get("score"))
-        st.write("🎬 Episodes:", a.get("episodes"))
-        st.write("📖 Synopsis:", a.get("synopsis"))
+            a["title"]["english"]
 
-        if st.button(TEXT[lang]["back"]):
+            or
+
+            a["title"]["romaji"]
+
+        )
+
+
+        st.header(title)
+
+
+        st.image(
+
+            a["coverImage"]["large"],
+
+            width=250
+
+        )
+
+
+        st.write(
+
+            "⭐ Score:",
+
+            a.get(
+                "averageScore",
+                "N/A"
+            )
+
+        )
+
+
+        st.write(
+
+            "🎬 Episodes:",
+
+            a.get(
+                "episodes",
+                "N/A"
+            )
+
+        )
+
+
+        st.write(
+
+            "📖 Synopsis:",
+
+            a.get(
+                "description",
+                "No synopsis available"
+            )
+
+        )
+
+
+        if st.button(
+            TEXT[lang]["back"]
+        ):
+
             st.session_state.step = "show_anime"
+
             st.rerun()
 # =========================
 # ⚔️ BATTLE SYSTEM (FIXED UI)

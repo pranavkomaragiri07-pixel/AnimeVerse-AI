@@ -615,8 +615,16 @@ with tab1:
         except requests.exceptions.Timeout:
             st.warning("Jikan API timeout. Try again.")
 
-        except Exception as e:
-            st.error(f"Error: {e}")with tab2:
+               except Exception as e:
+
+            st.error(
+                f"Error: {e}"
+            )
+
+
+lang = st.session_state.lang
+
+with tab2:
 
     # =========================
     # SESSION STATE INIT

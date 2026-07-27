@@ -549,7 +549,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 lang = st.session_state.lang
 
 # =========================
-# 🔍 ANIME SEARCH
+# 🔍 ANIME SEARCH (AniList GraphQL)
 # =========================
 
 with tab1:
@@ -565,61 +565,130 @@ with tab1:
         key="search_anime"
     ) and name:
 
-                try:
+        try:
 
-            url = f"https://api.jikan.moe/v4/anime?q={name}&limit=1"
+            query = """
+            query ($search: String) {
+                Media(search: $search, type: ANIME) {
+                    title {
+                        romaji
+                        english
+                        native
+                    }
+                    coverImage {
+                        large
+                    }
+                    averageScore
+                    episodes
+                    genres
+                    description
+                }
+            }
+            """
 
-            response = requests.get(
-                url,
-                headers={
-                    "User-Agent": "Mozilla/5.0"
+            variables = {
+                "search": name
+            }
+
+            response = requests.post(
+                "https://graphql.anilist.co",
+                json={
+                    "query": query,
+                    "variables": variables
                 },
-                timeout=60
+                timeout=20
             )
+
 
             if response.status_code == 200:
 
-                data = response.json().get("data", [])
+                data = response.json()
 
-                if data:
+                anime = data["data"]["Media"]
 
-                    anime = data[0]
 
-                    st.success(anime["title"])
+                if anime:
 
-                    st.image(
-                        anime["images"]["jpg"]["large_image_url"],
-                        width=300
+                    title = (
+                        anime["title"]["english"]
+                        or anime["title"]["romaji"]
                     )
+
+
+                    st.success(title)
+
+
+                    if anime["coverImage"]["large"]:
+
+                        st.image(
+                            anime["coverImage"]["large"],
+                            width=300
+                        )
+
 
                     st.write(
                         "⭐ Rating:",
-                        anime.get("score", "N/A")
+                        anime.get(
+                            "averageScore",
+                            "N/A"
+                        )
                     )
+
 
                     st.write(
                         "🎬 Episodes:",
-                        anime.get("episodes", "N/A")
+                        anime.get(
+                            "episodes",
+                            "N/A"
+                        )
                     )
+
+
+                    st.write(
+                        "🎭 Genres:",
+                        ", ".join(
+                            anime.get(
+                                "genres",
+                                []
+                            )
+                        )
+                    )
+
+
+                    description = anime.get(
+                        "description"
+                    )
+
+                    if description:
+                        description = description.replace(
+                            "<br>",
+                            "\n"
+                        )
 
                     st.write(
                         "📖 Synopsis:",
-                        anime.get("synopsis", "No synopsis")
+                        description or "No synopsis available"
                     )
 
+
                 else:
-                    st.error("No anime found")
+
+                    st.error(
+                        "No anime found"
+                    )
+
 
             else:
+
                 st.error(
-                    f"API Error: {response.status_code}"
+                    f"AniList API Error: {response.status_code}"
                 )
 
 
         except requests.exceptions.Timeout:
 
             st.warning(
-                "Jikan server timeout. Try again after some time."
+                "AniList API timeout. Try again."
             )
 
 
@@ -628,7 +697,6 @@ with tab1:
             st.error(
                 f"Error: {e}"
             )
-
 with tab2:
 
     # =========================

@@ -1,5 +1,5 @@
 #APP.PY
-
+import time
 import os
 import streamlit as st
 import requests
@@ -574,14 +574,16 @@ with tab1:
                 "sfw": True
             }
 
-            response = requests.get(
-                url,
-                params=params,
-                headers={
-                    "User-Agent": "AnimeVerse-AI"
-                },
-                timeout=30
-            )
+        time.sleep(1)
+
+response = requests.get(
+    url,
+    params=params,
+    headers={
+        "User-Agent": "Mozilla/5.0 AnimeVerse-AI"
+    },
+    timeout=60
+)
 
 
             if response.status_code == 200:

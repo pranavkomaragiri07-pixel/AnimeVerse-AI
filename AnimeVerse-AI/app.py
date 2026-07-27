@@ -612,11 +612,10 @@ with tab1:
             else:
                 st.error(f"API Error: {response.status_code}")
 
-        except requests.exceptions.Timeout:
+                except requests.exceptions.Timeout:
             st.warning("Jikan API timeout. Try again.")
 
-               except Exception as e:
-
+        except Exception as e:
             st.error(
                 f"Error: {e}"
             )

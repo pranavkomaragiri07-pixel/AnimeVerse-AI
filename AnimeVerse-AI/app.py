@@ -566,17 +566,21 @@ with tab1:
 
             url = "https://api.jikan.moe/v4/anime"
 
-            params = {
-                "q": name,
-                "limit": 1
-            }
+           params = {
+    "q": name.strip(),
+    "limit": 1,
+    "sfw": True
+}
 
 
-            response = requests.get(
-                url,
-                params=params,
-                timeout=15
-            )
+          response = requests.get(
+    url,
+    params=params,
+    headers={
+        "User-Agent": "AnimeVerse-AI"
+    },
+    timeout=30
+)
 
 
             if response.status_code == 200:
@@ -663,9 +667,20 @@ with tab1:
 
             else:
 
-                st.error(
-                    f"API Error: {response.status_code}"
-                )
+    if response.status_code == 504:
+        st.warning(
+            "Jikan API is slow right now. Please click Search again."
+        )
+
+    elif response.status_code == 429:
+        st.warning(
+            "Too many requests. Wait 10 seconds."
+        )
+
+    else:
+        st.error(
+            f"API Error: {response.status_code}"
+        )
 
 
         except Exception as e:

@@ -576,19 +576,22 @@ with tab1:
 
             time.sleep(1)
 
-response = requests.get(
-    f"https://api.jikan.moe/v4/anime?q={name}&limit=1",
-    headers={
-        "User-Agent": "AnimeVerse-AI"
-    },
-    timeout=10
-)
+            response = requests.get(
+                url,
+                params=params,
+                headers={
+                    "User-Agent": "AnimeVerse-AI"
+                },
+                timeout=15
+            )
+
 
             if response.status_code == 200:
 
                 result = response.json()
 
                 data = result.get("data", [])
+
 
                 if data:
 
@@ -597,6 +600,7 @@ response = requests.get(
                     st.success(
                         anime.get("title")
                     )
+
 
                     image = anime.get(
                         "images",
@@ -608,11 +612,13 @@ response = requests.get(
                         "large_image_url"
                     )
 
+
                     if image:
                         st.image(
                             image,
                             width=300
                         )
+
 
                     st.write(
                         "⭐ Rating:",
@@ -622,6 +628,7 @@ response = requests.get(
                         )
                     )
 
+
                     st.write(
                         "🎬 Episodes:",
                         anime.get(
@@ -630,6 +637,7 @@ response = requests.get(
                         )
                     )
 
+
                     st.write(
                         "📖 Synopsis:",
                         anime.get(
@@ -637,6 +645,7 @@ response = requests.get(
                             "No synopsis available"
                         )
                     )
+
 
                 else:
 
@@ -648,7 +657,7 @@ response = requests.get(
             elif response.status_code == 429:
 
                 st.warning(
-                    "Jikan API limit reached. Wait few seconds and try again."
+                    "API limit reached. Wait few seconds and try again."
                 )
 
 
@@ -672,6 +681,10 @@ response = requests.get(
                 f"Error: {e}"
             )
 
+
+# =========================
+# NEXT TAB
+# =========================
 
 lang = st.session_state.lang
 

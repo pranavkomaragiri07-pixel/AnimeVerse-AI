@@ -552,19 +552,6 @@ lang = st.session_state.lang
 # 🔍 ANIME SEARCH
 # =========================
 
-with tab1:
-
-    st.header(TEXT[lang]["search"])
-
-    name = st.text_input(
-        TEXT[lang]["enter"]
-    )
-
-    if st.button(
-        TEXT[lang]["search"],
-        key="search_anime"
-    ) and name:
-
         try:
 
             url = "https://api.jikan.moe/v4/anime"
@@ -592,6 +579,7 @@ with tab1:
                 data = result.get("data", [])
 
                 if data:
+
                     anime = data[0]
 
                     st.success(anime.get("title"))
@@ -603,26 +591,37 @@ with tab1:
                     if image:
                         st.image(image, width=300)
 
-                    st.write("⭐ Rating:", anime.get("score", "N/A"))
-                    st.write("🎬 Episodes:", anime.get("episodes", "N/A"))
+                    st.write(
+                        "⭐ Rating:",
+                        anime.get("score", "N/A")
+                    )
+
+                    st.write(
+                        "🎬 Episodes:",
+                        anime.get("episodes", "N/A")
+                    )
 
                 else:
                     st.error("No anime found")
 
             else:
-                st.error(f"API Error: {response.status_code}")
+                st.error(
+                    f"API Error: {response.status_code}"
+                )
 
-                except requests.exceptions.Timeout:
-            st.warning("Jikan API timeout. Try again.")
 
-        except Exception as e:
-            st.error(
-                f"Error: {e}"
+        except requests.exceptions.Timeout:
+
+            st.warning(
+                "Jikan API timeout. Try again."
             )
 
 
-lang = st.session_state.lang
+        except Exception as e:
 
+            st.error(
+                f"Error: {e}"
+            )
 with tab2:
 
     # =========================
